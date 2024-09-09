@@ -180,7 +180,7 @@ in
 
   programs.git = {
     enable = true;
-    userName = "Chase Whipple";
+    userName = "Chasewhip8";
     userEmail = "chasewhip20@gnail.com";
   };
 
