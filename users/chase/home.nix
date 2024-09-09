@@ -181,7 +181,7 @@ in
   programs.git = {
     enable = true;
     userName = "Chasewhip8";
-    userEmail = "chasewhip20@gnail.com";
+    userEmail = "chasewhip20@gmail.com";
   };
 
   programs.google-chrome.enable = true;
