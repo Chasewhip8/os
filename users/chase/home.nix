@@ -7,6 +7,7 @@ let
 in
 {
   imports = [
+    inputs.hyprland.homeManagerModules.default
     inputs.xremap-flake.homeManagerModules.default
     ./theme.nix
   ];
@@ -17,32 +18,29 @@ in
 
   # User Packages
   home.packages = [
+    pkgs.pavucontrol # Audio Control Panel
     pkgs.libnotify
     pkgs.tree
-    pkgs.zed-editor
+    pkgs.zed-editor.fhs
     pkgs.vesktop
     pkgs.slack
+    pkgs.spotify
+    pkgs.docker
+    pkgs.jetbrains.datagrip
+    pkgs.nodejs
+
+    # screenshot.sh dependencies
+    pkgs.hyprshade
+    pkgs.grimblast
+    pkgs.swappy
+    pkgs.wl-clipboard
   ];
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
-
- #   ".config/xdg-desktop-portal/hyprland-portals.conf".text = ''
-  #    [preferred]
-   #   default=hyprland;gtk
-    #  org.freedesktop.impl.portal.FileChooser=gtk
-   # '';
-
-    # # You can also set the file content immediately.
-    # ".gradle/gradle.properties".text = ''
-    #   org.gradle.console=verbose
-    #   org.gradle.daemon.idletimeout=3600000
-    # '';
+    ".config/zed/settings.json".source = ./zed-settings.json;
+    ".config/script/screenshot.sh".source = ./screenshot.sh;
   };
 
   home.shellAliases = {
@@ -71,7 +69,7 @@ in
     settings = {
       # Monitors
       monitor = [
-        "DP-2,5120x1440@240,0x0,1,bitdepth,10"
+        "DP-2,5120x1440@240,0x0,1,bitdepth,8"
       ];
 
       "$mod" = "SUPER";
@@ -83,10 +81,11 @@ in
       "$file" = "thunar";
       "$browser" = "${pkgs.google-chrome}/bin/google-chrome-stable";
       "$locker" = "hyprlock";
+      "$screenshot" = ".config/script/screenshot.sh sf";
 
       # Startup
       exec-once = [
-	"${startupScript}/bin/start"
+	    "${startupScript}/bin/start"
       ];
 
       # Keybinds
@@ -98,7 +97,7 @@ in
         "$mod, E, exec, $launcher"
         "$mod, L, exec, $locker" # lock
         "$mod, escape, exit"
-        #"$mod CTRL, F, exec " # TODO window pin script
+        "$mod, P, exec, $screenshot"
         "$mod, J, togglesplit" # dwindle
 
         # Application Binds
@@ -135,7 +134,7 @@ in
         kb_layout = "us";
         follow_mouse = true;
 
-        sensitivity = 0; # 0 means no modification
+        sensitivity = 1.5; # 0 means no modification
         force_no_accel = true;
       };
 
@@ -168,6 +167,7 @@ in
     syntaxHighlighting.enable = true;
     initExtra = ''
       source ~/.config/zsh/themes/enabled.zsh-theme
+      export PATH=$PATH:$(go env GOPATH)/bin
     '';
     oh-my-zsh = {
       enable = true;

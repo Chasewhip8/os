@@ -19,8 +19,11 @@
     enable = true;
     flavor = "macchiato";
     accent = "maroon";
-    pointerCursor.enable = true;
-  };  
+    pointerCursor = {
+        enable = true;
+        accent = "rosewater";
+    };
+  };
 
   gtk = {
     enable = true;
@@ -49,7 +52,20 @@
   };
 
   wayland.windowManager.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+    systemd.enable = true; # Whether to enable hyprland-session.target on hyprland startup
+
     settings = {
+      cursor = {
+        no_hardware_cursors = true;
+      };
+
+      env = [
+        "XCURSOR_SIZE,32"
+        "HYPRCURSOR_SIZE,32"
+      ];
+
       misc = {
         disable_hyprland_logo = true;
       };
@@ -100,7 +116,7 @@
       decoration = {
         rounding = 5;
         drop_shadow = false;
-        
+
         blur = {
           enabled = true;
           size = 6;

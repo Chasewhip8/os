@@ -4,7 +4,9 @@
 
 { config, pkgs, inputs, ... }: {
   imports =
-    [ # Include the results of the hardware scan.
+    [
+      inputs.hyprland.nixosModules.default
+      # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ../../modules/nvidia.nix
       ../../modules/greetd.nix
@@ -135,9 +137,38 @@
       thunar-volman
     ];
   };
-  programs.xfconf.enable = true; # Required for settings peristence with >
+  programs.xfconf.enable = true; # Required for settings peristence
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # Thumbnail support for images
+
+  virtualisation.docker = {
+    enable = true;
+    rootless = {
+        enable = true;
+        setSocketVariable = true;
+    };
+  };
+
+  # Ledger udev rules
+  services.udev.extraRules = ''
+    # HW.1, Nano
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="2581", ATTRS{idProduct}=="1b7c|2b7c|3b7c|4b7c", TAG+="uaccess", TAG+="udev-acl"
+
+    # Blue, NanoS, Aramis, HW.2, Nano X, NanoSP, Stax, Ledger Test,
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", TAG+="uaccess", TAG+="udev-acl"
+
+    # Same, but with hidraw-based library (instead of libusb)
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2c97", MODE="0666"
+  '';
+
+  networking.firewall = {
+      enable = true;
+      # Allow docker to
+      extraCommands = ''
+        iptables -I INPUT 1 -s 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
+        iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
+      '';
+    };
 
   # Hyprlock - This allows hyprlock to authenticate the user session.
   security.pam.services.hyprlock = {};
