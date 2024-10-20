@@ -6,7 +6,6 @@
   # Zsh Theme
   home.file = {
     ".config/zsh/themes/enabled.zsh-theme".source = ./main.zsh-theme;
-    ".config/wallpaper/enabled.jpg".source = ./wallpaper.jpg;
   };
 
   programs.kitty.extraConfig = ''
@@ -47,15 +46,7 @@
     "org/gnome/desktop/interface".color-scheme = "prefer-dark";
   };
 
-  programs.tofi.settings = {
-    border-width = 0;
-  };
-
   wayland.windowManager.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-    systemd.enable = true; # Whether to enable hyprland-session.target on hyprland startup
-
     settings = {
       cursor = {
         no_hardware_cursors = true;

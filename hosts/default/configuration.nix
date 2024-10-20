@@ -157,6 +157,10 @@
     # Blue, NanoS, Aramis, HW.2, Nano X, NanoSP, Stax, Ledger Test,
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", TAG+="uaccess", TAG+="udev-acl"
 
+    # Keystone 3 Pro
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev"
+
     # Same, but with hidraw-based library (instead of libusb)
     KERNEL=="hidraw*", ATTRS{idVendor}=="2c97", MODE="0666"
   '';
