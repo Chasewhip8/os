@@ -4,7 +4,7 @@ let
 in
 {
   options = {
-    extension.extensions.zed = {
+    extensions.zed = {
       settingsPath = lib.mkOption {
         type = lib.types.path;
         default = "./zed-settings.json";

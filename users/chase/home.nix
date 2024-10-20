@@ -2,7 +2,7 @@
 {
   imports = [
     inputs.xremap-flake.homeManagerModules.default
-    ../../modules/home-manager/zed
+    ../../modules/home-manager/zed.nix
     ./hyprland.nix
     ./theme.nix
   ];
