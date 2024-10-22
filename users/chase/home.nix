@@ -21,6 +21,7 @@
     pkgs.jetbrains.datagrip
     pkgs.nodejs
     pkgs.charles
+    pkgs.prismlauncher
   ];
 
   # Custom Module Configs

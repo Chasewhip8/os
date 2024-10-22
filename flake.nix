@@ -27,6 +27,10 @@
       url = "github:nix-community/browser-previews";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    prismlauncher = {
+       url = "github:PrismLauncher/PrismLauncher";
+     };
   };
 
   outputs = { self, nixpkgs, ... }@inputs: {
