@@ -1,30 +1,17 @@
 {
     "assistant": {
         "default_model": {
-            "provider": "zed.dev",
-            "model": "claude-3-5-sonnet-20240620"
+            "model": "claude-3-5-sonnet-latest",
+            "provider": "zed.dev"
         },
         "version": "2"
     },
+    "auto_install_extensions": {},
     "auto_update": false,
-    "base_keymap": "JetBrains",
-    "theme": "Ayu Mirage",
-    "soft_wrap": "editor_width",
-    "ui_font_size": 22,
-    "buffer_font_size": 18,
-    "scroll_sensitivity": 1,
     "autosave": "on_window_change",
-    "tab_size": 4,
+    "base_keymap": "JetBrains",
+    "buffer_font_size": 18,
     "format_on_save": "on",
-    "lsp": {
-        "rust-analyzer": {
-            "initialization_options": {
-                "check": {
-                    "command": "clippy"
-                }
-            }
-        }
-    },
     "git": {
         "inline_blame": {
             "enabled": false
@@ -38,5 +25,19 @@
         "YAML": {
             "tab_size": 2
         }
-    }
+    },
+    "lsp": {
+        "rust-analyzer": {
+            "initialization_options": {
+                "check": {
+                    "command": "clippy"
+                }
+            }
+        }
+    },
+    "scroll_sensitivity": 1,
+    "soft_wrap": "editor_width",
+    "tab_size": 4,
+    "theme": "Ayu Mirage",
+    "ui_font_size": 22
 }

@@ -19,13 +19,21 @@
     pkgs.slack
     pkgs.spotify
     pkgs.jetbrains.datagrip
+    pkgs.jetbrains.goland
     pkgs.nodejs
-    pkgs.charles
     pkgs.prismlauncher
+    pkgs.obsidian
+    pkgs.corepack
+    pkgs.logseq
+    pkgs.rust-bin.nightly.latest.default
+    pkgs.gcc
   ];
 
   # Custom Module Configs
-  extensions.zed.settingsPath = ./zed-settings.json;
+  extensions.zed = {
+    settingsPath = ./zed-settings.json;
+    keymapPath = ./zed-keymap.json;
+  };
 
   home.shellAliases = {
     nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#default";
@@ -78,12 +86,8 @@
 
   programs.google-chrome.enable = true;
 
-  # Services
-  programs.keychain.enable = true;
-
   programs.ssh = {
     enable = true;
-#    addKeysToAgent = true;
   };
 
   # Tools

@@ -71,6 +71,10 @@
   # Enable Power API
   services.upower.enable = true;
 
+  # Keyring
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true; # Allow greetd to unlock keyring
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.chase = {
     isNormalUser = true;
@@ -87,6 +91,10 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-27.3.11"
+  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -137,6 +145,7 @@
       thunar-volman
     ];
   };
+  programs.file-roller.enable = true;
   programs.xfconf.enable = true; # Required for settings peristence
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # Thumbnail support for images
@@ -149,6 +158,11 @@
     };
   };
 
+  programs.steam = {
+    enable = true;
+    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
+  };
+
   # Ledger udev rules
   services.udev.extraRules = ''
     # HW.1, Nano
@@ -156,13 +170,6 @@
 
     # Blue, NanoS, Aramis, HW.2, Nano X, NanoSP, Stax, Ledger Test,
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", TAG+="uaccess", TAG+="udev-acl"
-
-    # Keystone 3 Pro
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev", TAG+="uaccess"
-    KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev"
-
-    # Same, but with hidraw-based library (instead of libusb)
-    KERNEL=="hidraw*", ATTRS{idVendor}=="2c97", MODE="0666"
   '';
 
   networking.firewall = {
