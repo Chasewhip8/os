@@ -1,5 +1,9 @@
-{ config, lib, ... }:
+{ config, pkgs, ... }:
 {
+  environment.systemPackages = with pkgs; [
+    cudaPackages.cudatoolkit
+  ];
+
   hardware = {
     graphics.enable = true;
     nvidia = {
@@ -12,6 +16,7 @@
         enable = true;
       };
     };
+    nvidia-container-toolkit.enable = true;
   };
   services.xserver.videoDrivers = [ "nvidia" ];
 }

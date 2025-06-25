@@ -1,31 +1,86 @@
 {
-    "assistant": {
-        "default_model": {
-            "model": "claude-3-5-sonnet-latest",
-            "provider": "zed.dev"
+    "edit_predictions": {
+        "mode": "subtle",
+        "copilot": {
+            "proxy": null,
+            "proxy_no_verify": null
         },
-        "version": "2"
+        "enabled_in_text_threads": false
     },
-    "auto_install_extensions": {},
-    "auto_update": false,
-    "autosave": "on_window_change",
+    "features": {
+        "edit_prediction_provider": "zed"
+    },
+    "agent": {
+        "always_allow_tool_actions": true,
+        "default_profile": "write",
+        "profiles": {
+            "write": {
+                "name": "Write",
+                "tools": {
+                    "batch_tool": true,
+                    "code_actions": false,
+                    "code_symbols": true,
+                    "contents": false,
+                    "copy_path": false,
+                    "create_file": true,
+                    "delete_path": false,
+                    "diagnostics": true,
+                    "edit_file": true,
+                    "fetch": true,
+                    "list_directory": true,
+                    "move_path": false,
+                    "now": false,
+                    "find_path": true,
+                    "read_file": true,
+                    "grep": true,
+                    "rename": false,
+                    "symbol_info": true,
+                    "terminal": true,
+                    "thinking": true,
+                    "web_search": true
+                },
+                "enable_all_context_servers": true,
+                "context_servers": {}
+            }
+        },
+        "inline_assistant_model": {
+            "provider": "google",
+            "model": "gemini-2.5-flash-preview-04-17"
+        },
+        "default_model": {
+            "provider": "zed.dev",
+            "model": "claude-sonnet-4"
+        },
+        "version": "2",
+        "enable_experimental_live_diffs": true
+    },
+    "file_scan_exclusions": [
+        "**/.git",
+        "**/.svn",
+        "**/.hg",
+        "**/.jj",
+        "**/CVS",
+        "**/.DS_Store",
+        "**/Thumbs.db",
+        "**/.classpath",
+        "**/.settings",
+        "**/.idea",
+        "**/.vscode",
+        "**/.turbo",
+        "**/node_modules",
+        "**/dist"
+    ],
+    "auto_update": true,
     "base_keymap": "JetBrains",
-    "buffer_font_size": 18,
+    "theme": "Ayu Mirage",
+    "soft_wrap": "editor_width",
+    "ui_font_size": 19,
+    "buffer_font_size": 16.5,
+    "agent_font_size": 19,
+    "scroll_sensitivity": 1,
+    "autosave": "on_window_change",
+    "tab_size": 4,
     "format_on_save": "on",
-    "git": {
-        "inline_blame": {
-            "enabled": false
-        }
-    },
-    "inlay_hints": {
-        "enabled": true,
-        "show_type_hints": false
-    },
-    "languages": {
-        "YAML": {
-            "tab_size": 2
-        }
-    },
     "lsp": {
         "rust-analyzer": {
             "initialization_options": {
@@ -35,9 +90,12 @@
             }
         }
     },
-    "scroll_sensitivity": 1,
-    "soft_wrap": "editor_width",
-    "tab_size": 4,
-    "theme": "Ayu Mirage",
-    "ui_font_size": 22
+    "git": {
+        "inline_blame": {
+            "enabled": false
+        }
+    },
+    "inlay_hints": {
+        "enabled": false
+    }
 }

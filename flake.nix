@@ -1,6 +1,17 @@
 {
   description = "Nixos config flake";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+      "https://cuda-maintainers.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "cuda-maintainers.cachix.org-1:0dq3bujKpuEPMCX6U4WylrUDZ9JyUG0VpVZa7CNfq5E="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -13,11 +24,6 @@
       url = "git+https://github.com/hyprwm/Hyprland?submodules=1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # zed-editor = {
-    #     url = "github:zed-industries/zed";
-    #     inputs.nixpkgs.follows = "nixpkgs";
-    # };
 
     xremap-flake.url = "github:xremap/nix-flake";
 
@@ -36,6 +42,8 @@
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
   };
 
   outputs = { self, nixpkgs, rust-overlay, ... }@inputs: {

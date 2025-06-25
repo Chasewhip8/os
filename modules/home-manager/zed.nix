@@ -1,6 +1,11 @@
-{ config, pkgs, lib, inputs, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-    cfg = config.extensions.zed;
+  cfg = config.extensions.zed;
 in
 {
   options = {
@@ -20,9 +25,14 @@ in
   };
 
   config = {
-    home.packages = [ pkgs.zed-editor ];
+    home.packages = [
+      pkgs.zed-editor
+      pkgs.nil
+      pkgs.nixd
+      pkgs.package-version-server
+    ];
 
-    home.activation.zedResetConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       # Ensure the directory exists
       mkdir -p "$HOME/.config/zed"
 

@@ -2,15 +2,32 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }: {
-  imports =
-    [
-      inputs.hyprland.nixosModules.default
-      # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ../../modules/nvidia.nix
-      ../../modules/greetd.nix
-    ];
+{
+  pkgs,
+  inputs,
+  ...
+}:
+{
+  imports = [
+    inputs.hyprland.nixosModules.default
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ../../modules/nvidia.nix
+    ../../modules/greetd.nix
+  ];
+
+  fonts.packages = [
+    inputs.apple-fonts.packages.${pkgs.system}.sf-pro
+    inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
+    inputs.apple-fonts.packages.${pkgs.system}.sf-compact
+    inputs.apple-fonts.packages.${pkgs.system}.sf-compact-nerd
+    inputs.apple-fonts.packages.${pkgs.system}.sf-mono
+    inputs.apple-fonts.packages.${pkgs.system}.sf-mono-nerd
+    inputs.apple-fonts.packages.${pkgs.system}.sf-arabic
+    inputs.apple-fonts.packages.${pkgs.system}.sf-arabic-nerd
+    inputs.apple-fonts.packages.${pkgs.system}.ny
+    inputs.apple-fonts.packages.${pkgs.system}.ny-nerd
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
@@ -24,7 +41,10 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Enable Flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   # Enable networking
   networking.networkmanager.enable = true;
@@ -80,8 +100,10 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Chase";
-    extraGroups = [ "networkmanager" "wheel" ];
-    packages = with pkgs; [];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   # XRemap
@@ -104,7 +126,7 @@
   ];
 
   home-manager = {
-    extraSpecialArgs = {inherit inputs;};
+    extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     users = {
       "chase" = import ../../users/chase/home.nix;
@@ -153,9 +175,17 @@
   virtualisation.docker = {
     enable = true;
     rootless = {
-        enable = true;
-        setSocketVariable = true;
+      enable = true;
+      setSocketVariable = true;
     };
+  };
+
+  programs._1password.enable = true;
+  programs._1password-gui = {
+    enable = true;
+    # Certain features, including CLI integration and system authentication support,
+    # require enabling PolKit integration on some desktop environments (e.g. Plasma).
+    polkitPolicyOwners = [ "chase" ];
   };
 
   programs.steam = {
@@ -170,19 +200,26 @@
 
     # Blue, NanoS, Aramis, HW.2, Nano X, NanoSP, Stax, Ledger Test,
     SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", TAG+="uaccess", TAG+="udev-acl"
+
+    # Keystone 3 Pro
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev", TAG+="uaccess"
+    KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev"
+
+    # Same, but with hidraw-based library (instead of libusb)
+    KERNEL=="hidraw*", ATTRS{idVendor}=="2c97", MODE="0666"
   '';
 
   networking.firewall = {
-      enable = true;
-      # Allow docker to
-      extraCommands = ''
-        iptables -I INPUT 1 -s 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
-        iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
-      '';
-    };
+    enable = true;
+    # Allow docker to
+    extraCommands = ''
+      iptables -I INPUT 1 -s 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
+      iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
+    '';
+  };
 
   # Hyprlock - This allows hyprlock to authenticate the user session.
-  security.pam.services.hyprlock = {};
+  security.pam.services.hyprlock = { };
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
