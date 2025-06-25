@@ -1,7 +1,7 @@
-{ config, pkgs, lib, ... }:
+{ config, lib, ... }:
 let
-    cfg = config.extensions.wallpaper;
-    wallpaperAbsolutePath = "${config.home.homeDirectory}/.config/wallpaper/enabled.jpg";
+  cfg = config.extensions.wallpaper;
+  wallpaperAbsolutePath = "${config.home.homeDirectory}/.config/wallpaper/enabled.jpg";
 in
 {
   options = {

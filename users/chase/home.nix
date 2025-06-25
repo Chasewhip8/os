@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     inputs.xremap-flake.homeManagerModules.default
@@ -26,8 +26,8 @@
     pkgs.corepack
     pkgs.rust-bin.stable."1.85.1".default
     pkgs.gcc
-#    pkgs.llvmPackages.bintools
-#    pkgs.clang
+    #    pkgs.llvmPackages.bintools
+    #    pkgs.clang
     pkgs.mold
     pkgs.charles
     pkgs.figma-linux
@@ -56,7 +56,9 @@
     config.modmap = [
       {
         name = "caps-lock to super";
-        remap = { "KEY_CAPSLOCK" = "KEY_LEFTMETA"; };
+        remap = {
+          "KEY_CAPSLOCK" = "KEY_LEFTMETA";
+        };
       }
     ];
   };

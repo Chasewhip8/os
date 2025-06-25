@@ -1,6 +1,7 @@
-{ pkgs, inputs, ... }: {
-   imports = [
-     inputs.catppuccin.homeManagerModules.catppuccin
+{ inputs, ... }:
+{
+  imports = [
+    inputs.catppuccin.homeManagerModules.catppuccin
   ];
 
   # Zsh Theme
@@ -19,8 +20,8 @@
     flavor = "macchiato";
     accent = "maroon";
     pointerCursor = {
-        enable = true;
-        accent = "rosewater";
+      enable = true;
+      accent = "rosewater";
     };
   };
 
