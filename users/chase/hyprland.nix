@@ -121,6 +121,7 @@ in
       orientation = "center"; # put the master column in the middle
       slave_count_for_center_master = 0; # 0 ⇒ centre even when no slaves
       mfact = 0.50; # (optional) master width ratio
+      new_status = "master";
     };
 
     input = {

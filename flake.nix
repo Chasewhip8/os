@@ -35,8 +35,8 @@
     };
 
     prismlauncher = {
-       url = "github:PrismLauncher/PrismLauncher";
-     };
+      url = "github:PrismLauncher/PrismLauncher";
+    };
 
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
@@ -46,14 +46,21 @@
     apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
   };
 
-  outputs = { self, nixpkgs, rust-overlay, ... }@inputs: {
-    nixosConfigurations.default = nixpkgs.lib.nixosSystem {
-      specialArgs = {inherit inputs;};
-      modules = [
-        ./hosts/default/configuration.nix
-        { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
-        inputs.home-manager.nixosModules.default
-      ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      rust-overlay,
+      ...
+    }@inputs:
+    {
+      nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          ./hosts/default/configuration.nix
+          { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+          inputs.home-manager.nixosModules.default
+        ];
+      };
     };
-  };
 }

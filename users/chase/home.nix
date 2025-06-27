@@ -34,6 +34,7 @@
     (pkgs.burpsuite.override { proEdition = true; })
     pkgs.android-tools
     pkgs.bun
+    pkgs.audacity
   ];
 
   # Custom Module Configs
