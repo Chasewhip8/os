@@ -26,13 +26,7 @@
     pkgs.corepack
     pkgs.rust-bin.stable."1.85.1".default
     pkgs.gcc
-    #    pkgs.llvmPackages.bintools
-    #    pkgs.clang
     pkgs.mold
-    pkgs.charles
-    pkgs.figma-linux
-    (pkgs.burpsuite.override { proEdition = true; })
-    pkgs.android-tools
     pkgs.bun
     pkgs.audacity
   ];
@@ -51,6 +45,7 @@
     EDITOR = "nano";
   };
 
+  # I like to remap my caps lock to the super key as a bind layer for hyprland.
   services.xremap = {
     withWlroots = true;
     watch = true;
@@ -96,9 +91,11 @@
 
   programs.google-chrome.enable = true;
 
+  # SSH
   programs.ssh = {
     enable = true;
   };
+  services.ssh-agent.enable = true;
 
   # Tools
   programs.htop.enable = true;
