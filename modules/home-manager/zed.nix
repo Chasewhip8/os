@@ -30,6 +30,7 @@ in
       pkgs.nil
       pkgs.nixd
       pkgs.package-version-server
+      pkgs.rust-analyzer
     ];
 
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

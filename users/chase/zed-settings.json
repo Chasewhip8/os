@@ -87,6 +87,9 @@
                 "check": {
                     "command": "clippy"
                 }
+            },
+            "binary": {
+                "path": "/home/chase/.nix-profile/bin/rust-analyzer"
             }
         }
     },

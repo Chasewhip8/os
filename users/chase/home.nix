@@ -25,6 +25,7 @@
     pkgs.obsidian
     pkgs.corepack
     pkgs.rust-bin.stable."1.85.1".default
+    pkgs.gnumake
     pkgs.gcc
     pkgs.mold
     pkgs.bun
@@ -73,6 +74,7 @@
     initExtra = ''
       source ~/.config/zsh/themes/enabled.zsh-theme
       export PATH=$PATH:$(go env GOPATH)/bin
+      export PATH=$PATH:$HOME/.cargo/bin
     '';
     oh-my-zsh = {
       enable = true;
