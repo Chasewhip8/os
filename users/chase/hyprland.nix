@@ -17,7 +17,7 @@ in
 
   wayland.windowManager.hyprland.settings = {
     monitor = [
-      "DP-2,5120x1440@240,0x0,1,bitdepth,10"
+      "DP-2,5120x1440@240,0x0,1"
     ];
 
     "$mod" = "SUPER";
@@ -142,7 +142,7 @@ in
     };
 
     cursor = {
-      no_warps = true;
+      no_warps = false;
     };
 
     windowrule = [

@@ -22,6 +22,7 @@
     pkgs.jetbrains.goland
     pkgs.nodejs
     pkgs.prismlauncher
+    pkgs.glfw
     pkgs.obsidian
     pkgs.corepack
     pkgs.rust-bin.stable."1.85.1".default
@@ -30,6 +31,7 @@
     pkgs.mold
     pkgs.bun
     pkgs.audacity
+    pkgs.telegram-desktop
   ];
 
   # Custom Module Configs
@@ -75,6 +77,7 @@
       source ~/.config/zsh/themes/enabled.zsh-theme
       export PATH=$PATH:$(go env GOPATH)/bin
       export PATH=$PATH:$HOME/.cargo/bin
+      export PATH=$PATH:$HOME/.bun/bin
     '';
     oh-my-zsh = {
       enable = true;

@@ -50,26 +50,8 @@
         "default_model": {
             "provider": "zed.dev",
             "model": "claude-sonnet-4"
-        },
-        "version": "2",
-        "enable_experimental_live_diffs": true
+        }
     },
-    "file_scan_exclusions": [
-        "**/.git",
-        "**/.svn",
-        "**/.hg",
-        "**/.jj",
-        "**/CVS",
-        "**/.DS_Store",
-        "**/Thumbs.db",
-        "**/.classpath",
-        "**/.settings",
-        "**/.idea",
-        "**/.vscode",
-        "**/.turbo",
-        "**/node_modules",
-        "**/dist"
-    ],
     "auto_update": true,
     "base_keymap": "JetBrains",
     "theme": "Ayu Mirage",
@@ -90,6 +72,25 @@
             },
             "binary": {
                 "path": "/home/chase/.nix-profile/bin/rust-analyzer"
+            }
+        },
+        "biome": {
+            "settings": {
+                "require_config_file": true
+            }
+        },
+        "vtsls": {
+            "settings": {
+                "typescript": {
+                    "tsserver": {
+                        "experimental": {
+                            "enableProjectDiagnostics": false
+                        }
+                    },
+                    "updateImportsOnFileMove": {
+                        "enabled": "always"
+                    }
+                }
             }
         }
     },

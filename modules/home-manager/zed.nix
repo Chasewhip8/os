@@ -31,6 +31,7 @@ in
       pkgs.nixd
       pkgs.package-version-server
       pkgs.rust-analyzer
+      pkgs.markdown-oxide
     ];
 
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

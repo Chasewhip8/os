@@ -12,7 +12,7 @@
     inputs.hyprland.nixosModules.default
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/nvidia.nix
+    ../../modules/nvidia-pinned.nix
     ../../modules/greetd.nix
   ];
 
@@ -132,6 +132,9 @@
       "chase" = import ../../users/chase/home.nix;
     };
   };
+
+  # Allow Dynamic Binaries
+  programs.nix-ld.enable = true;
 
   # Hyprland
   programs.hyprland = {

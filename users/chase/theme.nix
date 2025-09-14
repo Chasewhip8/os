@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   imports = [
-    inputs.catppuccin.homeManagerModules.catppuccin
+    inputs.catppuccin.homeModules.catppuccin
   ];
 
   # Zsh Theme
@@ -19,7 +19,7 @@
     enable = true;
     flavor = "macchiato";
     accent = "maroon";
-    pointerCursor = {
+    cursors = {
       enable = true;
       accent = "rosewater";
     };
@@ -27,11 +27,6 @@
 
   gtk = {
     enable = true;
-    catppuccin = {
-      enable = true;
-      icon.enable = true;
-      size = "compact";
-    };
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
