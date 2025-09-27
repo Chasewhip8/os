@@ -148,17 +148,17 @@ in
     windowrule = [
       # common modals
       "float,title:^(Open)$"
-      "float, title:^(Authentication Required)$"
-      "float, title:^(Add Folder to Workspace)$"
-      "float,initialtitle:^(Open File)$"
+      "float,title:^(Authentication Required)$"
+      "float,title:^(Add Folder to Workspace)$"
+      "float,initialTitle:^(Open File)$"
       "float,title:^(Choose Files)$"
       "float,title:^(Save As)$"
       "float,title:^(Confirm to replace files)$"
       "float,title:^(File Operation Progress)$"
       "float,class:^([Xx]dg-desktop-portal-gtk)$"
-      "float, title:^(File Upload)(.*)$"
-      "float, title:^(Choose wallpaper)(.*)$"
-      "float, title:^(Library)(.*)$"
+      "float,title:^(File Upload)(.*)$"
+      "float,title:^(Choose wallpaper)(.*)$"
+      "float,title:^(Library)(.*)$"
       "float,class:^(.*dialog.*)$"
       "float,title:^(.*dialog.*)$"
 

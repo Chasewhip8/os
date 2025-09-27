@@ -25,13 +25,14 @@
     pkgs.glfw
     pkgs.obsidian
     pkgs.corepack
-    pkgs.rust-bin.stable."1.85.1".default
+    pkgs.rust-bin.stable."1.86.0".default
     pkgs.gnumake
     pkgs.gcc
     pkgs.mold
     pkgs.bun
     pkgs.audacity
     pkgs.telegram-desktop
+    # pkgs.rustup
   ];
 
   # Custom Module Configs
@@ -42,6 +43,7 @@
 
   home.shellAliases = {
     nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#default";
+    nixconf-update = "nix flake update --flake ~/.nixconf";
   };
 
   home.sessionVariables = {
@@ -73,7 +75,7 @@
     enable = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    initExtra = ''
+    initContent = ''
       source ~/.config/zsh/themes/enabled.zsh-theme
       export PATH=$PATH:$(go env GOPATH)/bin
       export PATH=$PATH:$HOME/.cargo/bin
@@ -96,10 +98,7 @@
 
   programs.google-chrome.enable = true;
 
-  # SSH
-  programs.ssh = {
-    enable = true;
-  };
+  # SSH agent
   services.ssh-agent.enable = true;
 
   # Tools

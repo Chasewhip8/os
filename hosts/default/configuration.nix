@@ -12,8 +12,10 @@
     inputs.hyprland.nixosModules.default
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/nvidia-pinned.nix
+    ../../modules/nvidia.nix
     ../../modules/greetd.nix
+    ../../modules/files.nix
+    ../../modules/home-manager-lifted.nix
   ];
 
   fonts.packages = [
@@ -36,14 +38,24 @@
   networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-27.3.11"
+  ];
 
   # Enable Flakes
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
+  ];
+
+  # Enable trusted user for cache
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+    "chase"
   ];
 
   # Enable networking
@@ -91,12 +103,16 @@
   # Enable Power API
   services.upower.enable = true;
 
+  # Enable ZSH
+  programs.zsh.enable = true;
+
   # Keyring
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true; # Allow greetd to unlock keyring
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.chase = {
+    uid = 1000;
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Chase";
@@ -110,13 +126,6 @@
   hardware.uinput.enable = true;
   users.groups.uinput.members = [ "chase" ];
   users.groups.input.members = [ "chase" ];
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-27.3.11"
-  ];
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -136,44 +145,12 @@
   # Allow Dynamic Binaries
   programs.nix-ld.enable = true;
 
-  # Hyprland
-  programs.hyprland = {
-    enable = true;
-    package = inputs.hyprland.packages."${pkgs.system}".hyprland;
-    portalPackage = inputs.hyprland.packages."${pkgs.system}".xdg-desktop-portal-hyprland;
-  };
-  programs.zsh.enable = true;
-
-  # Portals - This needs to be configured globaly.
-  xdg.portal = {
-    enable = true;
-    extraPortals = [
-      inputs.hyprland.packages.${pkgs.system}.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal-gtk
-    ];
-    configPackages = [ inputs.hyprland.packages.${pkgs.system}.hyprland ];
-    xdgOpenUsePortal = true;
-  };
-
   # Platform Hints - These need to be here so that hyprland passes them
   #                  to child processes.
   environment.sessionVariables = {
     NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
     ELECTRON_OZONE_PLATFORM_HINT = "wayland";
   };
-
-  # File Manager
-  programs.thunar = {
-    enable = true;
-    plugins = with pkgs.xfce; [
-      thunar-archive-plugin
-      thunar-volman
-    ];
-  };
-  programs.file-roller.enable = true;
-  programs.xfconf.enable = true; # Required for settings peristence
-  services.gvfs.enable = true; # Mount, trash, and other functionalities
-  services.tumbler.enable = true; # Thumbnail support for images
 
   virtualisation.docker = {
     enable = true;
@@ -220,9 +197,6 @@
       iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
     '';
   };
-
-  # Hyprlock - This allows hyprlock to authenticate the user session.
-  security.pam.services.hyprlock = { };
 
   system.stateVersion = "24.05"; # Did you read the comment?
 }
