@@ -58,7 +58,7 @@
       };
 
       general = {
-        #  Border Theme
+        # Border Theme
         "col.active_border" = "rgba(eb6f92ff) rgba(c4a7e7ff) 45deg";
         "col.inactive_border" = "rgba(31748fcc) rgba(9ccfd8cc) 45deg";
       };
@@ -74,28 +74,26 @@
         enabled = true;
 
         bezier = [
-          "wind, 0.05, 0.9, 0.1, 1.05"
-          "winIn, 0.1, 1.1, 0.1, 1.1"
-          "winOut, 0.3, -0.3, 0, 1"
+          "wind, 0.05, 0.9, 0.1, 1.0"
+          "winIn, 0.1, 1.0, 0.1, 1.0"
+          "winOut, 0.3, 0.0, 0, 1.0"
           "liner, 1, 1, 1, 1"
         ];
 
         animation = [
-          "windows, 1, 6, wind, slide"
-          "windowsIn, 1, 6, winIn, slide"
-          "windowsOut, 1, 5, winOut, slide"
-          "windowsMove, 1, 5, wind, slide"
-          "border, 1, 1, liner"
-          "borderangle, 1, 30, liner, loop"
-          "fade, 1, 10, default"
-          "workspaces, 1, 5, wind"
+          "windows, 1, 3, wind, slide"
+          "windowsIn, 1, 3, winIn, slide"
+          "windowsOut, 1, 2.5, winOut, slide"
+          "windowsMove, 1, 2.5, wind, slide"
+          "border, 1, 0.5, liner"
+          "borderangle, 1, 15, liner, loop"
+          "fade, 1, 5, default"
+          "workspaces, 1, 2.5, wind"
         ];
       };
 
       windowrulev2 = [
         "opacity 0.80 0.80,class:^(kitty)$"
-        "float,class:^(org.kde.dolphin)$,title:^(Copying — Dolphin)$"
-        "float,title:^(Picture-in-Picture)$"
         "opacity 0.80 0.80,class:^(org.freedesktop.impl.portal.desktop.gtk)$"
         "opacity 0.80 0.80,class:^(org.freedesktop.impl.portal.desktop.hyprland)$"
       ];
