@@ -15,6 +15,7 @@
   };
 
   inputs = {
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     home-manager = {
@@ -48,6 +49,7 @@
   outputs =
     {
       self,
+      determinate,
       nixpkgs,
       rust-overlay,
       ...
@@ -56,6 +58,7 @@
       nixosConfigurations.default = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
+          determinate.nixosModules.default
           ./hosts/default/configuration.nix
           { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
           inputs.home-manager.nixosModules.default
