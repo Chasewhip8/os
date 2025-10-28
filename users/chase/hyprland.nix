@@ -27,6 +27,8 @@ in
     "$file" = "thunar";
     "$browser" = "${pkgs.google-chrome}/bin/google-chrome-stable";
 
+    "$GAME_GTNH" = "title:^GT: New Horizons.*$|class:^GT: New Horizons.*$";
+
     exec-once = [
       "${startupScript}/bin/start"
     ];
@@ -51,12 +53,6 @@ in
       "$mod, R, exec, $file"
       "$mod, C, exec, $editor"
 
-      # Focus Binds
-      "$mod, J, cyclenext, prev"
-      "$mod, K, cyclenext"
-      "$mod, I, cyclenext, prev"
-      "$mod, L, cyclenext"
-
       # Move Binds
       "$mod CTRL, J, movewindow, l"
       "$mod CTRL, L, movewindow, r"
@@ -79,8 +75,9 @@ in
       "$mod, S, workspace, 2"
       "$mod CTRL, S, movetoworkspace, 2"
 
-      # "$mod, equal, workspace, name:spotify"
-      # "$mod CTRL, equal, movetoworkspace, name:spotify"
+      "$mod, equal, workspace, name:game"
+      "$mod CTRL, equal, movetoworkspace, name:game"
+
       # "$mod, P, workspace, name:slack"
       # "$mod CTRL, P, movetoworkspace, name:slack"
       # "$mod, bracketleft, workspace, name:mail"
@@ -108,6 +105,10 @@ in
       "$mod CTRL, D, movetoworkspace, r+1"
 
       "$mod, SPACE, layoutmsg, swapwithmaster master"
+    ];
+
+    workspace = [
+      "name:game, persistent:true, border:false, rounding:false, bordersize:0, gapsout:0"
     ];
 
     bindm = [
@@ -146,6 +147,9 @@ in
     };
 
     windowrule = [
+      # Focus new windows
+      "focusonactivate, class:.*"
+
       # common modals
       "float,title:^(Open)$"
       "float,title:^(Authentication Required)$"
@@ -174,6 +178,12 @@ in
       "size 25%, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
       "float, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
       "pin, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
+
+      # Game
+      "workspace name:game, $GAME_GTNH"
+      "size 2560 1440, $GAME_GTNH" # 5120×1440 panel ⇒ max 16:9 is 2560×1440
+      "keepaspectratio, $GAME_GTNH"
+      "center, $GAME_GTNH"
     ];
   };
 }

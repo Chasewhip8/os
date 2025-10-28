@@ -3,6 +3,7 @@
   imports = [
     inputs.xremap-flake.homeManagerModules.default
     ../../modules/home-manager/zed.nix
+    ../../modules/home-manager/solana.nix
     ./hyprland.nix
     ./theme.nix
   ];
@@ -22,6 +23,7 @@
     pkgs.jetbrains.goland
     pkgs.nodejs
     pkgs.prismlauncher
+    pkgs.openjdk25
     pkgs.glfw
     pkgs.obsidian
     pkgs.corepack
@@ -32,7 +34,9 @@
     pkgs.bun
     pkgs.audacity
     pkgs.telegram-desktop
-    # pkgs.rustup
+    pkgs.signal-desktop
+    pkgs.openssl
+    pkgs.pkg-config
   ];
 
   # Custom Module Configs
@@ -52,6 +56,7 @@
 
   # I like to remap my caps lock to the super key as a bind layer for hyprland.
   services.xremap = {
+    enable = true;
     withWlroots = true;
     watch = true;
     config.modmap = [
