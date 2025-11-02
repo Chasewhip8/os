@@ -46,6 +46,10 @@
     apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
 
     solana-nix.url = "github:arijoon/solana-nix";
+
+    hyprlux = {
+      url = "github:amadejkastelic/Hyprlux";
+    };
   };
 
   outputs =

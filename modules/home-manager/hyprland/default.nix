@@ -12,6 +12,7 @@ in
     ./notifications.nix
     ./launcher.nix
     ./wallpaper.nix
+    ./flux.nix
   ];
 
   wayland.windowManager.hyprland = {
