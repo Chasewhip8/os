@@ -50,6 +50,10 @@
     hyprlux = {
       url = "github:amadejkastelic/Hyprlux";
     };
+
+    foundry.url = "github:shazow/foundry.nix/stable";
+
+    codex-cli-nix.url = "github:sadjow/codex-cli-nix";
   };
 
   outputs =
@@ -58,6 +62,7 @@
       determinate,
       nixpkgs,
       rust-overlay,
+      foundry,
       ...
     }@inputs:
     {
@@ -66,7 +71,12 @@
         modules = [
           determinate.nixosModules.default
           ./hosts/default/configuration.nix
-          { nixpkgs.overlays = [ rust-overlay.overlays.default ]; }
+          {
+            nixpkgs.overlays = [
+              rust-overlay.overlays.default
+              foundry.overlay
+            ];
+          }
           inputs.home-manager.nixosModules.default
         ];
       };

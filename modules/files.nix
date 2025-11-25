@@ -3,6 +3,10 @@
   ...
 }:
 {
+  environment.systemPackages = with pkgs; [
+    file-roller
+  ];
+
   # File Manager
   programs.thunar = {
     enable = true;
@@ -11,7 +15,6 @@
       thunar-volman
     ];
   };
-  programs.file-roller.enable = true;
   programs.xfconf.enable = true; # Required for settings peristence
   services.gvfs.enable = true; # Mount, trash, and other functionalities
   services.tumbler.enable = true; # Thumbnail support for images

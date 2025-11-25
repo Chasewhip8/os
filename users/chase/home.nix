@@ -27,7 +27,7 @@
     pkgs.glfw
     pkgs.obsidian
     pkgs.corepack
-    pkgs.rust-bin.stable."1.86.0".default
+    (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
     pkgs.gnumake
     pkgs.gcc
     pkgs.mold
@@ -37,6 +37,15 @@
     pkgs.signal-desktop
     pkgs.openssl
     pkgs.pkg-config
+    pkgs.fzf
+    pkgs.ripgrep
+    pkgs.zoxide
+    pkgs.lsd
+    pkgs.bat
+    pkgs.foundry-bin
+    pkgs.solc
+    inputs.codex-cli-nix.packages.${pkgs.system}.default
+    pkgs.anki-bin
   ];
 
   # Custom Module Configs
@@ -52,6 +61,7 @@
 
   home.sessionVariables = {
     EDITOR = "nano";
+    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
   };
 
   # I like to remap my caps lock to the super key as a bind layer for hyprland.

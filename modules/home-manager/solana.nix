@@ -8,6 +8,6 @@
 {
   home.packages = [
     inputs.solana-nix.packages.${pkgs.system}.solana-cli
-    inputs.solana-nix.packages.${pkgs.system}.anchor-cli
+    # inputs.solana-nix.packages.${pkgs.system}.anchor-cli
   ];
 }

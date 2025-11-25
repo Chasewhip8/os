@@ -92,10 +92,11 @@
         ];
       };
 
-      windowrulev2 = [
-        "opacity 0.80 0.80,class:^(kitty)$"
-        "opacity 0.80 0.80,class:^(org.freedesktop.impl.portal.desktop.gtk)$"
-        "opacity 0.80 0.80,class:^(org.freedesktop.impl.portal.desktop.hyprland)$"
+      windowrule = [
+        # opacity rules
+        "opacity 0.80 0.80, match:class ^(kitty)$"
+        "opacity 0.80 0.80, match:class ^(org.freedesktop.impl.portal.desktop.gtk)$"
+        "opacity 0.80 0.80, match:class ^(org.freedesktop.impl.portal.desktop.hyprland)$"
       ];
 
       decoration = {

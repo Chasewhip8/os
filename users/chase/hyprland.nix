@@ -27,7 +27,7 @@ in
     "$file" = "thunar";
     "$browser" = "${pkgs.google-chrome}/bin/google-chrome-stable";
 
-    "$GAME_GTNH" = "title:^GT: New Horizons.*$|class:^GT: New Horizons.*$";
+    "$GAME_GTNH" = "match:title ^GT: New Horizons.*$ | match:class ^GT: New Horizons.*$";
 
     exec-once = [
       "${startupScript}/bin/start"
@@ -148,42 +148,46 @@ in
 
     windowrule = [
       # Focus new windows
-      "focusonactivate, class:.*"
+      # "match:class .*, focus_on_activate on"
 
       # common modals
-      "float,title:^(Open)$"
-      "float,title:^(Authentication Required)$"
-      "float,title:^(Add Folder to Workspace)$"
-      "float,initialTitle:^(Open File)$"
-      "float,title:^(Choose Files)$"
-      "float,title:^(Save As)$"
-      "float,title:^(Confirm to replace files)$"
-      "float,title:^(File Operation Progress)$"
-      "float,class:^([Xx]dg-desktop-portal-gtk)$"
-      "float,title:^(File Upload)(.*)$"
-      "float,title:^(Choose wallpaper)(.*)$"
-      "float,title:^(Library)(.*)$"
-      "float,class:^(.*dialog.*)$"
-      "float,title:^(.*dialog.*)$"
+      "match:title ^(Open)$, float on"
+      "match:title ^(Authentication Required)$, float on"
+      "match:title ^(Add Folder to Workspace)$, float on"
+      "match:initial_title ^(Open File)$, float on"
+      "match:title ^(Choose Files)$, float on"
+      "match:title ^(Save As)$, float on"
+      "match:title ^(Confirm to replace files)$, float on"
+      "match:title ^(File Operation Progress)$, float on"
+      "match:class ^([Xx]dg-desktop-portal-gtk)$, float on"
+      "match:title ^(File Upload)(.*)$, float on"
+      "match:title ^(Choose wallpaper)(.*)$, float on"
+      "match:title ^(Library)(.*)$, float on"
+      "match:class ^(.*dialog.*)$, float on"
+      "match:title ^(.*dialog.*)$, float on"
 
       # applications
-      "float,class:^(thunar)$"
-      "size 1556 835, class:^(thunar)$, title:^(chase - Thunar)$"
-      "float,class:^(kitty)$,title:^(htop)$"
+      "match:class ^(thunar)$, float on"
+      "match:class ^(thunar)$, match:title ^(chase - Thunar)$, size 1556 835"
+      "match:class ^(kitty)$, match:title ^(htop)$, float on"
 
       # Picture-in-Picture
-      "float, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
-      "keepaspectratio, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
-      "move 73% 72%, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
-      "size 25%, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
-      "float, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
-      "pin, title:^([Pp]icture[-\s]?[Ii]n[-\s]?[Pp]icture)(.*)$"
+      "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, float on"
+      "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, keep_aspect_ratio on"
+      "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, move 73% 72%"
+      "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, size 25% 25%"
+      "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, float on"
+      "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, pin on"
 
       # Game
+      # These still rely on $GAME_GTNH. You need to update that macro itself
+      # to use new-style match: props (e.g. `match:class ^(your-game-class)$`).
+      #
+      # After you update $GAME_GTNH, these lines are fine as-is syntax-wise:
       "workspace name:game, $GAME_GTNH"
       "size 2560 1440, $GAME_GTNH" # 5120×1440 panel ⇒ max 16:9 is 2560×1440
-      "keepaspectratio, $GAME_GTNH"
-      "center, $GAME_GTNH"
+      "keep_aspect_ratio on, $GAME_GTNH"
+      "center on, $GAME_GTNH"
     ];
   };
 }
