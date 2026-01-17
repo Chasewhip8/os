@@ -1,70 +1,73 @@
+# PC (NixOS) home configuration for chase
 { pkgs, inputs, ... }:
 {
   imports = [
+    # Shared profiles
+    ../../profiles/base.nix
+    ../../profiles/development.nix
+
+    # Additional modules
     inputs.xremap-flake.homeManagerModules.default
-    ../../programs/zed.nix
     ../../programs/solana.nix
+
+    # PC-specific
     ./hyprland.nix
     ./theme.nix
   ];
 
   home.username = "chase";
   home.homeDirectory = "/home/chase";
-  home.stateVersion = "24.05"; # Don't manually modify in most cases.
+  home.stateVersion = "24.05";
 
-  # User Packages
-  home.packages = [
-    pkgs.pavucontrol # Audio Control Panel
-    pkgs.tree
-    pkgs.vesktop
-    pkgs.slack
-    pkgs.spotify
-    pkgs.jetbrains.datagrip
-    pkgs.jetbrains.goland
-    pkgs.nodejs
-    pkgs.prismlauncher
-    pkgs.openjdk25
-    pkgs.glfw
-    pkgs.obsidian
-    pkgs.corepack
-    (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
-    pkgs.gnumake
-    pkgs.gcc
-    pkgs.mold
-    pkgs.bun
-    pkgs.audacity
-    pkgs.telegram-desktop
-    pkgs.signal-desktop
-    pkgs.openssl
-    pkgs.pkg-config
-    pkgs.fzf
-    pkgs.ripgrep
-    pkgs.zoxide
-    pkgs.lsd
-    pkgs.bat
-    pkgs.foundry-bin
-    pkgs.solc
-    inputs.codex-cli-nix.packages.${pkgs.system}.default
-    pkgs.anki-bin
-  ];
-
-  # Custom Module Configs
+  # Zed config paths (uses module from base profile)
   extensions.zed = {
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };
 
+  # PC-specific packages (Linux GUI apps, etc.)
+  home.packages = [
+    pkgs.pavucontrol
+    pkgs.vesktop
+    pkgs.slack
+    pkgs.spotify
+    pkgs.jetbrains.datagrip
+    pkgs.jetbrains.goland
+    pkgs.prismlauncher
+    pkgs.openjdk25
+    pkgs.glfw
+    pkgs.obsidian
+    pkgs.gcc
+    pkgs.mold
+    pkgs.audacity
+    pkgs.telegram-desktop
+    pkgs.signal-desktop
+    pkgs.openssl
+    pkgs.pkg-config
+    pkgs.solc
+    inputs.codex-cli-nix.packages.${pkgs.system}.default
+    pkgs.anki-bin
+  ];
+
+  # PC-specific shell config
   home.shellAliases = {
     nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#pc";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };
 
   home.sessionVariables = {
-    EDITOR = "nano";
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
   };
 
-  # I like to remap my caps lock to the super key as a bind layer for hyprland.
+  # Extend zsh with PC-specific init
+  programs.zsh.initContent = ''
+    source ~/.config/zsh/themes/enabled.zsh-theme
+    export PATH=$PATH:$(go env GOPATH)/bin
+    export PATH=$PATH:$HOME/.cargo/bin
+    export PATH=$PATH:$HOME/.bun/bin
+  '';
+
+  # XRemap for caps-lock -> super key
   services.xremap = {
     enable = true;
     withWlroots = true;
@@ -79,50 +82,8 @@
     ];
   };
 
-  programs.kitty = {
-    enable = true;
-    shellIntegration = {
-      enableZshIntegration = true;
-    };
-  };
-
-  programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    initContent = ''
-      source ~/.config/zsh/themes/enabled.zsh-theme
-      export PATH=$PATH:$(go env GOPATH)/bin
-      export PATH=$PATH:$HOME/.cargo/bin
-      export PATH=$PATH:$HOME/.bun/bin
-    '';
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-      ];
-    };
-  };
-
-  programs.git = {
-    enable = true;
-    userName = "Chasewhip8";
-    userEmail = "chasewhip20@gmail.com";
-  };
-
+  # PC-specific programs
   programs.google-chrome.enable = true;
-
-  # SSH agent
-  services.ssh-agent.enable = true;
-
-  # Tools
-  programs.htop.enable = true;
-
-  # Dev Tooling
-  programs.go.enable = true;
   programs.pyenv.enable = true;
-
-  # Let Home Manager install and manage itself.
-  programs.home-manager.enable = true;
+  services.ssh-agent.enable = true;
 }
