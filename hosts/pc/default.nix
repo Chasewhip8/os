@@ -138,7 +138,7 @@
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     users = {
-      "chase" = import ../../home/users/chase;
+      "chase" = import ../../home/users/chase/pc.nix;
     };
   };
 

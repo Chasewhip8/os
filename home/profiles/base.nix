@@ -2,6 +2,7 @@
 { pkgs, inputs, ... }:
 {
   imports = [
+    ../programs/zsh.nix
     ../programs/zed.nix
   ];
 
@@ -18,24 +19,6 @@
 
   home.sessionVariables = {
     EDITOR = "nano";
-  };
-
-  # Shell configuration
-  programs.zsh = {
-    enable = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    initContent = ''
-      export PATH=$PATH:$HOME/.cargo/bin
-      export PATH=$PATH:$HOME/.bun/bin
-    '';
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "sudo"
-      ];
-    };
   };
 
   # Git configuration
