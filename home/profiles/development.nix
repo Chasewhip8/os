@@ -4,8 +4,8 @@
   home.packages = [
     # JavaScript/TypeScript
     pkgs.nodejs
-    pkgs.corepack
     pkgs.bun
+    pkgs.pnpm
 
     # Rust
     (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))

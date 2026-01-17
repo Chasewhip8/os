@@ -1,7 +1,4 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
-
+# NixOS PC configuration
 {
   pkgs,
   inputs,
@@ -10,63 +7,40 @@
 {
   imports = [
     inputs.hyprland.nixosModules.default
-    # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ../../modules/nixos/nvidia.nix
     ../../modules/nixos/greetd.nix
     ../../modules/nixos/files.nix
-    ../../modules/nixos/home-manager-lifted.nix
+    ../../modules/nixos/pam-services.nix
+    ../../modules/nixos/fonts.nix
+    ../../modules/nixos/docker.nix
+    ../../modules/nixos/1password.nix
+    ../../modules/nixos/gaming.nix
+    ../../modules/nixos/ledger.nix
   ];
 
-  fonts.packages = [
-    inputs.apple-fonts.packages.${pkgs.system}.sf-pro
-    inputs.apple-fonts.packages.${pkgs.system}.sf-pro-nerd
-    inputs.apple-fonts.packages.${pkgs.system}.sf-compact
-    inputs.apple-fonts.packages.${pkgs.system}.sf-compact-nerd
-    inputs.apple-fonts.packages.${pkgs.system}.sf-mono
-    inputs.apple-fonts.packages.${pkgs.system}.sf-mono-nerd
-    inputs.apple-fonts.packages.${pkgs.system}.sf-arabic
-    inputs.apple-fonts.packages.${pkgs.system}.sf-arabic-nerd
-    inputs.apple-fonts.packages.${pkgs.system}.ny
-    inputs.apple-fonts.packages.${pkgs.system}.ny-nerd
-  ];
-
-  # Bootloader.
+  # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
-  # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+  # Hostname
+  networking.hostName = "nixos";
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-27.3.11"
-  ];
+  nixpkgs.config.permittedInsecurePackages = [ "electron-27.3.11" ];
 
   # Enable Flakes
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.trusted-users = [ "root" "@wheel" "chase" ];
 
-  # Enable trusted user for cache
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-    "chase"
-  ];
-
-  # Enable networking
+  # Networking
   networking.networkmanager.enable = true;
+  networking.firewall.enable = true;
 
-  # Set your time zone.
+  # Locale
   time.timeZone = "America/Boise";
-
-  # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "en_US.UTF-8";
     LC_IDENTIFICATION = "en_US.UTF-8";
@@ -79,16 +53,18 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Configure keymap in X11
+  # Keyboard
   services.xserver.xkb = {
     layout = "us";
     variant = "";
   };
 
-  # Enable Printing
+  # Services
   services.printing.enable = true;
+  services.udisks2.enable = true;
+  services.upower.enable = true;
 
-  # Enable Audio
+  # Audio
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -97,106 +73,45 @@
     pulse.enable = true;
   };
 
-  # Enable Removeable Disks
-  services.udisks2.enable = true;
-
-  # Enable Power API
-  services.upower.enable = true;
-
-  # Enable ZSH
+  # Shell
   programs.zsh.enable = true;
 
   # Keyring
   services.gnome.gnome-keyring.enable = true;
-  security.pam.services.greetd.enableGnomeKeyring = true; # Allow greetd to unlock keyring
+  security.pam.services.greetd.enableGnomeKeyring = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # User
   users.users.chase = {
     uid = 1000;
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Chase";
-    extraGroups = [
-      "networkmanager"
-      "wheel"
-    ];
+    extraGroups = [ "networkmanager" "wheel" ];
   };
 
-  # XRemap
+  # XRemap permissions
   hardware.uinput.enable = true;
   users.groups.uinput.members = [ "chase" ];
   users.groups.input.members = [ "chase" ];
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
-  environment.systemPackages = with pkgs; [
-    git
-    wget
-  ];
+  # System packages
+  environment.systemPackages = with pkgs; [ git wget ];
 
+  # Home Manager
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
-    users = {
-      "chase" = import ../../home/users/chase/pc.nix;
-    };
+    users."chase" = import ../../home/users/chase/pc.nix;
   };
 
-  # Allow Dynamic Binaries
+  # Dynamic binaries
   programs.nix-ld.enable = true;
 
-  # Platform Hints - These need to be here so that hyprland passes them
-  #                  to child processes.
+  # Wayland hints for Electron apps
   environment.sessionVariables = {
-    NIXOS_OZONE_WL = "1"; # hint electron apps to use wayland
+    NIXOS_OZONE_WL = "1";
     ELECTRON_OZONE_PLATFORM_HINT = "wayland";
   };
 
-  virtualisation.docker = {
-    enable = true;
-    rootless = {
-      enable = true;
-      setSocketVariable = true;
-    };
-  };
-
-  programs._1password.enable = true;
-  programs._1password-gui = {
-    enable = true;
-    # Certain features, including CLI integration and system authentication support,
-    # require enabling PolKit integration on some desktop environments (e.g. Plasma).
-    polkitPolicyOwners = [ "chase" ];
-  };
-
-  programs.steam = {
-    enable = true;
-    localNetworkGameTransfers.openFirewall = true; # Open ports in the firewall for Steam Local Network Game Transfers
-  };
-
-  # Ledger udev rules
-  services.udev.extraRules = ''
-    # HW.1, Nano
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="2581", ATTRS{idProduct}=="1b7c|2b7c|3b7c|4b7c", TAG+="uaccess", TAG+="udev-acl"
-
-    # Blue, NanoS, Aramis, HW.2, Nano X, NanoSP, Stax, Ledger Test,
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="2c97", TAG+="uaccess", TAG+="udev-acl"
-
-    # Keystone 3 Pro
-    SUBSYSTEMS=="usb", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev", TAG+="uaccess"
-    KERNEL=="hidraw*", ATTRS{idVendor}=="1209", ATTRS{idProduct}=="3001", MODE="0660", GROUP="plugdev"
-
-    # Same, but with hidraw-based library (instead of libusb)
-    KERNEL=="hidraw*", ATTRS{idVendor}=="2c97", MODE="0666"
-  '';
-
-  networking.firewall = {
-    enable = true;
-    # Allow docker to
-    extraCommands = ''
-      iptables -I INPUT 1 -s 172.16.0.0/12 -p tcp -d 172.17.0.1 -j ACCEPT
-      iptables -I INPUT 2 -s 172.16.0.0/12 -p udp -d 172.17.0.1 -j ACCEPT
-    '';
-  };
-
-  system.stateVersion = "24.05"; # Did you read the comment?
+  system.stateVersion = "24.05";
 }
