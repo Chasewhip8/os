@@ -12,10 +12,10 @@
     inputs.hyprland.nixosModules.default
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ../../modules/nvidia.nix
-    ../../modules/greetd.nix
-    ../../modules/files.nix
-    ../../modules/home-manager-lifted.nix
+    ../../modules/nixos/nvidia.nix
+    ../../modules/nixos/greetd.nix
+    ../../modules/nixos/files.nix
+    ../../modules/nixos/home-manager-lifted.nix
   ];
 
   fonts.packages = [
@@ -138,7 +138,7 @@
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     users = {
-      "chase" = import ../../users/chase/home.nix;
+      "chase" = import ../../home/users/chase;
     };
   };
 

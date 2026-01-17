@@ -66,11 +66,11 @@
       ...
     }@inputs:
     {
-      nixosConfigurations.default = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.pc = nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
           determinate.nixosModules.default
-          ./hosts/default/configuration.nix
+          ./hosts/pc
           {
             nixpkgs.overlays = [
               rust-overlay.overlays.default

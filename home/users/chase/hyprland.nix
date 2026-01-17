@@ -10,7 +10,7 @@ let
 in
 {
   imports = [
-    ../../modules/home-manager/hyprland
+    ../../programs/hyprland
   ];
 
   extensions.wallpaper.path = ./wallpaper.jpg;

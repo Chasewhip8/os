@@ -2,8 +2,8 @@
 {
   imports = [
     inputs.xremap-flake.homeManagerModules.default
-    ../../modules/home-manager/zed.nix
-    ../../modules/home-manager/solana.nix
+    ../../programs/zed.nix
+    ../../programs/solana.nix
     ./hyprland.nix
     ./theme.nix
   ];
@@ -55,7 +55,7 @@
   };
 
   home.shellAliases = {
-    nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#default";
+    nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#pc";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };
 
