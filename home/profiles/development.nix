@@ -12,9 +12,6 @@
 
     # Build tools
     pkgs.gnumake
-
-    # Blockchain
-    pkgs.foundry-bin
   ];
 
   # Dev tooling

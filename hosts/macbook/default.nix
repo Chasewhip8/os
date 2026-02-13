@@ -4,11 +4,8 @@
   ...
 }:
 {
-  # Nix settings
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  # Disable nix-darwin's Nix management (Determinate handles it)
+  nix.enable = false;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -33,6 +30,7 @@
 
   # Home Manager
   home-manager = {
+    backupFileExtension = "hm-backup";
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     users.chase = import ../../home/users/chase/macbook.nix;

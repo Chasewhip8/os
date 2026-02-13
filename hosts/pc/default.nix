@@ -12,7 +12,6 @@
     ../../modules/nixos/greetd.nix
     ../../modules/nixos/files.nix
     ../../modules/nixos/pam-services.nix
-    ../../modules/nixos/fonts.nix
     ../../modules/nixos/docker.nix
     ../../modules/nixos/1password.nix
     ../../modules/nixos/gaming.nix
