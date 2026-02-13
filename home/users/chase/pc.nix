@@ -5,6 +5,7 @@
     # Shared profiles
     ../../profiles/base.nix
     ../../profiles/development.nix
+    ../../profiles/gui.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)
     ../../programs/hyprland
