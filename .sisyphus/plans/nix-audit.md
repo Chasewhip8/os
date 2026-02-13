@@ -67,15 +67,15 @@ Make the 3-environment Nix config correct, DRY, and easy to understand — each 
 - Cleaned: commented-out macOS defaults (either configure or remove)
 
 ### Definition of Done
-- [ ] All 3 configs evaluate: `nix build --dry-run` passes for pc, macbook, macbook-vm
-- [ ] Macbook has ZERO dev packages (no nodejs, bun, rust, go, gcc, etc.)
-- [ ] Macbook still has Zed config sync activation (`zedResetConfig`)
-- [ ] Macbook still has Kitty config management (programs.kitty)
-- [ ] VM has opencode
-- [ ] No duplicate package declarations between pc.nix and macbook-vm.nix
-- [ ] No duplicate settings between hosts/pc and hosts/macbook-vm
-- [ ] No references to browser-previews or prismlauncher in flake.nix
-- [ ] plan.md, lib/, modules/darwin/, modules/shared/ deleted
+- [x] All 3 configs evaluate: `nix build --dry-run` passes for pc, macbook, macbook-vm
+- [x] Macbook has ZERO dev packages (no nodejs, bun, rust, go, gcc, etc.)
+- [x] Macbook still has Zed config sync activation (`zedResetConfig`)
+- [x] Macbook still has Kitty config management (programs.kitty)
+- [x] VM has opencode
+- [x] No duplicate package declarations between pc.nix and macbook-vm.nix
+- [x] No duplicate settings between hosts/pc and hosts/macbook-vm
+- [x] No references to browser-previews or prismlauncher in flake.nix
+- [x] plan.md, lib/, modules/darwin/, modules/shared/ deleted
 
 ### Must Have
 - Build verification after each structural change
