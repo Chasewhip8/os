@@ -476,7 +476,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ---
 
-- [ ] 5. Restructure macbook profile composition
+- [x] 5. Restructure macbook profile composition
 
   **What to do**:
   - Edit `home/users/chase/macbook.nix` to have the correct imports:
@@ -569,7 +569,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ---
 
-- [ ] 6. Clean up PC and VM user configs
+- [x] 6. Clean up PC and VM user configs
 
   **What to do**:
   - **pc.nix**: After Task 3 consolidated dev packages, verify pc.nix only has PC-specific packages remaining:
@@ -643,7 +643,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ---
 
-- [ ] 7. Deduplicate flake.nix overlays and final cleanup
+- [x] 7. Deduplicate flake.nix overlays and final cleanup
 
   **What to do**:
   - In `flake.nix`, extract the repeated overlay block into a `let` binding:

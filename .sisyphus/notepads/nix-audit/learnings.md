@@ -47,3 +47,65 @@
   - VM (imports zed-lsp.nix directly): Gets LSP servers only
 - **Verification**: Both modified files parse correctly (nix-instantiate)
 - **User configs unchanged**: macbook.nix and pc.nix still use extensions.zed options
+
+## [$(date -u +"%Y-%m-%dT%H:%M:%SZ")] Task 5: Macbook profile restructure
+- Removed imports: development.nix, gui.nix
+- Added import: zed.nix (config sync only)
+- Added Kitty config directly to macbook.nix
+- Kept pkgs.opencode (GUI tool for VM connection)
+- Verification: macbook has ZERO dev packages
+
+## [2026-02-13T00:00:00Z] Task 6: PC and VM config cleanup verification
+
+### Verification Results: ✅ ALL PASSED
+
+**PC Config (home/users/chase/pc.nix):**
+- ✅ Contains ONLY PC-specific GUI packages (14 packages):
+  - pavucontrol, vesktop, slack, spotify
+  - jetbrains.datagrip, jetbrains.goland
+  - prismlauncher, openjdk25, glfw
+  - obsidian, audacity, telegram-desktop, signal-desktop, anki-bin
+- ✅ Zero dev packages (gcc, mold, openssl, pkg-config, solc, codex-cli, pyenv)
+- ✅ No PKG_CONFIG_PATH environment variables
+- ✅ Imports: base.nix, development.nix, gui.nix, hyprland
+- ✅ Config evaluates successfully
+
+**VM Config (home/users/chase/macbook-vm.nix):**
+- ✅ Minimal configuration with NO packages section
+- ✅ Imports: base.nix, development.nix, zed-lsp.nix
+- ✅ All dev tools inherited from development.nix
+- ✅ Zero dev packages in file
+- ✅ Config evaluates successfully
+
+**Opencode Availability:**
+- ✅ opencode confirmed in development.nix (line 31)
+- ✅ opencode verified available on VM via nix eval
+- ✅ VM inherits all dev tools from development.nix
+
+**Verification Commands Run:**
+- grep for dev packages in pc.nix: 0 matches ✅
+- grep for dev packages in macbook-vm.nix: 0 matches ✅
+- nix eval pc config: successful ✅
+- nix eval macbook-vm config: successful ✅
+- nix eval opencode on VM: confirmed ✅
+
+### Key Findings:
+- Task 3's dev package consolidation was successful
+- PC config is now clean and focused on GUI apps only
+- VM config is minimal and properly inherits all dev tools
+- No duplicated package declarations across configs
+- All configs build and evaluate without errors
+
+### Status: VERIFICATION COMPLETE - NO CHANGES NEEDED
+Both configs are in the correct state post-Task 3. No modifications required.
+
+## [2026-02-13T00:00:00Z] Task 7: Flake overlay deduplication
+- Extracted commonOverlays into let binding (lines 60-65)
+- Removed foundry input from inputs section (was line 48)
+- Removed foundry from outputs function args (was line 60)
+- Removed foundry.overlay from all 3 config modules
+- Kept rust-overlay (actively used for Rust nightly in development.nix)
+- All 3 configs now use commonOverlays instead of inline blocks
+- flake.lock updated after foundry input removal
+- Final audit: No TODO/FIXME/HACK markers found in any .nix files
+- Build verification: macbook config builds successfully; flake check passes all 3 configurations

@@ -4,8 +4,7 @@
   imports = [
     # Shared profiles
     ../../profiles/base.nix
-    ../../profiles/development.nix
-    ../../profiles/gui.nix
+    ../../programs/zed.nix
   ];
 
   home.username = "chase";
@@ -16,6 +15,16 @@
   extensions.zed = {
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
+  };
+
+  # Kitty terminal configuration
+  programs.kitty = {
+    enable = true;
+    shellIntegration.enableZshIntegration = true;
+    extraConfig = ''
+      window_margin_width 10
+      font_size 18.0
+    '';
   };
 
   # macOS-specific packages
