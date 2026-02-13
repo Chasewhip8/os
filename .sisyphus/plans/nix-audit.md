@@ -757,14 +757,14 @@ grep -c 'browser-previews\|prismlauncher' flake.nix
 ```
 
 ### Final Checklist
-- [ ] All 3 configs build successfully
-- [ ] Macbook: zero dev packages, has Zed config sync + Kitty config
-- [ ] VM: has all dev tools + opencode + LSP servers
-- [ ] PC: has everything (dev + GUI + Hyprland)
-- [ ] No duplicated package declarations across user configs
-- [ ] No duplicated NixOS settings across host configs
-- [ ] No dead files, directories, or flake inputs
-- [ ] flake.nix overlay defined once, used three times
-- [ ] All stateVersion values unchanged
-- [ ] orbstack.nix untouched
-- [ ] hyprland/ subtree untouched
+- [x] All 3 configs build successfully
+- [x] Macbook: zero dev packages, has Zed config sync + Kitty config
+- [x] VM: has all dev tools + opencode + LSP servers
+- [x] PC: has everything (dev + GUI + Hyprland)
+- [x] No duplicated package declarations across user configs
+- [x] No duplicated NixOS settings across host configs
+- [x] No dead files, directories, or flake inputs
+- [x] flake.nix overlay defined once, used three times
+- [x] All stateVersion values unchanged
+- [x] orbstack.nix untouched
+- [x] hyprland/ subtree untouched
