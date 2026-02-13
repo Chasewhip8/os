@@ -9,9 +9,6 @@
 
     # Linux desktop (Hyprland + theme + xremap + etc)
     ../../programs/hyprland
-
-    # Additional programs
-    ../../programs/solana.nix
   ];
 
   home.username = "chase";
@@ -36,15 +33,9 @@
     pkgs.openjdk25
     pkgs.glfw
     pkgs.obsidian
-    pkgs.gcc
-    pkgs.mold
     pkgs.audacity
     pkgs.telegram-desktop
     pkgs.signal-desktop
-    pkgs.openssl
-    pkgs.pkg-config
-    pkgs.solc
-    inputs.codex-cli-nix.packages.${pkgs.system}.default
     pkgs.anki-bin
   ];
 
@@ -53,11 +44,4 @@
     nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#pc";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };
-
-  home.sessionVariables = {
-    PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
-  };
-
-  # PC-specific programs
-  programs.pyenv.enable = true;
 }

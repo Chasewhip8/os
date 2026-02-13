@@ -8,9 +8,7 @@ let
   cfg = config.extensions.zed;
 in
 {
-  imports = [
-    ./zed-lsp.nix
-  ];
+  imports = [];
 
   options = {
     extensions.zed = {
@@ -29,10 +27,6 @@ in
   };
 
   config = {
-    home.packages = [
-      pkgs.zed-editor
-    ];
-
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       # Ensure the directory exists
       mkdir -p "$HOME/.config/zed"

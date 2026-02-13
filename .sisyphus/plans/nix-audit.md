@@ -167,7 +167,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ## TODOs
 
-- [ ] 1. Remove dead weight and verify stale items
+- [x] 1. Remove dead weight and verify stale items
 
   **What to do**:
   - Delete `plan.md` from repository root
@@ -236,7 +236,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ---
 
-- [ ] 2. Create shared NixOS base module
+- [x] 2. Create shared NixOS base module
 
   **What to do**:
   - Create `modules/nixos/base.nix` containing the settings duplicated between `hosts/pc/default.nix` and `hosts/macbook-vm/default.nix`:
@@ -320,7 +320,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ---
 
-- [ ] 3. Consolidate dev packages into development.nix
+- [x] 3. Consolidate dev packages into development.nix
 
   **What to do**:
   - Add to `home/profiles/development.nix` the packages currently duplicated in pc.nix and macbook-vm.nix:
@@ -400,7 +400,7 @@ Wave 3 (After Wave 2 — intentional behavior changes):
 
 ---
 
-- [ ] 4. Split zed.nix into package install vs config sync
+- [x] 4. Split zed.nix into package install vs config sync
 
   **What to do**:
   - Currently `home/programs/zed.nix` does TWO things:
