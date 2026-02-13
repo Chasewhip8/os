@@ -48,8 +48,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    apple-fonts.url = "github:Lyndeno/apple-fonts.nix";
-
     solana-nix.url = "github:arijoon/solana-nix";
 
     hyprlux = {
@@ -100,6 +98,21 @@
             ];
           }
           inputs.home-manager.darwinModules.default
+        ];
+      };
+
+      nixosConfigurations.macbook-vm = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          determinate.nixosModules.default
+          ./hosts/macbook-vm
+          {
+            nixpkgs.overlays = [
+              rust-overlay.overlays.default
+              foundry.overlay
+            ];
+          }
+          inputs.home-manager.nixosModules.default
         ];
       };
     };
