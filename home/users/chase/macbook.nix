@@ -1,9 +1,10 @@
 # macOS home configuration for chase
-{ pkgs, inputs, ... }:
+{ ... }:
 {
   imports = [
     # Shared profiles
     ../../profiles/base.nix
+    ../../profiles/development.nix
     ../../programs/zed.nix
   ];
 
@@ -11,10 +12,15 @@
   home.homeDirectory = "/Users/chase";
   home.stateVersion = "24.05";
 
-  # Zed config paths (uses module from base profile)
+  # Zed config paths
   extensions.zed = {
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
+  };
+
+  extensions.opencode = {
+    pluginPath = ./opencode.json;
+    configPath = ./oh-my-opencode.jsonc;
   };
 
   # Kitty terminal configuration
@@ -27,14 +33,9 @@
     '';
   };
 
-  # macOS-specific packages
-  home.packages = [
-    pkgs.opencode
-  ];
-
   # macOS-specific shell config
   home.shellAliases = {
-    nixconf-apply = "darwin-rebuild switch --flake ~/.nixconf#macbook";
+    nixconf-apply = "sudo darwin-rebuild switch --flake ~/.nixconf#macbook";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };
 }

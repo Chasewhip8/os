@@ -1,101 +1,57 @@
 # Nix Configuration Agent Instructions
 
-## Core Principle: Separation of Concerns
+## Core Principle
 
-This configuration uses [Determinate Nix](https://docs.determinate.systems/) with flakes. Maintain strict modularity - no spaghetti code.
+Optimize for clarity, composability, and reversibility. Every change should be easy to understand, easy to disable, and safe to evolve.
 
-## Architecture Rules
+## Architecture Wisdom
 
-### 1. Directory Boundaries
+### 1. Keep Boundaries Clean
 
-```
-hosts/           → System-level config only (per-machine)
-modules/nixos/   → NixOS-specific system modules
-modules/darwin/  → macOS-specific system modules (create if needed)
-home/profiles/   → Composable feature sets (cross-platform)
-home/programs/   → Individual application configs
-home/users/      → Per-user, per-host configurations
-lib/             → Shared utility functions
-```
+- Separate host-level concerns from user-level concerns.
+- Keep platform-specific logic isolated from cross-platform logic.
+- Avoid coupling unrelated domains in a single module.
 
-### 2. Module Guidelines
+### 2. Compose, Do Not Entangle
 
-**One concern per file.** If a module does two unrelated things, split it.
+- Prefer small modules with one clear responsibility.
+- Compose behavior through `imports` and options, not copy-paste.
+- Design modules to be independently toggleable.
 
-- System modules (`modules/`) configure system services, hardware, PAM
-- Home modules (`home/programs/`) configure user applications
-- Never mix system and user configuration in the same file
-- Each module should be independently toggleable
+### 3. Make Data Flow Obvious
 
-**Bad:**
+- Keep dependencies directional and predictable.
+- Avoid circular imports and hidden implicit dependencies.
+- Favor explicit options and documented defaults over ad-hoc overrides.
 
-```nix
-# nvidia-and-gaming.nix - DON'T DO THIS
-{ services.xserver.videoDrivers = ["nvidia"]; programs.steam.enable = true; }
-```
+### 4. Prefer Stable Interfaces
 
-**Good:**
+- Expose configuration through typed options (`mkOption`) where reuse is expected.
+- Use defaults to reduce repetition, but keep override points clear.
+- Treat module interfaces as contracts: change them deliberately.
 
-```nix
-# nvidia.nix
-{ services.xserver.videoDrivers = ["nvidia"]; }
-# steam.nix (separate file)
-{ programs.steam.enable = true; }
-```
+### 5. Localize Change
 
-### 3. Import Hierarchy
+- Add new behavior in focused modules rather than expanding unrelated files.
+- Refactor duplication into shared abstractions only when repetition becomes meaningful.
+- Keep each module small enough to reason about quickly.
 
-```
-flake.nix
-  └─ hosts/{machine}/default.nix
-       └─ modules/nixos/*.nix (system modules)
-       └─ home-manager
-            └─ home/users/{user}/{host}.nix
-                 └─ home/profiles/*.nix
-                 └─ home/programs/*.nix
-```
+### 6. Be Explicit About Platform Decisions
 
-- Hosts import modules, never the reverse
-- Profiles compose programs, not system config
-- Users import profiles, override as needed
+- Gate platform behavior clearly and in one place.
+- Avoid scattering platform conditionals throughout unrelated logic.
+- Keep platform divergence shallow so cross-platform maintenance stays cheap.
 
-### 4. Platform Separation
+### 7. Preserve Idempotence and Safety
 
-- Linux-only code: `modules/nixos/`, `home/programs/hyprland/`
-- macOS-only code: `modules/darwin/`, macOS-specific in user configs
-- Cross-platform code: `home/profiles/base.nix`, `home/profiles/development.nix`
+- Ensure repeated evaluations and rebuilds produce predictable outcomes.
+- Avoid side effects during evaluation.
+- Prefer deterministic inputs and pinned dependencies.
 
-Never use `if pkgs.stdenv.isDarwin` inline - create platform-specific files.
+## Change Checklist
 
-### 5. Avoiding Spaghetti
-
-**DO:**
-
-- Create a new file when adding a new application/service
-- Use `imports = [ ]` to compose functionality
-- Define custom options for configurable modules (see `home/programs/zed.nix`)
-- Keep files under 100 lines; split if larger
-
-**DON'T:**
-
-- Add unrelated config to existing files for convenience
-- Create circular imports
-- Hardcode paths - use `config.home.homeDirectory`, `pkgs.lib`, etc.
-- Duplicate configuration across hosts - extract to a module
-
-## Reference Documentation
-
-- [Determinate Nix Installer](https://docs.determinate.systems/nix-installer/)
-- [Flakes Reference](https://docs.determinate.systems/flakes/)
-- [Zero to Nix](https://zero-to-nix.com/) - Determinate's Nix guide
-- [NixOS Options Search](https://search.nixos.org/options)
-- [Home Manager Options](https://nix-community.github.io/home-manager/options.xhtml)
-- [nix-darwin Options](https://daiderd.com/nix-darwin/manual/index.html)
-
-## Checklist Before Committing
-
-- [ ] New functionality in its own file?
-- [ ] File under 100 lines? Unless needed.
-- [ ] No cross-layer imports (home importing system modules)?
-- [ ] Platform-specific code in platform-specific directory?
-- [ ] Can the module be disabled without breaking others?
+- [ ] Does this change keep system and user concerns cleanly separated?
+- [ ] Is the module responsibility still singular and clear?
+- [ ] Can the feature be disabled without collateral breakage?
+- [ ] Are defaults and overrides explicit and understandable?
+- [ ] Does this reduce long-term complexity instead of shifting it?

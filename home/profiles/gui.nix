@@ -3,7 +3,6 @@
 {
   imports = [
     ../programs/zed.nix
-    ../programs/zed-lsp.nix
   ];
 
   home.packages = [

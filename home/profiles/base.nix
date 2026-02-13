@@ -1,7 +1,8 @@
 # Base profile - cross-platform shell, git, and common CLI tools
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   imports = [
+    ../programs/opencode.nix
     ../programs/zsh.nix
   ];
 

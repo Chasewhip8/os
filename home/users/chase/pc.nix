@@ -21,6 +21,11 @@
     keymapPath = ./zed-keymap.json;
   };
 
+  extensions.opencode = {
+    pluginPath = ./opencode.json;
+    configPath = ./oh-my-opencode.jsonc;
+  };
+
   # PC-specific packages (Linux GUI apps)
   home.packages = [
     pkgs.pavucontrol

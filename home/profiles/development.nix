@@ -2,7 +2,7 @@
 { pkgs, inputs, ... }:
 {
   imports = [
-    ../programs/solana.nix
+    ../programs/language-servers.nix
   ];
 
   home.packages = [
@@ -23,17 +23,17 @@
     pkgs.openssl
     pkgs.pkg-config
 
-    # Solidity
-    pkgs.solc
-
     # CLI tools
-    inputs.codex-cli-nix.packages.${pkgs.system}.default
     pkgs.opencode
   ];
 
   # Dev tooling
   programs.go.enable = true;
   programs.pyenv.enable = true;
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
 
   # Session variables for C/C++ development
   home.sessionVariables = {

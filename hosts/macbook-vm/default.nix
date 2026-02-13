@@ -24,6 +24,9 @@
   # NOTE: Rosetta x86 emulation already configured in orbstack.nix
   # (nix.settings.extra-platforms = ["x86_64-linux" "i686-linux"])
 
+  # Kitty terminfo so `orb` shell inherits TERM=xterm-kitty correctly
+  environment.systemPackages = [ pkgs.kitty.terminfo ];
+
   # User — extend base user with VM-specific groups
   users.users.chase.extraGroups = [ "wheel" "docker" ];
 
