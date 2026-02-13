@@ -3,7 +3,6 @@
 {
   imports = [
     ../programs/zsh.nix
-    ../programs/zed.nix
   ];
 
   # Cross-platform packages
@@ -28,16 +27,6 @@
         user.name = "Chasewhip8";
         user.email = "chasewhip20@gmail.com";
     };
-  };
-
-  # Terminal
-  programs.kitty = {
-    enable = true;
-    shellIntegration.enableZshIntegration = true;
-    extraConfig = ''
-      window_margin_width 10
-      font_size 18.0
-    '';
   };
 
   # Common tools

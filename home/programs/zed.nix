@@ -8,6 +8,10 @@ let
   cfg = config.extensions.zed;
 in
 {
+  imports = [
+    ./zed-lsp.nix
+  ];
+
   options = {
     extensions.zed = {
       settingsPath = lib.mkOption {
@@ -27,11 +31,6 @@ in
   config = {
     home.packages = [
       pkgs.zed-editor
-      pkgs.nil
-      pkgs.nixd
-      pkgs.package-version-server
-      pkgs.rust-analyzer
-      pkgs.markdown-oxide
     ];
 
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
