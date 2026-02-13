@@ -3,6 +3,7 @@
   pkgs,
   inputs,
   modulesPath,
+  lib,
   ...
 }:
 {
@@ -18,6 +19,9 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Set host platform for aarch64-linux (OrbStack VM)
+  nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
 
   # Enable Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -44,9 +48,9 @@
   # Shell
   programs.zsh.enable = true;
 
-  # User — UID 501 to match macOS for VirtioFS file permissions
+  # User — UID 1000 (NixOS requires >= 1000 for normal users)
   users.users.chase = {
-    uid = 501;
+    uid = 1000;
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Chase";
