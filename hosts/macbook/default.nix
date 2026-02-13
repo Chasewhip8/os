@@ -36,22 +36,24 @@
     users.chase = import ../../home/users/chase/macbook.nix;
   };
 
-  # macOS system defaults
-  system.defaults = {
-    # dock = {
-    #   autohide = true;
-    #   mru-spaces = false;
-    # };
-    # finder = {
-    #   AppleShowAllExtensions = true;
-    #   FXPreferredViewStyle = "clmv";
-    # };
-    # NSGlobalDomain = {
-    #   AppleInterfaceStyle = "Dark";
-    #   KeyRepeat = 2;
-    #   InitialKeyRepeat = 15;
-    # };
+  # Homebrew casks (macOS GUI apps not available via Nix)
+  homebrew = {
+    enable = true;
+    casks = [
+      "1password"
+      "aerospace"
+      "discord"
+      "google-chrome"
+      "kitty"
+      "notion"
+      "slack"
+      "telegram"
+      "zed"
+    ];
+    onActivation.cleanup = "none";
   };
+
+
 
   # Used for backwards compatibility
   system.stateVersion = 5;

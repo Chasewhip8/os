@@ -20,7 +20,7 @@
 
   # macOS-specific packages
   home.packages = [
-    # Add macOS-specific packages here
+    pkgs.opencode
   ];
 
   # macOS-specific shell config

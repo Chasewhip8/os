@@ -34,15 +34,6 @@
 
     catppuccin.url = "github:catppuccin/nix";
 
-    browser-previews = {
-      url = "github:nix-community/browser-previews";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    prismlauncher = {
-      url = "github:PrismLauncher/PrismLauncher";
-    };
-
     rust-overlay = {
       url = "github:oxalica/rust-overlay";
       inputs.nixpkgs.follows = "nixpkgs";

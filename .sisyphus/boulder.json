@@ -1,9 +1,9 @@
 {
-  "active_plan": "/Users/chase/Projects/os/.sisyphus/plans/nixos-vm-config.md",
-  "started_at": "2026-02-13T03:40:18.834Z",
+  "active_plan": "/Users/chase/.nixconf/.sisyphus/plans/nix-audit.md",
+  "started_at": "2026-02-13T16:23:25.393Z",
   "session_ids": [
-    "ses_3aaea3007ffe8Ef7eMHw4FlUF1"
+    "ses_3a82f8a44ffejvfJH1dxrNSwoh"
   ],
-  "plan_name": "nixos-vm-config",
+  "plan_name": "nix-audit",
   "agent": "atlas"
 }
