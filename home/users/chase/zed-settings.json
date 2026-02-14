@@ -10,15 +10,13 @@
         "button": false
     },
     "edit_predictions": {
+        "provider": "zed",
         "mode": "subtle",
         "copilot": {
             "proxy": null,
             "proxy_no_verify": null
         },
         "enabled_in_text_threads": false
-    },
-    "features": {
-        "edit_prediction_provider": "zed"
     },
     "agent": {
         "button": true,
@@ -68,8 +66,8 @@
     "base_keymap": "JetBrains",
     "theme": "Ayu Mirage",
     "soft_wrap": "editor_width",
-    "ui_font_size": 20,
-    "buffer_font_size": 17,
+    "ui_font_size": 22,
+    "buffer_font_size": 18,
     "agent_ui_font_size": 19,
     "scroll_sensitivity": 1,
     "autosave": "on_window_change",

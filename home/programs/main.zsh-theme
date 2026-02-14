@@ -10,7 +10,15 @@ ZSH_THEME_GIT_PROMPT_CLEAN=""
 ZSH_THEME_RUBY_PROMPT_PREFIX="%{$fg_bold[red]%}‹"
 ZSH_THEME_RUBY_PROMPT_SUFFIX="›%{$reset_color%}"
 
-PROMPT='%{$fg_bold[green]%}%~%{$reset_color%}$(git_prompt_info)$(virtualenv_prompt_info)%{$reset_color%} $ '
+if [[ "$OSTYPE" == darwin* ]]; then
+  ZSH_PROMPT_CONTEXT="%{$fg_bold[blue]%}[MAC]%{$reset_color%} "
+elif [[ "$OSTYPE" == linux* ]]; then
+  ZSH_PROMPT_CONTEXT="%{$fg_bold[red]%}[VM]%{$reset_color%} "
+else
+  ZSH_PROMPT_CONTEXT="%{$fg_bold[cyan]%}[HOST]%{$reset_color%} "
+fi
+
+PROMPT='${ZSH_PROMPT_CONTEXT}%{$fg_bold[green]%}%~%{$reset_color%}$(git_prompt_info)$(virtualenv_prompt_info)%{$reset_color%} $ '
 
 RPROMPT='$(ruby_prompt_info)'
 

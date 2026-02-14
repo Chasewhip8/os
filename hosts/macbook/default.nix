@@ -4,8 +4,8 @@
   ...
 }:
 {
-  # Disable nix-darwin's Nix management (Determinate handles it)
-  nix.enable = false;
+  # Determinate Nix custom settings (written to /etc/nix/nix.custom.conf)
+  determinateNix.customSettings.trusted-users = [ "root" "chase" "@admin" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -39,6 +39,9 @@
   # Homebrew casks (macOS GUI apps not available via Nix)
   homebrew = {
     enable = true;
+    taps = [
+      "nikitabobko/tap"
+    ];
     casks = [
       "1password"
       "aerospace"
@@ -50,7 +53,7 @@
       "telegram"
       "zed"
     ];
-    onActivation.cleanup = "none";
+    onActivation.cleanup = "zap";
   };
 
 
