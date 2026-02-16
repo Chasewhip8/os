@@ -12,6 +12,14 @@ in
 
   options = {
     extensions.aerospace = {
+      enable = lib.mkEnableOption "AeroSpace config and package";
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.aerospace;
+        description = "The AeroSpace package to install";
+      };
+
       configPath = lib.mkOption {
         type = lib.types.path;
         default = "./aerospace.toml";
@@ -20,12 +28,12 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
+    home.packages = [ cfg.package ];
+
     home.activation.aerospaceResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      # Overwrite file on each apply to reset to original settings
       cp ${cfg.configPath} "$HOME/.aerospace.toml"
 
-      # Set file permissions
       chmod 0644 "$HOME/.aerospace.toml"
     '';
   };

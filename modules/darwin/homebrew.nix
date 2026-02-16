@@ -17,6 +17,7 @@
       "telegram"
       "zed"
     ];
+    onActivation.upgrade = true;
     onActivation.cleanup = "zap";
   };
 }

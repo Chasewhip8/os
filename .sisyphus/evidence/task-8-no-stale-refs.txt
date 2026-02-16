@@ -1,0 +1,19 @@
+Task 8: Delete old directories and stale files
+================================================
+
+QA Scenario 2: No stale references to deleted paths
+----------------------------------------------------
+
+Test 1: Search for stale profiles/ references
+$ grep -r 'profiles/' home/ hosts/ modules/ --include='*.nix'
+(no output - 0 matches found)
+
+Test 2: Search for stale programs/hyprland references
+$ grep -r 'programs/hyprland' home/users/ --include='*.nix'
+(no output - 0 matches found)
+
+Test 3: Search for stale gui.nix references
+$ grep -r 'gui\.nix' home/ --include='*.nix'
+(no output - 0 matches found)
+
+RESULT: ✅ Zero stale references found in codebase

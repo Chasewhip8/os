@@ -1,0 +1,33 @@
+Task 9 Package Preservation Verification
+Timestamp (UTC): 2026-02-16T18:56:12Z
+
+## kitty enable on pc
+warning: Git tree '/mnt/mac/Users/chase/.nixconf' has uncommitted changes
+warning: ignoring untrusted flake configuration setting 'extra-substituters'.
+Pass '--accept-flake-config' to trust it
+warning: ignoring untrusted flake configuration setting 'extra-trusted-public-keys'.
+Pass '--accept-flake-config' to trust it
+true
+
+EXIT_CODE:0
+
+## kitty enable on macbook
+warning: Git tree '/mnt/mac/Users/chase/.nixconf' has uncommitted changes
+warning: ignoring untrusted flake configuration setting 'extra-substituters'.
+Pass '--accept-flake-config' to trust it
+warning: ignoring untrusted flake configuration setting 'extra-trusted-public-keys'.
+Pass '--accept-flake-config' to trust it
+true
+
+EXIT_CODE:0
+
+## zed-editor present on pc home.packages
+warning: Git tree '/mnt/mac/Users/chase/.nixconf' has uncommitted changes
+warning: ignoring untrusted flake configuration setting 'extra-substituters'.
+Pass '--accept-flake-config' to trust it
+warning: ignoring untrusted flake configuration setting 'extra-trusted-public-keys'.
+Pass '--accept-flake-config' to trust it
+evaluation warning: 'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'
+true
+
+EXIT_CODE:0

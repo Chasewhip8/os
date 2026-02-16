@@ -1,14 +1,10 @@
 # OrbStack VM (NixOS) home configuration for chase
-{
-  pkgs,
-  inputs,
-  ...
-}:
+{ ... }:
 {
   imports = [
     # Shared profiles
-    ../../profiles/base.nix
-    ../../profiles/development.nix
+    ../../programs/base.nix
+    ../../programs/development.nix
   ];
 
   home.username = "chase";
@@ -16,11 +12,11 @@
   home.stateVersion = "24.05";
 
   extensions.opencode = {
+    enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
     serve = {
       enable = true;
-      package = inputs.opencode.packages.${pkgs.system}.default;
     };
   };
 

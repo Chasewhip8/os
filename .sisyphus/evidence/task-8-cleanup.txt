@@ -1,0 +1,35 @@
+Task 8: Delete old directories and stale files
+================================================
+
+QA Scenario 1: Old directories and files removed
+-------------------------------------------------
+
+Test 1: Verify profiles/ directory removed
+$ test ! -d home/profiles && echo PASS || echo FAIL
+PASS: profiles directory removed
+
+Test 2: Verify old hyprland directory removed
+$ test ! -d home/programs/hyprland && echo PASS || echo FAIL
+PASS: old hyprland directory already removed
+
+Test 3: Verify solana.nix preserved
+$ test -f home/programs/solana.nix && echo PASS || echo FAIL
+PASS: solana.nix preserved
+
+Test 4: Verify new hyprland location exists
+$ test -d home/desktop/hyprland && echo PASS || echo FAIL
+PASS: new hyprland location exists
+
+Test 5: List remaining programs/ directory contents
+$ ls home/programs/
+aerospace.nix
+base.nix
+development.nix
+language-servers.nix
+main.zsh-theme
+opencode.nix
+solana.nix
+zed.nix
+zsh.nix
+
+RESULT: ✅ All old directories removed, expected files preserved

@@ -101,4 +101,14 @@ in
   # Linux-specific programs
   programs.google-chrome.enable = true;
   services.ssh-agent.enable = true;
+
+  # Terminal (kitty)
+  programs.kitty = {
+    enable = true;
+    shellIntegration.enableZshIntegration = true;
+    extraConfig = ''
+      window_margin_width 10
+      font_size 18.0
+    '';
+  };
 }

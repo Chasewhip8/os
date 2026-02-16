@@ -1,0 +1,26 @@
+QA Scenario 2: No content changes during move
+==============================================
+
+Test: Verify git shows 100% similarity renames
+Command: git diff --cached -M100% --name-status | grep hyprland
+
+Result:
+R100	home/programs/hyprland/default.nix	home/desktop/hyprland/default.nix
+R100	home/programs/hyprland/flux.nix	home/desktop/hyprland/flux.nix
+R100	home/programs/hyprland/keybindings.nix	home/desktop/hyprland/keybindings.nix
+R100	home/programs/hyprland/launcher.nix	home/desktop/hyprland/launcher.nix
+R100	home/programs/hyprland/lock.nix	home/desktop/hyprland/lock.nix
+R100	home/programs/hyprland/notifications.nix	home/desktop/hyprland/notifications.nix
+R100	home/programs/hyprland/screenshot.nix	home/desktop/hyprland/screenshot.nix
+R100	home/programs/hyprland/screenshot.sh	home/desktop/hyprland/screenshot.sh
+R100	home/programs/hyprland/theme.nix	home/desktop/hyprland/theme.nix
+R100	home/programs/hyprland/wallpaper.jpg	home/desktop/hyprland/wallpaper.jpg
+R100	home/programs/hyprland/wallpaper.nix	home/desktop/hyprland/wallpaper.nix
+R100	home/programs/hyprland/windowrules.nix	home/desktop/hyprland/windowrules.nix
+
+Analysis:
+- All 12 files show R100 status (100% similarity rename)
+- Zero content modifications detected
+- Pure directory move operation confirmed
+
+Conclusion: ✅ All files moved with 100% similarity - no content changes

@@ -1,0 +1,38 @@
+# Task 4: Kitty in Hyprland Verification
+
+## QA Scenario 2: Kitty config correctly added to hyprland desktop
+
+### Test 1: programs.kitty present
+$ grep 'programs.kitty' home/desktop/hyprland/default.nix
+  programs.kitty = {
+(PASS)
+
+### Test 2: window_margin_width 10 present
+$ grep 'window_margin_width 10' home/desktop/hyprland/default.nix
+      window_margin_width 10
+(PASS)
+
+### Test 3: font_size 18.0 present
+$ grep 'font_size 18.0' home/desktop/hyprland/default.nix
+      font_size 18.0
+(PASS)
+
+### Test 4: enableZshIntegration present
+$ grep 'enableZshIntegration' home/desktop/hyprland/default.nix
+    shellIntegration.enableZshIntegration = true;
+(PASS)
+
+### Syntax Validation
+$ nix-instantiate --parse home/desktop/hyprland/default.nix
+(valid Nix expression output - PASS)
+
+## Result: ALL TESTS PASSED ✓
+
+## Kitty Config Exact Reproduction
+From gui.nix lines 12-19:
+- enable = true ✓
+- shellIntegration.enableZshIntegration = true ✓
+- extraConfig with window_margin_width 10 ✓
+- extraConfig with font_size 18.0 ✓
+
+All settings exactly reproduced in hyprland/default.nix.

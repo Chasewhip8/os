@@ -1,14 +1,14 @@
 # PC (NixOS) home configuration for chase
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   imports = [
-    # Shared profiles
-    ../../profiles/base.nix
-    ../../profiles/development.nix
-    ../../profiles/gui.nix
+    # Shared programs
+    ../../programs/base.nix
+    ../../programs/development.nix
+    ../../programs/zed.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)
-    ../../programs/hyprland
+    ../../desktop/hyprland
   ];
 
   home.username = "chase";
@@ -17,11 +17,13 @@
 
   # Zed config paths
   extensions.zed = {
+    enable = true;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };
 
   extensions.opencode = {
+    enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
   };

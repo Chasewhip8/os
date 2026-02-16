@@ -1,0 +1,28 @@
+QA Scenario 1: All 12 hyprland items exist in new location
+============================================================
+
+Test: List all files in home/desktop/hyprland/
+Command: ls home/desktop/hyprland/
+
+Result:
+default.nix
+flux.nix
+keybindings.nix
+launcher.nix
+lock.nix
+notifications.nix
+screenshot.nix
+screenshot.sh
+theme.nix
+wallpaper.jpg
+wallpaper.nix
+windowrules.nix
+
+File count: 12
+
+Test: Validate default.nix parses successfully
+Command: nix-instantiate --parse home/desktop/hyprland/default.nix
+
+Result: SUCCESS - File parses without errors
+
+Conclusion: ✅ All 12 hyprland items successfully moved to home/desktop/hyprland/

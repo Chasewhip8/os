@@ -1,0 +1,10 @@
+=== Task 7: No Double-Definition Check ===
+
+Test 1: Verify programs.zsh.enable removed (expect 0)
+0
+
+Test 2: Verify backupFileExtension removed (expect 0)
+0
+
+Test 3: Verify environment.systemPackages removed (expect 0)
+0

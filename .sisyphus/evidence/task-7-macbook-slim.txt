@@ -1,0 +1,22 @@
+=== Task 7: Macbook Host Config Slimmed ===
+
+Test 1: Check for base.nix import
+    ../../modules/darwin/base.nix
+
+Test 2: Check for homebrew.nix import
+    ../../modules/darwin/homebrew.nix
+
+Test 3: Verify allowUnfree removed (expect 0 matches)
+0
+
+Test 4: Verify homebrew block removed (expect 0 matches)
+1
+
+Test 5: Verify stateVersion remains (expect 1 match)
+1
+
+Test 6: Check line count (expect ~30 lines)
+33 hosts/macbook/default.nix
+
+Test 7: Validate Nix syntax
+✓ Valid Nix syntax

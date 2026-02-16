@@ -1,14 +1,29 @@
 {
   config,
+  inputs,
   lib,
+  pkgs,
   ...
 }:
 let
   cfg = config.extensions.opencode;
+  opencodePackage =
+    if cfg.serve.package != null then
+      cfg.serve.package
+    else
+      cfg.package;
 in
 {
   options = {
     extensions.opencode = {
+      enable = lib.mkEnableOption "opencode config and package";
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = inputs.opencode.packages.${pkgs.system}.default;
+        description = "The opencode package to install";
+      };
+
       pluginPath = lib.mkOption {
         type = lib.types.path;
         description = "Path to opencode.json in this repository";
@@ -29,15 +44,18 @@ in
         };
 
         package = lib.mkOption {
-          type = lib.types.package;
-          description = "The opencode package to use for the server";
+          type = lib.types.nullOr lib.types.package;
+          default = null;
+          description = "Optional package override used only for opencode serve";
         };
       };
     };
   };
 
-  config = lib.mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
+      home.packages = [ cfg.package ];
+
       home.activation.opencodeResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         mkdir -p "$HOME/.config/opencode"
 
@@ -57,7 +75,7 @@ in
         };
 
         Service = {
-          ExecStart = "${cfg.serve.package}/bin/opencode serve --port ${toString cfg.serve.port}";
+          ExecStart = "${opencodePackage}/bin/opencode serve --port ${toString cfg.serve.port}";
           Restart = "on-failure";
           RestartSec = 5;
           WorkingDirectory = "%h";
@@ -68,5 +86,5 @@ in
         };
       };
     })
-  ];
+  ]);
 }

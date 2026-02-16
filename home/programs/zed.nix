@@ -12,6 +12,14 @@ in
 
   options = {
     extensions.zed = {
+      enable = lib.mkEnableOption "zed config and package";
+
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.zed-editor;
+        description = "The Zed package to install";
+      };
+
       settingsPath = lib.mkOption {
         type = lib.types.path;
         default = "./zed-settings.json";
@@ -26,16 +34,15 @@ in
     };
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
+    home.packages = [ cfg.package ];
+
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-      # Ensure the directory exists
       mkdir -p "$HOME/.config/zed"
 
-      # Overwrite files on each apply to reset to original settings
       cp ${cfg.settingsPath} "$HOME/.config/zed/settings.json"
       cp ${cfg.keymapPath} "$HOME/.config/zed/keymap.json"
 
-      # Optionally set file permissions
       chmod 0644 "$HOME/.config/zed/settings.json"
       chmod 0644 "$HOME/.config/zed/keymap.json"
     '';

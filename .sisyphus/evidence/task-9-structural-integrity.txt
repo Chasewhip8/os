@@ -1,0 +1,30 @@
+Task 9 Structural Integrity Verification
+Timestamp (UTC): 2026-02-16T18:56:12Z
+
+## Required structural checks
+PASS: profiles/ removed
+PASS: modules/darwin/ exists
+PASS: desktop/hyprland/ exists
+PASS: old hyprland gone
+
+## Scenario 3 checks
+-- files containing profiles/ under home/*.nix --
+-- files containing programs/hyprland under home/users/*.nix --
+-- modules/darwin listing --
+base.nix
+homebrew.nix
+-- home/desktop/hyprland file count --
+12
+-- home/programs listing --
+aerospace.nix
+base.nix
+development.nix
+language-servers.nix
+main.zsh-theme
+opencode.nix
+solana.nix
+zed.nix
+zsh.nix
+
+## Global stale reference check
+PASS: no stale refs

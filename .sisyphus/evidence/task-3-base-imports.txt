@@ -1,0 +1,15 @@
+=== QA Scenario 1: Import paths correctly updated in base.nix ===
+
+Step 1: Check opencode.nix import path
+    ./opencode.nix
+
+Step 2: Check zsh.nix import path
+    ./zsh.nix
+
+Step 3: Verify no stale ../programs/ paths
+No stale paths found (expected)
+
+Step 4: Validate Nix syntax
+✓ Valid Nix syntax
+
+Result: PASS - All import paths updated correctly

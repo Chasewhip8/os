@@ -1,0 +1,46 @@
+# Task 4: PC Imports Verification
+
+## QA Scenario 1: pc.nix imports are correct after gui.nix decomposition
+
+### Test 1: No stale profiles/ paths
+$ grep 'profiles/' home/users/chase/pc.nix
+(no output - PASS)
+
+### Test 2: No stale programs/hyprland path
+$ grep 'programs/hyprland' home/users/chase/pc.nix
+(no output - PASS)
+
+### Test 3: No gui.nix import
+$ grep 'gui.nix' home/users/chase/pc.nix
+(no output - PASS)
+
+### Test 4: programs/base.nix present
+$ grep 'programs/base.nix' home/users/chase/pc.nix
+    ../../programs/base.nix
+(PASS)
+
+### Test 5: programs/development.nix present
+$ grep 'programs/development.nix' home/users/chase/pc.nix
+    ../../programs/development.nix
+(PASS)
+
+### Test 6: programs/zed.nix present
+$ grep 'programs/zed.nix' home/users/chase/pc.nix
+    ../../programs/zed.nix
+(PASS)
+
+### Test 7: desktop/hyprland present
+$ grep 'desktop/hyprland' home/users/chase/pc.nix
+    ../../desktop/hyprland
+(PASS)
+
+### Test 8: zed-editor in home.packages
+$ grep 'zed-editor' home/users/chase/pc.nix
+    pkgs.zed-editor
+(PASS)
+
+### Syntax Validation
+$ nix-instantiate --parse home/users/chase/pc.nix
+(valid Nix expression output - PASS)
+
+## Result: ALL TESTS PASSED ✓

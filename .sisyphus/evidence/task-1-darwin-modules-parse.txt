@@ -1,0 +1,3 @@
+({ pkgs, ... }: { environment = { systemPackages = (with pkgs; [ (git) (wget) ]); }; home-manager = { backupFileExtension = "hm-backup"; }; nixpkgs = { config = { allowUnfree = true; }; }; programs = { zsh = { enable = true; }; }; })
+({ ... }: { homebrew = { casks = [ ("1password") ("aerospace") ("discord") ("google-chrome") ("kitty") ("notion") ("slack") ("telegram") ("zed") ]; enable = true; onActivation = { cleanup = "zap"; }; taps = [ ("nikitabobko/tap") ]; }; })
+Both files parsed successfully

@@ -1,9 +1,9 @@
 {
-  "active_plan": "/mnt/mac/Users/chase/.nixconf/.sisyphus/plans/opencode-serve.md",
-  "started_at": "2026-02-16T17:55:56.882Z",
+  "active_plan": "/mnt/mac/Users/chase/.nixconf/.sisyphus/plans/nix-repo-restructure.md",
+  "started_at": "2026-02-16T18:40:00.988Z",
   "session_ids": [
-    "ses_3987b5c88ffePefGZlfelROHHs"
+    "ses_3983f683cffeJueswtTKMW6IQo"
   ],
-  "plan_name": "opencode-serve",
+  "plan_name": "nix-repo-restructure",
   "agent": "atlas"
 }

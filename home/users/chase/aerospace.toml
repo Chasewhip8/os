@@ -1,13 +1,6 @@
 # Start AeroSpace at login
 start-at-login = true
 
-# You can use it to add commands that run after login to macOS user session.
-# 'start-at-login' needs to be 'true' for 'after-login-command' to work
-# Available commands: https://nikitabobko.github.io/AeroSpace/commands
-after-login-command = [
-    "exec-and-forget borders active_color=0xffeb6f92 inactive_color=0xcc9ccfd8 width=3.0 style=round",
-]
-
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
@@ -46,10 +39,10 @@ key-mapping.preset = 'qwerty'
 [gaps]
 inner.horizontal = 2
 inner.vertical = 2
-outer.left = 3
+outer.left = 0
 outer.bottom = 0
 outer.top = 0
-outer.right = 3
+outer.right = 0
 
 # See https://nikitabobko.github.io/AeroSpace/guide#exec-env-vars
 [exec] # Again, you don't need to copy all config sections to your config.
@@ -80,7 +73,7 @@ alt-q = 'close --quit-if-last-window'
 
 # Application Binds
 alt-t = 'exec-and-forget /opt/homebrew/bin/kitty -e orb -m nixos -w /home/chase' # Terminal (VM)
-alt-shift-t = 'exec-and-forget /opt/homebrew/bin/kitty ~'                           # Terminal (macOS)
+alt-cmd-t = 'exec-and-forget /opt/homebrew/bin/kitty ~'                             # Terminal (macOS)
 alt-f = 'exec-and-forget open -n "/Applications/Google Chrome.app"' # Browser
 alt-r = 'exec-and-forget open /Users/chase'                         # Finder
 alt-c = "exec-and-forget zed"

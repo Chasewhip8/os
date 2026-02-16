@@ -2,7 +2,7 @@
 { ... }:
 {
   # Zsh theme
-  home.file.".config/zsh/themes/enabled.zsh-theme".source = ./main.zsh-theme;
+  home.file.".config/zsh/themes/enabled.zsh-theme".source = ../users/chase/main.zsh-theme;
 
   programs.zsh = {
     enable = true;

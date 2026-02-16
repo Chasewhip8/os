@@ -3,8 +3,8 @@
 {
   imports = [
     # Shared profiles
-    ../../profiles/base.nix
-    ../../profiles/development.nix
+    ../../programs/base.nix
+    ../../programs/development.nix
     ../../programs/zed.nix
     ../../programs/aerospace.nix
   ];
@@ -15,15 +15,18 @@
 
   # Zed config paths
   extensions.zed = {
+    enable = true;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };
 
   extensions.aerospace = {
+    enable = true;
     configPath = ./aerospace.toml;
   };
 
   extensions.opencode = {
+    enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
   };

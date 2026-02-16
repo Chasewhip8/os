@@ -1,8 +1,8 @@
 # Development profile - cross-platform dev tools and languages
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   imports = [
-    ../programs/language-servers.nix
+    ./language-servers.nix
   ];
 
   home.packages = [
@@ -22,9 +22,6 @@
     # C/C++ development
     pkgs.openssl
     pkgs.pkg-config
-
-    # CLI tools
-    inputs.opencode.packages.${pkgs.system}.default
   ];
 
   # Dev tooling

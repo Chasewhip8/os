@@ -2,8 +2,8 @@
 { pkgs, ... }:
 {
   imports = [
-    ../programs/opencode.nix
-    ../programs/zsh.nix
+    ./opencode.nix
+    ./zsh.nix
   ];
 
   # Cross-platform packages

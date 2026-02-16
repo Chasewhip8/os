@@ -1,0 +1,27 @@
+Task 6: Update macbook-vm.nix imports
+======================================
+
+File: home/users/chase/macbook-vm.nix
+
+Verification Results:
+---------------------
+
+1. No profiles/ paths remain:
+   $ grep 'profiles/' home/users/chase/macbook-vm.nix
+   (no output - PASS)
+
+2. programs/base.nix import exists:
+   $ grep 'programs/base.nix' home/users/chase/macbook-vm.nix
+   ../../programs/base.nix
+   (1 match - PASS)
+
+3. programs/development.nix import exists:
+   $ grep 'programs/development.nix' home/users/chase/macbook-vm.nix
+   ../../programs/development.nix
+   (1 match - PASS)
+
+4. Nix syntax validation:
+   $ nix-instantiate --parse home/users/chase/macbook-vm.nix
+   (valid syntax - PASS)
+
+All acceptance criteria met.

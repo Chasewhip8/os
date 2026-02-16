@@ -1,0 +1,12 @@
+=== QA Scenario 2: Import paths correctly updated in development.nix ===
+
+Step 1: Check language-servers.nix import path
+    ./language-servers.nix
+
+Step 2: Verify no stale ../programs/ paths
+No stale paths found (expected)
+
+Step 3: Validate Nix syntax
+✓ Valid Nix syntax
+
+Result: PASS - All import paths updated correctly
