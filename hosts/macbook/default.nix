@@ -4,20 +4,13 @@
   ...
 }:
 {
-  # Determinate Nix custom settings (written to /etc/nix/nix.custom.conf)
-  determinateNix.customSettings.trusted-users = [ "root" "chase" "@admin" ];
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # System packages
-  environment.systemPackages = with pkgs; [
-    git
-    wget
+  imports = [
+    ../../modules/darwin/base.nix
+    ../../modules/darwin/homebrew.nix
   ];
 
-  # Enable ZSH
-  programs.zsh.enable = true;
+  # Determinate Nix custom settings (written to /etc/nix/nix.custom.conf)
+  determinateNix.customSettings.trusted-users = [ "root" "chase" "@admin" ];
 
   # Define user
   users.users.chase = {
@@ -30,33 +23,10 @@
 
   # Home Manager
   home-manager = {
-    backupFileExtension = "hm-backup";
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
     users.chase = import ../../home/users/chase/macbook.nix;
   };
-
-  # Homebrew casks (macOS GUI apps not available via Nix)
-  homebrew = {
-    enable = true;
-    taps = [
-      "nikitabobko/tap"
-    ];
-    casks = [
-      "1password"
-      "aerospace"
-      "discord"
-      "google-chrome"
-      "kitty"
-      "notion"
-      "slack"
-      "telegram"
-      "zed"
-    ];
-    onActivation.cleanup = "zap";
-  };
-
-
 
   # Used for backwards compatibility
   system.stateVersion = 5;
