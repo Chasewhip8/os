@@ -1,0 +1,23 @@
+QA Scenario 1: Module evaluates without errors (nix eval)
+==========================================================
+
+Command: nix eval .#nixosConfigurations.macbook-vm.config.system.build.toplevel --apply 'x: "ok"' 2>&1
+
+Exit Code: 0
+
+Output:
+-------
+warning: Git tree '/mnt/mac/Users/chase/.nixconf' has uncommitted changes
+warning: ignoring untrusted flake configuration setting 'extra-substituters'.
+Pass '--accept-flake-config' to trust it
+warning: ignoring untrusted flake configuration setting 'extra-trusted-public-keys'.
+Pass '--accept-flake-config' to trust it
+evaluation warning: 'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'
+warning: Using 'builtins.derivation' to create a derivation named 'options.json' that references the store path '/nix/store/0hxg06dwld1rqiyn16hg01vpk8hbqvc8-source' without a proper context. The resulting derivation will not have a correct store reference, so this is unreliable and may stop working in the future.
+"ok"
+
+Result: ✅ PASS
+- No evaluation errors
+- Exit code 0
+- Module evaluates successfully
+- Warnings are pre-existing (not related to this change)

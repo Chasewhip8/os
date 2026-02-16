@@ -1,0 +1,1 @@
+Failed to restart opencode-serve.service: Unit opencode-serve.service not found.

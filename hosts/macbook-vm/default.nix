@@ -11,7 +11,6 @@
     ../../modules/nixos/base.nix
     ./orbstack.nix
     "${modulesPath}/virtualisation/lxc-container.nix"
-    ../../modules/nixos/docker.nix
     ../../modules/nixos/1password-cli.nix
   ];
 
@@ -28,7 +27,7 @@
   environment.systemPackages = [ pkgs.kitty.terminfo ];
 
   # User — extend base user with VM-specific groups
-  users.users.chase.extraGroups = [ "wheel" "docker" ];
+  users.users.chase.extraGroups = [ "wheel" ];
 
   # Home Manager
   home-manager = {

@@ -1,0 +1,55 @@
+SCOPE FIDELITY CHECK - opencode-serve
+Generated: 2026-02-16
+
+FILES MODIFIED (Commits 355d102 + 36d4c9a):
+Core (specified in plan):
+  ✅ home/programs/opencode.nix
+  ✅ home/users/chase/macbook-vm.nix
+
+Additional (user-confirmed as intended):
+  ✅ flake.nix (opencode flake input)
+  ✅ flake.lock (dependency update)
+  ✅ home/profiles/development.nix (use flake input)
+  ✅ home/programs/language-servers.nix (add biome)
+
+Forbidden files (verified NOT modified):
+  ✅ modules/nixos/base.nix
+  ✅ home/users/chase/macbook.nix
+  ✅ home/users/chase/pc.nix
+
+MUST HAVE REQUIREMENTS (4/4):
+  ✅ mkEnableOption guard
+     Location: home/programs/opencode.nix:23
+     Code: enable = lib.mkEnableOption "opencode headless server"
+  
+  ✅ Fixed port 4096 in service config
+     Location: home/programs/opencode.nix:27
+     Code: default = 4096
+  
+  ✅ Restart=on-failure with RestartSec=5
+     Location: home/programs/opencode.nix:61-62
+     Code: Restart = "on-failure"; RestartSec = 5
+  
+  ✅ oc alias passes current directory via --dir $PWD
+     Location: home/users/chase/macbook-vm.nix:33
+     Code: oc = "opencode attach http://localhost:4096 --dir $PWD"
+
+MUST NOT HAVE GUARDRAILS (7/7):
+  ✅ No service management aliases (oc-restart, oc-status, etc.)
+  ✅ No health checks, liveness probes, or monitoring
+  ✅ No OPENCODE_SERVER_PASSWORD or auth layer
+  ✅ No socket activation or systemd complexity
+  ✅ No modifications to base.nix, macbook.nix, or pc.nix
+  ✅ No refactoring of existing pluginPath/configPath options
+  ✅ No log rotation or journal configuration
+
+IMPLEMENTATION QUALITY:
+  ✅ lib.mkMerge pattern used correctly (line 39)
+  ✅ systemd service wrapped in lib.mkIf cfg.serve.enable (line 52)
+  ✅ Full nix store path in ExecStart (line 60)
+  ✅ Existing activation script preserved (lines 41-49)
+  ✅ Package reference uses flake input pattern (macbook-vm.nix:23)
+
+VERDICT: APPROVE
+
+Summary: Must Have [4/4] | Must NOT Have [7/7] | Core Files [2 modified] | Additional (intended) [4 modified]

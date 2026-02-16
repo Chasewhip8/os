@@ -1,0 +1,55 @@
+QA Scenario 2: Module options are correctly defined
+===================================================
+
+File: home/programs/opencode.nix
+
+Verification Checklist:
+-----------------------
+
+✅ 1. extensions.opencode.serve.enable option exists with mkEnableOption
+   - Line 23: enable = lib.mkEnableOption "opencode headless server";
+   - Correct type and description
+
+✅ 2. extensions.opencode.serve.port option exists with type port and default 4096
+   - Lines 25-29:
+     port = lib.mkOption {
+       type = lib.types.port;
+       default = 4096;
+       description = "Port for opencode serve";
+     };
+   - Correct type, default value, and description
+
+✅ 3. extensions.opencode.serve.package option exists with type package
+   - Lines 31-34:
+     package = lib.mkOption {
+       type = lib.types.package;
+       description = "The opencode package to use for the server";
+     };
+   - Correct type and description
+   - No default value (as required by spec)
+
+✅ 4. systemd service block is wrapped in lib.mkIf cfg.serve.enable
+   - Line 52: (lib.mkIf cfg.serve.enable {
+   - Properly conditional on cfg.serve.enable
+
+✅ 5. ExecStart uses ${cfg.serve.package}/bin/opencode serve --port ${toString cfg.serve.port}
+   - Line 59: ExecStart = "${cfg.serve.package}/bin/opencode serve --port ${toString cfg.serve.port}";
+   - Uses full nix store path via ${cfg.serve.package}
+   - Includes --port flag with toString conversion
+
+✅ 6. Restart=on-failure and RestartSec=5 are set
+   - Line 60: Restart = "on-failure";
+   - Line 61: RestartSec = 5;
+   - Both values match specification
+
+✅ 7. Config section uses lib.mkMerge to combine existing activation with new service
+   - Line 39: config = lib.mkMerge [
+   - Lines 40-50: Existing activation script (unchanged)
+   - Lines 52-68: New conditional systemd service
+   - Proper structure for combining unconditional and conditional config
+
+Result: ✅ PASS
+- All option declarations match specification
+- systemd service config matches specification exactly
+- Existing functionality preserved
+- Proper conditional evaluation for macOS compatibility

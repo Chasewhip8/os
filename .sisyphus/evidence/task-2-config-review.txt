@@ -1,0 +1,19 @@
+Config Review for Task 2: Enable opencode serve and add oc alias
+
+File: home/users/chase/macbook-vm.nix
+
+✓ Function args include pkgs and inputs (line 2):
+  { pkgs, inputs, ... }:
+
+✓ extensions.opencode.serve.enable = true (line 18):
+  serve = {
+    enable = true;
+    package = inputs.opencode.packages.${pkgs.system}.default;
+  };
+
+✓ extensions.opencode.serve.package references inputs.opencode.packages.${pkgs.system}.default (line 19)
+
+✓ home.shellAliases contains oc alias (line 29):
+  oc = "opencode attach http://localhost:4096 --dir $PWD";
+
+All config values match specification.

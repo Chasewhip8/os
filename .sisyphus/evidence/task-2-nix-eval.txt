@@ -1,0 +1,9 @@
+warning: Git tree '/mnt/mac/Users/chase/.nixconf' has uncommitted changes
+warning: ignoring untrusted flake configuration setting 'extra-substituters'.
+Pass '--accept-flake-config' to trust it
+warning: ignoring untrusted flake configuration setting 'extra-trusted-public-keys'.
+Pass '--accept-flake-config' to trust it
+evaluation warning: 'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'
+warning: Using 'builtins.derivation' to create a derivation named 'options.json' that references the store path '/nix/store/0hxg06dwld1rqiyn16hg01vpk8hbqvc8-source' without a proper context. The resulting derivation will not have a correct store reference, so this is unreliable and may stop working in the future.
+unpacking 'https://api.flakehub.com/f/pinned/DeterminateSystems/nixpkgs-weekly/0.1.930106%2Brev-bde09022887110deb780067364a0818e89258968/019bd9ed-5f0b-7074-afb0-8bb5e13a7598/source.tar.gz' into the Git cache...
+«derivation /nix/store/90an6sm793l32lsbpzmw50hx1xiifqpl-nixos-system-macbook-vm-lxc-26.05.20260211.ec7c70d.drv»

@@ -1,0 +1,30 @@
+TASK 3 STATUS: BLOCKED - Manual Intervention Required
+
+Task: Apply NixOS rebuild and verify service + alias
+
+Blocker: sudo password required for nixos-rebuild switch
+Root Cause: Automated execution environment does not support interactive password prompts
+
+Work Completed:
+  ✅ Tasks 1-2: Implementation complete and committed
+  ✅ Nix evaluation passes
+  ✅ Configuration is ready to deploy
+  
+Work Blocked:
+  ⏸️ NixOS rebuild (requires sudo)
+  ⏸️ Service verification (depends on rebuild)
+  ⏸️ Port check (depends on rebuild)
+  ⏸️ Alias verification (depends on rebuild)
+  ⏸️ Restart test (depends on rebuild)
+
+Required Manual Action:
+  sudo nixos-rebuild switch --flake ~/.nixconf#macbook-vm
+
+After Manual Rebuild:
+  The following can be verified:
+  - systemctl --user status opencode-serve
+  - curl -sf http://localhost:4096
+  - type oc
+  - systemctl --user restart opencode-serve
+
+Status: Implementation complete, deployment blocked on sudo access
