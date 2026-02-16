@@ -1,6 +1,7 @@
 { pkgs, ... }:
 {
   home.packages = [
+    pkgs.biome
     pkgs.nil
     pkgs.nixd
     pkgs.package-version-server

@@ -24,7 +24,7 @@
     pkgs.pkg-config
 
     # CLI tools
-    pkgs.opencode
+    inputs.opencode.packages.${pkgs.system}.default
   ];
 
   # Dev tooling
