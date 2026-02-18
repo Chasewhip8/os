@@ -9,6 +9,7 @@
 {
   imports = [
     ../../modules/nixos/base.nix
+    ../../modules/nixos/cloudflared.nix
     ./orbstack.nix
     "${modulesPath}/virtualisation/lxc-container.nix"
     ../../modules/nixos/1password-cli.nix

@@ -34,6 +34,11 @@ in
         description = "Path to oh-my-opencode config file in this repository";
       };
 
+      agentsPath = lib.mkOption {
+        type = lib.types.path;
+        description = "Path to AGENTS.md file in this repository";
+      };
+
       serve = {
         enable = lib.mkEnableOption "opencode headless server";
 
@@ -61,9 +66,11 @@ in
 
         cp ${cfg.pluginPath} "$HOME/.config/opencode/opencode.json"
         cp ${cfg.configPath} "$HOME/.config/opencode/oh-my-opencode.jsonc"
+        cp ${cfg.agentsPath} "$HOME/.config/opencode/AGENTS.md"
 
         chmod 0644 "$HOME/.config/opencode/opencode.json"
         chmod 0644 "$HOME/.config/opencode/oh-my-opencode.jsonc"
+        chmod 0644 "$HOME/.config/opencode/AGENTS.md"
       '';
     }
 

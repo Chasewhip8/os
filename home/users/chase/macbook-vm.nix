@@ -15,6 +15,7 @@
     enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
+    agentsPath = ./AGENTS.md;
     serve = {
       enable = true;
     };
@@ -27,5 +28,7 @@
     nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#macbook-vm";
     nixconf-update = "nix flake update --flake ~/.nixconf";
     oc = "opencode attach http://localhost:4096 --dir $PWD";
+    ocrestart = "systemctl --user restart opencode-serve";
+    ocserver = "opencode attach http://localhost:4096";
   };
 }

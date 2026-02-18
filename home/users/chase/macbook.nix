@@ -29,6 +29,7 @@
     enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
+    agentsPath = ./AGENTS.md;
   };
 
   home.packages = [

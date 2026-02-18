@@ -7,13 +7,13 @@
         },
         "oracle": {
             "model": "openai/gpt-5.2",
-            "variant": "high",
+            "variant": "xhigh",
         },
         "librarian": {
-            "model": "anthropic/claude-sonnet-4-5",
+            "model": "anthropic/claude-sonnet-4-6",
         },
         "explore": {
-            "model": "anthropic/claude-sonnet-4-5",
+            "model": "anthropic/claude-sonnet-4-6",
         },
         "multimodal-looker": {
             "model": "openai/gpt-5.2",
@@ -31,14 +31,14 @@
             "variant": "medium",
         },
         "atlas": {
-            "model": "anthropic/claude-sonnet-4-5",
+            "model": "anthropic/claude-sonnet-4-6",
         },
         "hephaestus": {
             "model": "openai/gpt-5.3-codex",
             "variant": "medium",
         },
         "verify": {
-            "model": "anthropic/claude-sonnet-4-5",
+            "model": "anthropic/claude-sonnet-4-6",
         },
     },
     "categories": {
@@ -55,14 +55,14 @@
             "variant": "max",
         },
         "quick": {
-            "model": "anthropic/claude-sonnet-4-5",
+            "model": "anthropic/claude-sonnet-4-6",
         },
         "unspecified-low": {
-            "model": "anthropic/claude-sonnet-4-5",
+            "model": "anthropic/claude-opus-4-6",
         },
         "unspecified-high": {
-            "model": "anthropic/claude-opus-4-6",
-            "variant": "max",
+            "model": "openai/gpt-5.3-codex",
+            "variant": "high",
         },
         "writing": {
             "model": "anthropic/claude-sonnet-4-5",
