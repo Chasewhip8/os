@@ -16,6 +16,7 @@
       "slack"
       "telegram"
       "zed"
+      "granola"
     ];
     onActivation.upgrade = true;
     onActivation.cleanup = "zap";

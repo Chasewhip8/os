@@ -48,56 +48,56 @@
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
 
     opencode = {
-      url = "github:anomalyco/opencode/v1.2.5";
+      url = "github:anomalyco/opencode/v1.2.10";
     };
   };
 
-   outputs =
-     {
-       self,
-       determinate,
-       nixpkgs,
-       nix-darwin,
-       rust-overlay,
-       ...
-     }@inputs:
-     let
-       commonOverlays = {
-         nixpkgs.overlays = [
-           rust-overlay.overlays.default
-         ];
-       };
-     in
-     {
-       nixosConfigurations.pc = nixpkgs.lib.nixosSystem {
-         specialArgs = { inherit inputs; };
-         modules = [
-           determinate.nixosModules.default
-           ./hosts/pc
-           commonOverlays
-           inputs.home-manager.nixosModules.default
-         ];
-       };
+  outputs =
+    {
+      self,
+      determinate,
+      nixpkgs,
+      nix-darwin,
+      rust-overlay,
+      ...
+    }@inputs:
+    let
+      commonOverlays = {
+        nixpkgs.overlays = [
+          rust-overlay.overlays.default
+        ];
+      };
+    in
+    {
+      nixosConfigurations.pc = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          determinate.nixosModules.default
+          ./hosts/pc
+          commonOverlays
+          inputs.home-manager.nixosModules.default
+        ];
+      };
 
-       darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
-         system = "aarch64-darwin";
-         specialArgs = { inherit inputs; };
-         modules = [
-           determinate.darwinModules.default
-           ./hosts/macbook
-           commonOverlays
-           inputs.home-manager.darwinModules.default
-         ];
-       };
+      darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { inherit inputs; };
+        modules = [
+          determinate.darwinModules.default
+          ./hosts/macbook
+          commonOverlays
+          inputs.home-manager.darwinModules.default
+        ];
+      };
 
-       nixosConfigurations.macbook-vm = nixpkgs.lib.nixosSystem {
-         specialArgs = { inherit inputs; };
-         modules = [
-           determinate.nixosModules.default
-           ./hosts/macbook-vm
-           commonOverlays
-           inputs.home-manager.nixosModules.default
-         ];
-       };
-     };
+      nixosConfigurations.macbook-vm = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs; };
+        modules = [
+          determinate.nixosModules.default
+          ./hosts/macbook-vm
+          commonOverlays
+          inputs.home-manager.nixosModules.default
+        ];
+      };
+    };
 }

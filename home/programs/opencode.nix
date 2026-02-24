@@ -83,6 +83,9 @@ in
 
         Service = {
           ExecStart = "${opencodePackage}/bin/opencode serve --port ${toString cfg.serve.port}";
+          Environment = [
+            "PATH=%h/.nix-profile/bin:/etc/profiles/per-user/%u/bin:/run/current-system/sw/bin:/nix/var/nix/profiles/default/bin"
+          ];
           Restart = "on-failure";
           RestartSec = 5;
           WorkingDirectory = "%h";

@@ -3,6 +3,7 @@
 {
   imports = [
     ./language-servers.nix
+    ./solana.nix
   ];
 
   home.packages = [
@@ -13,6 +14,9 @@
 
     # Rust
     (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
+
+    # CLI tools
+    pkgs.jq
 
     # Build tools
     pkgs.gnumake
