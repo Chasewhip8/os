@@ -5,13 +5,13 @@
   ...
 }:
 let
-  cfg = config.extensions.zed;
+  cfg = config.custom.zed;
 in
 {
   imports = [];
 
   options = {
-    extensions.zed = {
+    custom.zed = {
       enable = lib.mkEnableOption "zed config and package";
 
       package = lib.mkOption {

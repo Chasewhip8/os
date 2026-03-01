@@ -12,7 +12,7 @@
   home.homeDirectory = "/home/chase";
   home.stateVersion = "24.05";
 
-  extensions.opencode = {
+  custom.opencode = {
     enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
@@ -22,7 +22,7 @@
     };
   };
 
-  extensions.mnemonic = {
+  custom.mnemonic = {
     enable = true;
     url = "http://127.0.0.1:8787";
     apiKey = "macbook-vm-local";

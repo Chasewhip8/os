@@ -5,13 +5,13 @@
   ...
 }:
 let
-  cfg = config.extensions.aerospace;
+  cfg = config.custom.aerospace;
 in
 {
   imports = [];
 
   options = {
-    extensions.aerospace = {
+    custom.aerospace = {
       enable = lib.mkEnableOption "AeroSpace config and package";
 
       package = lib.mkOption {

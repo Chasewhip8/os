@@ -18,20 +18,20 @@
 
 
   # Zed config paths
-  extensions.zed = {
+  custom.zed = {
     enable = true;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };
 
-  extensions.opencode = {
+  custom.opencode = {
     enable = true;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
     agentsPath = ./AGENTS.md;
   };
 
-  extensions.mnemonic.enable = true;
+  custom.mnemonic.enable = true;
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [

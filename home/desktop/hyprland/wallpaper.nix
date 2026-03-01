@@ -1,11 +1,11 @@
 { config, lib, ... }:
 let
-  cfg = config.extensions.wallpaper;
+  cfg = config.custom.wallpaper;
   wallpaperAbsolutePath = "${config.home.homeDirectory}/.config/wallpaper/enabled.jpg";
 in
 {
   options = {
-    extensions.wallpaper = {
+    custom.wallpaper = {
       path = lib.mkOption {
         type = lib.types.path;
         default = "./wallpaper.jpg";

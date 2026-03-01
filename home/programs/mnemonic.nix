@@ -6,11 +6,11 @@
   ...
 }:
 let
-  cfg = config.extensions.mnemonic;
+  cfg = config.custom.mnemonic;
 in
 {
   options = {
-    extensions.mnemonic = {
+    custom.mnemonic = {
       enable = lib.mkEnableOption "mnemonic CLI, skills, and server connection";
 
       url = lib.mkOption {

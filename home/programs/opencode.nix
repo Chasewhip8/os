@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.extensions.opencode;
+  cfg = config.custom.opencode;
   opencodePackage =
     if cfg.serve.package != null then
       cfg.serve.package
@@ -15,7 +15,7 @@ let
 in
 {
   options = {
-    extensions.opencode = {
+    custom.opencode = {
       enable = lib.mkEnableOption "opencode config and package";
 
       package = lib.mkOption {

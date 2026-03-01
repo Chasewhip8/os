@@ -26,7 +26,7 @@ in
   ];
 
   # Wallpaper
-  extensions.wallpaper.path = ./wallpaper.jpg;
+  custom.wallpaper.path = ./wallpaper.jpg;
 
   # Hyprland
   wayland.windowManager.hyprland = {

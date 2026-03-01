@@ -14,13 +14,13 @@
 
 
   # Zed config paths
-  extensions.zed = {
+  custom.zed = {
     enable = true;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };
 
-  extensions.aerospace = {
+  custom.aerospace = {
     enable = true;
     configPath = ./aerospace.toml;
   };
