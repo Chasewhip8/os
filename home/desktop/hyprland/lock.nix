@@ -1,5 +1,5 @@
 # Adds a $locker variable to the user's Hyprland config which can be bound to lock the device.
-{ config, pkgs, ... }:
+{ ... }:
 {
   services.hypridle = {
     enable = true;

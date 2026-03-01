@@ -1,5 +1,5 @@
 # HyprLux night light / blue light filter
-{ lib, inputs, ... }:
+{ inputs, ... }:
 {
   imports = [
     inputs.hyprlux.homeManagerModules.default

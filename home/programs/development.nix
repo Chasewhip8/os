@@ -1,5 +1,5 @@
 # Development profile - cross-platform dev tools and languages
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./language-servers.nix
