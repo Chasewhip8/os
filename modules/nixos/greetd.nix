@@ -1,3 +1,4 @@
+# Greetd display manager with tuigreet and Hyprland session
 { pkgs, inputs, ... }:
 let
   tuigreet = "${pkgs.tuigreet}/bin/tuigreet";
