@@ -13,6 +13,7 @@
   home.homeDirectory = "/Users/chase";
   home.stateVersion = "24.05";
 
+
   # Zed config paths
   extensions.zed = {
     enable = true;
@@ -34,6 +35,7 @@
 
   home.packages = [
     pkgs.autoraise
+    pkgs.ghostty-bin
   ];
 
   # Kitty terminal configuration

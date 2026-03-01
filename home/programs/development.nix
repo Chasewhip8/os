@@ -1,9 +1,10 @@
 # Development profile - cross-platform dev tools and languages
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 {
   imports = [
     ./language-servers.nix
     ./solana.nix
+    ./mnemonic.nix
   ];
 
   home.packages = [
@@ -40,4 +41,5 @@
   home.sessionVariables = {
     PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
   };
+
 }

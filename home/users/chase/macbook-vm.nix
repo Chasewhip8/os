@@ -21,6 +21,11 @@
     };
   };
 
+  extensions.mnemonic = {
+    enable = true;
+    url = "http://127.0.0.1:8787";
+    apiKey = "macbook-vm-local";
+  };
   # VM-specific packages (none - all dev tools inherited from development.nix)
 
   # VM-specific shell config

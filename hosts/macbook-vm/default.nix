@@ -10,6 +10,7 @@
   imports = [
     ../../modules/nixos/base.nix
     ../../modules/nixos/cloudflared.nix
+    inputs.mnemonic.nixosModules.default
     ./orbstack.nix
     "${modulesPath}/virtualisation/lxc-container.nix"
     ../../modules/nixos/1password-cli.nix
@@ -33,6 +34,12 @@
 
   # Docker CLI → OrbStack's runtime (no local daemon)
   environment.sessionVariables.DOCKER_HOST = "unix:///opt/orbstack-guest/run/docker.sock";
+
+  services.mnemonic = {
+    enable = true;
+    apiKey = "macbook-vm-local";
+  };
+
   users.groups.docker = {};
   systemd.services.orbstack-docker-sock = {
     description = "Fix OrbStack Docker socket permissions";

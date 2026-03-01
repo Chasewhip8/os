@@ -15,6 +15,7 @@
   home.homeDirectory = "/home/chase";
   home.stateVersion = "24.05";
 
+
   # Zed config paths
   extensions.zed = {
     enable = true;
@@ -28,6 +29,8 @@
     configPath = ./oh-my-opencode.jsonc;
     agentsPath = ./AGENTS.md;
   };
+
+  extensions.mnemonic.enable = true;
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [

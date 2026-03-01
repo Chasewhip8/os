@@ -3,6 +3,7 @@
 {
   imports = [
     ./opencode.nix
+    ./git.nix
     ./zsh.nix
   ];
 
@@ -19,15 +20,6 @@
 
   home.sessionVariables = {
     EDITOR = "nano";
-  };
-
-  # Git configuration
-  programs.git = {
-    enable = true;
-    settings = {
-        user.name = "Chasewhip8";
-        user.email = "chasewhip20@gmail.com";
-    };
   };
 
   # Common tools
