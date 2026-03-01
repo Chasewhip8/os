@@ -5,6 +5,7 @@
     # Shared programs
     ../../programs/base.nix
     ../../programs/development.nix
+    ../../programs/opencode.nix
     ../../programs/zed.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)

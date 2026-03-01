@@ -5,6 +5,7 @@
     # Shared profiles
     ../../programs/base.nix
     ../../programs/development.nix
+    ../../programs/opencode.nix
   ];
 
   home.username = "chase";

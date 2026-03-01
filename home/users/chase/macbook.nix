@@ -4,7 +4,6 @@
   imports = [
     # Shared profiles
     ../../programs/base.nix
-    ../../programs/development.nix
     ../../programs/zed.nix
     ../../programs/aerospace.nix
   ];
@@ -26,12 +25,6 @@
     configPath = ./aerospace.toml;
   };
 
-  extensions.opencode = {
-    enable = true;
-    pluginPath = ./opencode.json;
-    configPath = ./oh-my-opencode.jsonc;
-    agentsPath = ./AGENTS.md;
-  };
 
   home.packages = [
     pkgs.autoraise
@@ -60,5 +53,10 @@
     nixconf-apply-vm = "orb -m nixos sudo nixos-rebuild switch --flake /home/chase/.nixconf#macbook-vm";
     nixconf-apply-all = "nixconf-apply-host && nixconf-apply-vm";
     nixconf-update = "nix flake update --flake ~/.nixconf";
+  };
+
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
   };
 }

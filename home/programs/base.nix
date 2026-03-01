@@ -2,7 +2,6 @@
 { pkgs, ... }:
 {
   imports = [
-    ./opencode.nix
     ./git.nix
     ./zsh.nix
   ];
