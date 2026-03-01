@@ -1,10 +1,4 @@
-{
-  config,
-  pkgs,
-  lib,
-  inputs,
-  ...
-}:
+{ pkgs, inputs, ... }:
 {
   home.packages = [
     inputs.solana-nix.packages.${pkgs.system}.solana-cli

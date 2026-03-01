@@ -1,9 +1,4 @@
-{
-  config,
-  lib,
-  inputs,
-  ...
-}:
+{ lib, inputs, ... }:
 {
   imports = [
     inputs.hyprlux.homeManagerModules.default

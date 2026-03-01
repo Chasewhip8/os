@@ -1,10 +1,5 @@
 # Adds a $screenshot variable to the user's Hyprland config which can be bound for screenshots.
-{
-  config,
-  pkgs,
-  inputs,
-  ...
-}:
+{ pkgs, ... }:
 {
   home.file = {
     ".config/script/screenshot.sh".source = ./screenshot.sh;
