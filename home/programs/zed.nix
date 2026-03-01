@@ -8,8 +8,6 @@ let
   cfg = config.custom.zed;
 in
 {
-  imports = [];
-
   options = {
     custom.zed = {
       enable = lib.mkEnableOption "zed config and package";

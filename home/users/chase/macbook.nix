@@ -12,7 +12,6 @@
   home.homeDirectory = "/Users/chase";
   home.stateVersion = "24.05";
 
-
   # Zed config paths
   custom.zed = {
     enable = true;
@@ -24,7 +23,6 @@
     enable = true;
     configPath = ./aerospace.toml;
   };
-
 
   home.packages = [
     pkgs.autoraise

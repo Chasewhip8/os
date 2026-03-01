@@ -8,8 +8,6 @@ let
   cfg = config.custom.aerospace;
 in
 {
-  imports = [];
-
   options = {
     custom.aerospace = {
       enable = lib.mkEnableOption "AeroSpace config and package";
