@@ -32,10 +32,6 @@
   # Dev tooling
   programs.go.enable = true;
   programs.pyenv.enable = true;
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 
   # Session variables for C/C++ development
   home.sessionVariables = {

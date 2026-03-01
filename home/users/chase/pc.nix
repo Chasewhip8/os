@@ -2,20 +2,12 @@
 { pkgs, ... }:
 {
   imports = [
-    # Shared programs
-    ../../programs/base.nix
-    ../../programs/development.nix
-    ../../programs/opencode.nix
+    ./nixos.nix
     ../../programs/zed.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)
     ../../desktop/hyprland
   ];
-
-  home.username = "chase";
-  home.homeDirectory = "/home/chase";
-  home.stateVersion = "24.05";
-
 
   # Zed config paths
   custom.zed = {
@@ -23,15 +15,6 @@
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };
-
-  custom.opencode = {
-    enable = true;
-    pluginPath = ./opencode.json;
-    configPath = ./oh-my-opencode.jsonc;
-    agentsPath = ./AGENTS.md;
-  };
-
-  custom.mnemonic.enable = true;
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [
@@ -54,6 +37,5 @@
   # PC-specific shell config
   home.shellAliases = {
     nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#pc";
-    nixconf-update = "nix flake update --flake ~/.nixconf";
   };
 }

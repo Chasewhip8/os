@@ -55,8 +55,4 @@
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };
 
-  programs.direnv = {
-    enable = true;
-    nix-direnv.enable = true;
-  };
 }
