@@ -1,9 +1,10 @@
 {
-  "active_plan": "/mnt/mac/Users/chase/.nixconf/.sisyphus/plans/nix-repo-restructure.md",
-  "started_at": "2026-02-16T18:40:00.988Z",
+  "active_plan": "/mnt/mac/Users/chase/.nixconf/.sisyphus/plans/macos-dev-tools-cleanup.md",
+  "started_at": "2026-03-01T18:11:44.289Z",
   "session_ids": [
-    "ses_3983f683cffeJueswtTKMW6IQo"
+    "ses_355669ff9ffeu9K0OQMXvA2VtC"
   ],
-  "plan_name": "nix-repo-restructure",
-  "agent": "atlas"
+  "plan_name": "macos-dev-tools-cleanup",
+  "agent": "atlas",
+  "worktree_path": "/mnt/mac/Users/chase/.nixconf/worktrees/macos-dev-tools-cleanup"
 }
