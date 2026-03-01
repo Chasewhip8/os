@@ -1,3 +1,4 @@
+# Thunar file manager and archive support
 {
   pkgs,
   ...

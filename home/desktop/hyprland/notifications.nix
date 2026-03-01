@@ -1,3 +1,4 @@
+# Dunst notification daemon
 { pkgs, ... }:
 {
   home.packages = [

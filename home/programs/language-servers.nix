@@ -1,3 +1,4 @@
+# Language servers for editor integration
 { pkgs, ... }:
 {
   home.packages = [

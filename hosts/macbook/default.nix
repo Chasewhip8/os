@@ -1,3 +1,4 @@
+# macOS (nix-darwin) host configuration
 { inputs, ... }:
 {
   imports = [

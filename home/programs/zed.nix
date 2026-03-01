@@ -1,3 +1,4 @@
+# Zed editor config sync module
 {
   config,
   pkgs,

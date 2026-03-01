@@ -1,3 +1,4 @@
+# Mnemonic CLI and skills configuration
 {
   config,
   inputs,

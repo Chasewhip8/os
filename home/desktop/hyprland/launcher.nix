@@ -1,3 +1,4 @@
+# Tofi application launcher
 { config, lib, ... }:
 {
   programs.tofi = {

@@ -1,3 +1,4 @@
+# NVIDIA GPU drivers and CUDA toolkit
 { config, pkgs, ... }:
 {
   environment.systemPackages = with pkgs; [

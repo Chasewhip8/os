@@ -1,3 +1,4 @@
+# AeroSpace window manager config sync module
 {
   config,
   pkgs,

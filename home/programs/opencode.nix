@@ -1,3 +1,4 @@
+# OpenCode editor configuration and serve module
 {
   config,
   inputs,

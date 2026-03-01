@@ -1,3 +1,4 @@
+# Cloudflare Tunnel daemon
 { pkgs, ... }:
 {
   environment.systemPackages = [ pkgs.cloudflared ];

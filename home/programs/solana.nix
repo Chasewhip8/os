@@ -1,3 +1,4 @@
+# Solana CLI tools
 { pkgs, inputs, ... }:
 {
   home.packages = [

@@ -1,3 +1,4 @@
+# HyprLux night light / blue light filter
 { lib, inputs, ... }:
 {
   imports = [

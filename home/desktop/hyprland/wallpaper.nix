@@ -1,3 +1,4 @@
+# Hyprpaper wallpaper manager
 { config, lib, ... }:
 let
   cfg = config.custom.wallpaper;

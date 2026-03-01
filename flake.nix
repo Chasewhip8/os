@@ -1,3 +1,4 @@
+# NixOS, nix-darwin, and home-manager flake configuration
 {
   description = "Nixos config flake";
 
