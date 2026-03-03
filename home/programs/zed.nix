@@ -13,6 +13,12 @@ in
     custom.zed = {
       enable = lib.mkEnableOption "zed config and package";
 
+      installPackage = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to install the Zed package (disable when using Homebrew)";
+      };
+
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.zed-editor;
@@ -34,7 +40,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.package ];
+    home.packages = lib.mkIf cfg.installPackage [ cfg.package ];
 
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.config/zed"

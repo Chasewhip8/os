@@ -15,6 +15,7 @@
   # Zed config paths
   custom.zed = {
     enable = true;
+    installPackage = false;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
   };

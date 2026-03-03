@@ -22,5 +22,6 @@
 
   home.shellAliases = {
     nixconf-update = "nix flake update --flake ~/.nixconf";
+    oc = "opencode";
   };
 }

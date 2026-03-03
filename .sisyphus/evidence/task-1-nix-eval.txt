@@ -1,4 +1,0 @@
-macbook (darwinConfigurations.macbook.system): EXIT 0 - PASS
-macbook-vm (nixosConfigurations.macbook-vm.config.system.build.toplevel): EXIT 0 - PASS
-pc (nixosConfigurations.pc.config.system.build.toplevel): EXIT 0 - PASS
-All 3 hosts evaluate cleanly after edits.
