@@ -34,6 +34,11 @@ in
         type = lib.types.path;
         description = "Path to AGENTS.md file in this repository";
       };
+
+      notifierConfigPath = lib.mkOption {
+        type = lib.types.path;
+        description = "Path to opencode-notifier.json in this repository";
+      };
     };
   };
 
@@ -46,10 +51,12 @@ in
       cp ${cfg.pluginPath} "$HOME/.config/opencode/opencode.json"
       cp ${cfg.configPath} "$HOME/.config/opencode/oh-my-opencode.jsonc"
       cp ${cfg.agentsPath} "$HOME/.config/opencode/AGENTS.md"
+      cp ${cfg.notifierConfigPath} "$HOME/.config/opencode/opencode-notifier.json"
 
       chmod 0644 "$HOME/.config/opencode/opencode.json"
       chmod 0644 "$HOME/.config/opencode/oh-my-opencode.jsonc"
       chmod 0644 "$HOME/.config/opencode/AGENTS.md"
+      chmod 0644 "$HOME/.config/opencode/opencode-notifier.json"
     '';
   };
 }

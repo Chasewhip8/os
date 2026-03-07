@@ -1,0 +1,6 @@
+let
+  secrets = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIH5k+53bEnXUQo7YAr72Q0cnOQ5vVnrQ7bVTaM+0uYtP";
+in
+{
+  "cargo-registry-token.age".publicKeys = [ secrets ];
+}

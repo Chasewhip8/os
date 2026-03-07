@@ -9,6 +9,7 @@
 {
   imports = [
     ../../modules/nixos/base.nix
+    ../../modules/agenix.nix
     ../../modules/nixos/cloudflared.nix
     inputs.mnemonic.nixosModules.default
     ./orbstack.nix

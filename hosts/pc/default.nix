@@ -7,6 +7,7 @@
 {
   imports = [
     ../../modules/nixos/base.nix
+    ../../modules/agenix.nix
     inputs.hyprland.nixosModules.default
     ./hardware-configuration.nix
     ../../modules/nixos/nvidia.nix

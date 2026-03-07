@@ -12,8 +12,9 @@ Please be as terse as possible while still conveying substantially all informati
 
 ## Agent Rules
 
-- Always co-locate worktree's inside of the project's directory at `./worktrees/<name>`.
+- NEVER use a worktree, if one is requested, supply the current git directory.
 - Always load `mnemonic-bootstrap` skill.
+- Never use `python` or `python3` for shell commands.
 
 </agent_configuration>
 
