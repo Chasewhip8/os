@@ -6,7 +6,7 @@
             "variant": "max",
         },
         "oracle": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "xhigh",
         },
         "librarian": {
@@ -17,7 +17,7 @@
             "variant": "medium",
         },
         "multimodal-looker": {
-            "model": "openai/gpt-5.2",
+            "model": "openai/gpt-5.4",
         },
         "prometheus": {
             "model": "anthropic/claude-opus-4-6",
@@ -28,7 +28,7 @@
             "variant": "max",
         },
         "momus": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "xhigh",
         },
     },
@@ -38,11 +38,11 @@
             "variant": "max",
         },
         "ultrabrain": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "xhigh",
         },
         "deep": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "xhigh",
         },
         "artistry": {
@@ -50,19 +50,29 @@
             "variant": "max",
         },
         "quick": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "medium",
         },
         "unspecified-low": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "xhigh",
         },
         "unspecified-high": {
-            "model": "openai/gpt-5.3-codex",
+            "model": "openai/gpt-5.4",
             "variant": "xhigh",
         },
         "writing": {
             "model": "anthropic/claude-sonnet-4-6",
+        },
+    },
+    "lsp": {
+        "marksman": {
+            "command": ["marksman", "server"],
+            "extensions": [".md", ".markdown"],
+        },
+        "taplo": {
+            "command": ["taplo", "lsp", "stdio"],
+            "extensions": [".toml"],
         },
     },
     "experimental": {
