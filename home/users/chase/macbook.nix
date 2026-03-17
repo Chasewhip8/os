@@ -27,7 +27,6 @@
 
   home.packages = [
     pkgs.autoraise
-    pkgs.ghostty-bin
   ];
 
   # Kitty terminal configuration
@@ -44,6 +43,8 @@
       macos_quit_when_last_window_closed yes
     '';
   };
+
+  programs.ssh.includes = [ "~/.orbstack/ssh/config" ];
 
   # macOS-specific shell config
   home.shellAliases = {

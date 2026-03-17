@@ -1,9 +1,12 @@
 # OrbStack VM (NixOS) home configuration for chase
-{ ... }:
+{ inputs, ... }:
 {
   imports = [
     ./nixos.nix
+    inputs.abilities.homeModules.default
   ];
+
+  abilities.skills.enable = true;
 
   # VM-specific mnemonic: local server overrides
   custom.mnemonic.url = "http://127.0.0.1:8787";

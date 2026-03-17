@@ -10,6 +10,7 @@
       "1password"
       "aerospace"
       "discord"
+      "ghostty"
       "google-chrome"
       "kitty"
       "notion"

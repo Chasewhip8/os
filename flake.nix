@@ -49,11 +49,16 @@
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
 
     opencode = {
-      url = "github:anomalyco/opencode/v1.2.20";
+      url = "github:anomalyco/opencode/v1.2.27";
     };
 
     mnemonic = {
       url = "github:Chasewhip8/mnemonic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    abilities = {
+      url = "git+ssh://git@github.com/Chasewhip8/abilities.git";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
