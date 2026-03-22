@@ -5,6 +5,7 @@
     # Shared profiles
     ../../programs/base.nix
     ../../programs/zed.nix
+    ../../programs/ghostty.nix
     ../../programs/aerospace.nix
   ];
 
@@ -18,6 +19,13 @@
     installPackage = false;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
+  };
+
+  custom.ghostty = {
+    enable = true;
+    installPackage = false;
+    settingsPath = ./ghostty-settings.nix;
+    enableZshIntegration = true;
   };
 
   custom.aerospace = {

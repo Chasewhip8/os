@@ -11,7 +11,7 @@
     ../../modules/nixos/base.nix
     ../../modules/agenix.nix
     ../../modules/nixos/cloudflared.nix
-    inputs.mnemonic.nixosModules.default
+    # inputs.mnemonic.nixosModules.default
     ./orbstack.nix
     "${modulesPath}/virtualisation/lxc-container.nix"
     ../../modules/nixos/1password-cli.nix
@@ -26,8 +26,9 @@
   # NOTE: Rosetta x86 emulation already configured in orbstack.nix
   # (nix.settings.extra-platforms = ["x86_64-linux" "i686-linux"])
 
-  # Kitty terminfo so `orb` shell inherits TERM=xterm-kitty correctly
+  # Terminal terminfo entries for remote shells
   environment.systemPackages = [
+    pkgs.ghostty.terminfo
     pkgs.kitty.terminfo
     pkgs.docker-client
     pkgs.docker-compose
@@ -36,10 +37,10 @@
   # Docker CLI → OrbStack's runtime (no local daemon)
   environment.sessionVariables.DOCKER_HOST = "unix:///opt/orbstack-guest/run/docker.sock";
 
-  services.mnemonic = {
-    enable = true;
-    apiKey = "macbook-vm-local";
-  };
+  # services.mnemonic = {
+  #   enable = true;
+  #   apiKey = "macbook-vm-local";
+  # };
 
   users.groups.docker = {};
   systemd.services.orbstack-docker-sock = {

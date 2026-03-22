@@ -49,7 +49,7 @@
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
 
     opencode = {
-      url = "github:anomalyco/opencode/v1.2.27";
+      url = "github:anomalyco/opencode/822bb7b3366d051a6d74657b7764f7f403a0c9a8";
     };
 
     mnemonic = {

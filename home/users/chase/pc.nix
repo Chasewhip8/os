@@ -4,6 +4,7 @@
   imports = [
     ./nixos.nix
     ../../programs/zed.nix
+    ../../programs/ghostty.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)
     ../../desktop/hyprland
@@ -14,6 +15,12 @@
     enable = true;
     settingsPath = ./zed-settings.json;
     keymapPath = ./zed-keymap.json;
+  };
+
+  custom.ghostty = {
+    enable = true;
+    settingsPath = ./ghostty-settings.nix;
+    enableZshIntegration = true;
   };
 
   # PC-specific packages (Linux GUI apps)

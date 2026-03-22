@@ -7,10 +7,11 @@
   ];
 
   abilities.skills.enable = true;
+  abilities.opencodePlugins.enable = true;
 
   # VM-specific mnemonic: local server overrides
-  custom.mnemonic.url = "http://127.0.0.1:8787";
-  custom.mnemonic.apiKey = "macbook-vm-local";
+  # custom.mnemonic.url = "http://127.0.0.1:8787";
+  # custom.mnemonic.apiKey = "macbook-vm-local";
 
   # VM-specific shell config
   home.shellAliases = {

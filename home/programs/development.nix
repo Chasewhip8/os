@@ -4,7 +4,7 @@
   imports = [
     ./language-servers.nix
     ./solana.nix
-    ./mnemonic.nix
+    # ./mnemonic.nix
   ];
 
   home.packages = [
@@ -12,6 +12,9 @@
     pkgs.nodejs
     pkgs.bun
     pkgs.pnpm
+
+    # Python
+    pkgs.python3
 
     # Rust
     (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))

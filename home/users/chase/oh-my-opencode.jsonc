@@ -3,7 +3,7 @@
     "agents": {
         "sisyphus": {
             "model": "openai/gpt-5.4",
-            "variant": "high",
+            "variant": "xhigh",
         },
         "hephaestus": {
             "model": "openai/gpt-5.4",
@@ -17,8 +17,7 @@
             "model": "anthropic/claude-sonnet-4-6",
         },
         "explore": {
-            "model": "openai/gpt-5.3-codex-spark",
-            "variant": "medium",
+            "model": "anthropic/claude-sonnet-4-6",
         },
         "multimodal-looker": {
             "model": "openai/gpt-5.4",
@@ -66,10 +65,25 @@
             "variant": "xhigh",
         },
         "writing": {
-            "model": "anthropic/claude-sonnet-4-6",
+            "model": "openai/gpt-5.4",
         },
     },
     "lsp": {
+        "biome": {
+            "command": ["/home/chase/.nix-profile/bin/biome", "lsp-proxy"],
+            "extensions": [
+                ".js",
+                ".jsx",
+                ".mjs",
+                ".cjs",
+                ".ts",
+                ".tsx",
+                ".mts",
+                ".cts",
+                ".json",
+                ".jsonc",
+            ],
+        },
         "marksman": {
             "command": ["marksman", "server"],
             "extensions": [".md", ".markdown"],
