@@ -40,7 +40,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    solana-nix.url = "github:arijoon/solana-nix";
+    crane.url = "github:ipetkov/crane/25bd41b24426c7734278c2ff02e53258851db914";
 
     hyprlux = {
       url = "github:amadejkastelic/Hyprlux";
@@ -49,7 +49,7 @@
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
 
     opencode = {
-      url = "github:anomalyco/opencode/822bb7b3366d051a6d74657b7764f7f403a0c9a8";
+      url = "github:anomalyco/opencode/v1.3.0";
     };
 
     mnemonic = {

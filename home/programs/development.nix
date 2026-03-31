@@ -35,6 +35,7 @@
   # Secrets (decrypted by agenix at /run/agenix/*)
   programs.zsh.initContent = lib.mkAfter ''
     [ -f /run/agenix/cargo-registry-token ] && export CARGO_REGISTRIES_SPHERE_FOUNDATION_TOKEN=$(cat /run/agenix/cargo-registry-token)
+    [ -f /run/agenix/linear-api-key ] && export LINEAR_API_KEY=$(cat /run/agenix/linear-api-key)
   '';
 
   # Dev tooling

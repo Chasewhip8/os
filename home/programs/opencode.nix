@@ -8,6 +8,13 @@
 }:
 let
   cfg = config.custom.opencode;
+  mergedConfigPath = pkgs.writeText "opencode.json" (
+    builtins.toJSON (
+      lib.recursiveUpdate
+        (builtins.fromJSON (builtins.readFile cfg.pluginPath))
+        cfg.extraConfig
+    )
+  );
 in
 {
   options = {
@@ -39,6 +46,12 @@ in
         type = lib.types.path;
         description = "Path to opencode-notifier.json in this repository";
       };
+
+      extraConfig = lib.mkOption {
+        type = lib.types.attrs;
+        default = { };
+        description = "Additional OpenCode config merged into opencode.json.";
+      };
     };
   };
 
@@ -48,7 +61,7 @@ in
     home.activation.opencodeResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.config/opencode"
 
-      cp ${cfg.pluginPath} "$HOME/.config/opencode/opencode.json"
+      cp ${mergedConfigPath} "$HOME/.config/opencode/opencode.json"
       cp ${cfg.configPath} "$HOME/.config/opencode/oh-my-opencode.jsonc"
       cp ${cfg.agentsPath} "$HOME/.config/opencode/AGENTS.md"
       cp ${cfg.notifierConfigPath} "$HOME/.config/opencode/opencode-notifier.json"

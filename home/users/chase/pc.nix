@@ -43,6 +43,6 @@
 
   # PC-specific shell config
   home.shellAliases = {
-    nixconf-apply = "sudo nixos-rebuild switch --flake ~/.nixconf#pc";
+    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#pc --use-remote-sudo";
   };
 }

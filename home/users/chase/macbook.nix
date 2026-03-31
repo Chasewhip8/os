@@ -1,5 +1,5 @@
 # macOS home configuration for chase
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 {
   imports = [
     # Shared profiles
@@ -7,6 +7,7 @@
     ../../programs/zed.nix
     ../../programs/ghostty.nix
     ../../programs/aerospace.nix
+    inputs.abilities.homeModules.default
   ];
 
   home.username = "chase";
@@ -33,6 +34,8 @@
     configPath = ./aerospace.toml;
   };
 
+  abilities.collaborator.enable = true;
+
   home.packages = [
     pkgs.autoraise
   ];
@@ -57,8 +60,8 @@
   # macOS-specific shell config
   home.shellAliases = {
     nixconf-apply = "nixconf-apply-host";
-    nixconf-apply-host = "sudo darwin-rebuild switch --flake ~/.nixconf#macbook";
-    nixconf-apply-vm = "orb -m nixos sudo nixos-rebuild switch --flake /home/chase/.nixconf#macbook-vm";
+    nixconf-apply-host = "darwin-rebuild switch --flake ~/.nixconf#macbook --use-remote-sudo";
+    nixconf-apply-vm = "orb -m nixos nixos-rebuild switch --flake /home/chase/.nixconf#macbook-vm --use-remote-sudo";
     nixconf-apply-all = "nixconf-apply-host && nixconf-apply-vm";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };

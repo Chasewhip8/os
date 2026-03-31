@@ -18,4 +18,9 @@
     file = ../secrets/cargo-registry-token.age;
     owner = "chase";
   };
+
+  age.secrets.linear-api-key = {
+    file = ../secrets/linear-api-key.age;
+    owner = "chase";
+  };
 }
