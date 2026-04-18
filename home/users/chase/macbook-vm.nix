@@ -9,7 +9,6 @@
   abilities.skills.enable = true;
   abilities.opencodePlugins.enable = true;
   abilities.mcp.linear.enable = true;
-  abilities.hunk.enable = true;
 
   # VM-specific mnemonic: local server overrides
   # custom.mnemonic.url = "http://127.0.0.1:8787";
