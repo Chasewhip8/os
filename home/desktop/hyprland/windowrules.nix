@@ -2,12 +2,6 @@
 { pkgs, ... }:
 {
   wayland.windowManager.hyprland.settings = {
-    "$GAME_GTNH" = "match:title ^GT: New Horizons.*$ | match:class ^GT: New Horizons.*$";
-
-    workspace = [
-      "name:game, persistent:true, border:false, rounding:false, bordersize:0, gapsout:0"
-    ];
-
     windowrule = [
       # Common modals
       "match:title ^(Open)$, float on"
@@ -36,12 +30,6 @@
       "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, move 73% 72%"
       "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, size 25% 25%"
       "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, pin on"
-
-      # Game
-      "workspace name:game, $GAME_GTNH"
-      "size 2560 1440, $GAME_GTNH"
-      "keep_aspect_ratio on, $GAME_GTNH"
-      "center on, $GAME_GTNH"
     ];
   };
 }

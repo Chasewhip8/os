@@ -72,16 +72,18 @@ in
     };
   };
 
-  # XRemap - caps lock to super key
+  # XRemap - modifier remaps
   services.xremap = {
     enable = true;
     withWlroots = true;
     watch = true;
     config.modmap = [
       {
-        name = "caps-lock to super";
+        name = "swap left super and left ctrl";
         remap = {
-          "KEY_CAPSLOCK" = "KEY_LEFTMETA";
+          "KEY_LEFTMETA" = "KEY_LEFTCTRL";
+          "KEY_LEFTCTRL" = "KEY_LEFTMETA";
+          "KEY_CAPSLOCK" = "KEY_LEFTALT";
         };
       }
     ];

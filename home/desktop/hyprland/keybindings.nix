@@ -2,7 +2,7 @@
 { ... }:
 {
   wayland.windowManager.hyprland.settings = {
-    "$mod" = "SUPER";
+    "$mod" = "ALT";
     "$term" = "kitty";
     "$editor" = "zeditor";
     "$file" = "thunar";
@@ -19,7 +19,6 @@
       "$mod CTRL, SPACE, togglefloating"
       "$mod, G, togglegroup"
       "$mod, H, moveoutofgroup"
-      "$mod, X, changegroupactive, f"
 
       # Applications
       "$mod, T, exec, $term"
@@ -27,11 +26,17 @@
       "$mod, R, exec, $file"
       "$mod, C, exec, $editor"
 
+      # Focus windows
+      "$mod, J, movefocus, l"
+      "$mod, K, movefocus, d"
+      "$mod, I, movefocus, u"
+      "$mod, L, movefocus, r"
+
       # Move windows
       "$mod CTRL, J, movewindow, l"
-      "$mod CTRL, L, movewindow, r"
-      "$mod CTRL, I, movewindow, u"
       "$mod CTRL, K, movewindow, d"
+      "$mod CTRL, I, movewindow, u"
+      "$mod CTRL, L, movewindow, r"
 
       # Workspaces
       "$mod, 1, workspace, 1"
@@ -44,13 +49,12 @@
       "$mod, 8, workspace, 8"
       "$mod, 9, workspace, 9"
 
-      "$mod, W, workspace, 1"
-      "$mod CTRL, W, movetoworkspace, 1"
-      "$mod, S, workspace, 2"
-      "$mod CTRL, S, movetoworkspace, 2"
-
-      "$mod, equal, workspace, name:game"
-      "$mod CTRL, equal, movetoworkspace, name:game"
+      "$mod, W, workspace, name:z-shelf-w"
+      "$mod CTRL, W, movetoworkspace, name:z-shelf-w"
+      "$mod, S, workspace, name:z-shelf-s"
+      "$mod CTRL, S, movetoworkspace, name:z-shelf-s"
+      "$mod, X, workspace, name:z-shelf-x"
+      "$mod CTRL, X, movetoworkspace, name:z-shelf-x"
 
       # Move to workspace
       "$mod CTRL, 1, movetoworkspace, 1"
