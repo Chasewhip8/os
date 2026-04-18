@@ -1,8 +1,9 @@
 # PC (NixOS) home configuration for chase
-{ pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 {
   imports = [
     ./nixos.nix
+    inputs.abilities.homeModules.default
     ../../programs/zed.nix
     ../../programs/ghostty.nix
 
@@ -10,10 +11,15 @@
     ../../desktop/hyprland
   ];
 
+  abilities.skills.enable = true;
+  abilities.opencodePlugins.enable = true;
+  abilities.mcp.linear.enable = true;
+
   # Zed config paths
   custom.zed = {
     enable = true;
     settingsPath = ./zed-settings.json;
+    settingsOverridePath = ./zed-settings-pc.json;
     keymapPath = ./zed-keymap.json;
   };
 
@@ -22,6 +28,13 @@
     settingsPath = ./ghostty-settings.nix;
     enableZshIntegration = true;
   };
+
+  programs.kitty.extraConfig = lib.mkAfter ''
+    confirm_os_window_close 0
+    map ctrl+c copy_to_clipboard
+    map ctrl+v paste_from_clipboard
+    map super+c send_text all \x03
+  '';
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [
@@ -45,4 +58,8 @@
   home.shellAliases = {
     nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#pc --use-remote-sudo";
   };
+
+  programs.zsh.initContent = lib.mkAfter ''
+    ZSH_PROMPT_CONTEXT="%{$fg_bold[green]%}[PC]%{$reset_color%} "
+  '';
 }

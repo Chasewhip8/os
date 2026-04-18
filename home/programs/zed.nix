@@ -7,6 +7,16 @@
 }:
 let
   cfg = config.custom.zed;
+  mergedSettingsPath =
+    let
+      baseSettings = builtins.fromJSON (builtins.readFile cfg.settingsPath);
+      overrideSettings =
+        if cfg.settingsOverridePath == null then
+          { }
+        else
+          builtins.fromJSON (builtins.readFile cfg.settingsOverridePath);
+    in
+    pkgs.writeText "zed-settings.json" (builtins.toJSON (lib.recursiveUpdate baseSettings overrideSettings));
 in
 {
   options = {
@@ -31,6 +41,12 @@ in
         description = "Path to the Zed config in your configuration";
       };
 
+      settingsOverridePath = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        description = "Optional path to a JSON file merged into the base Zed settings";
+      };
+
       keymapPath = lib.mkOption {
         type = lib.types.path;
         default = "./zed-keymap.json";
@@ -45,7 +61,7 @@ in
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.config/zed"
 
-      cp ${cfg.settingsPath} "$HOME/.config/zed/settings.json"
+      cp ${mergedSettingsPath} "$HOME/.config/zed/settings.json"
       cp ${cfg.keymapPath} "$HOME/.config/zed/keymap.json"
 
       chmod 0644 "$HOME/.config/zed/settings.json"
