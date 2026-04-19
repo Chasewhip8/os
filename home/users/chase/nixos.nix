@@ -2,6 +2,7 @@
 { ... }:
 {
   imports = [
+    ./repos.nix
     ../../programs/base.nix
     ../../programs/development.nix
     ../../programs/opencode.nix

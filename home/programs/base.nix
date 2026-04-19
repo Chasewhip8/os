@@ -3,6 +3,7 @@
 {
   imports = [
     ./git.nix
+    ./repos.nix
     ./ssh.nix
     ./zsh.nix
   ];

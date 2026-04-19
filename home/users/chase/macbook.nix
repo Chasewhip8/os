@@ -3,6 +3,7 @@
 {
   imports = [
     # Shared profiles
+    ./repos.nix
     ../../programs/base.nix
     ../../programs/zed.nix
     ../../programs/ghostty.nix
