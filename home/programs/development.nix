@@ -40,7 +40,6 @@
 
   # Dev tooling
   programs.go.enable = true;
-  programs.pyenv.enable = true;
 
   # Session variables for C/C++ development
   home.sessionVariables = {
