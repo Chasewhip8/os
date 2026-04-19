@@ -2,6 +2,8 @@
 let
   cfg = config.custom.repos;
   homeDir = config.home.homeDirectory;
+  gitExe = lib.getExe pkgs.git;
+  sshExe = lib.getExe' pkgs.openssh "ssh";
 
   mkAbsPath = path: "${homeDir}/${path}";
 
@@ -23,10 +25,40 @@ let
           echo "repos.nix: skipping ${lib.escapeShellArg repo.path}; directory exists but is not a git repo" >&2
         fi
       elif [ "${if cfg.cloneMissingRepositories then "1" else "0"}" = "1" ]; then
-        ${lib.getExe pkgs.git} clone ${lib.escapeShellArg repo.remote} ${lib.escapeShellArg absPath}
+        GIT_SSH_COMMAND=${lib.escapeShellArg sshExe} \
+          ${gitExe} clone ${lib.escapeShellArg repo.remote} ${lib.escapeShellArg absPath}
       fi
     ''
   ) cfg.repositories;
+  bootstrapScript = pkgs.writeShellScriptBin "bootstrap-repos" ''
+    set -eu
+
+    ${lib.concatStringsSep "\n" rootCommands}
+
+    ${lib.concatStringsSep "\n" (
+      map (
+        repo:
+        let
+          absPath = mkAbsPath repo.path;
+          parentDir = dirOf absPath;
+        in
+        ''
+          mkdir -p ${lib.escapeShellArg parentDir}
+
+          if [ -d ${lib.escapeShellArg absPath} ]; then
+            if [ -d ${lib.escapeShellArg "${absPath}/.git"} ]; then
+              echo "bootstrap-repos: already cloned ${lib.escapeShellArg repo.path}"
+            else
+              echo "bootstrap-repos: skipping ${lib.escapeShellArg repo.path}; directory exists but is not a git repo" >&2
+            fi
+          else
+            GIT_SSH_COMMAND=${lib.escapeShellArg sshExe} \
+              ${gitExe} clone ${lib.escapeShellArg repo.remote} ${lib.escapeShellArg absPath}
+          fi
+        ''
+      ) cfg.repositories
+    )}
+  '';
 in
 {
   options.custom.repos = {
@@ -72,6 +104,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    home.packages = [ bootstrapScript ];
+
     assertions = [
       {
         assertion = builtins.all (root: root != "" && !lib.hasPrefix "/" root) cfg.roots;

@@ -2,6 +2,7 @@
 {
   custom.repos = {
     enable = true;
+    cloneMissingRepositories = false;
     roots = [
       "arcadia"
       "net"
