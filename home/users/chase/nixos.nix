@@ -1,5 +1,5 @@
 # Shared NixOS home configuration for chase (PC and VM)
-{ inputs, pkgs, ... }:
+{ ... }:
 {
   imports = [
     ../../programs/base.nix
@@ -13,7 +13,6 @@
 
   custom.opencode = {
     enable = true;
-    package = inputs.opencode.packages.${pkgs.system}.default;
     pluginPath = ./opencode.json;
     configPath = ./oh-my-opencode.jsonc;
     agentsPath = ./AGENTS.md;

@@ -8,6 +8,14 @@
 }:
 let
   cfg = config.custom.opencode;
+  patchedOpencodePackage = inputs.opencode.packages.${pkgs.system}.default.overrideAttrs (old: {
+    nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.prettier ];
+    postConfigure = (old.postConfigure or "") + ''
+      chmod -R u+w packages/opencode/node_modules
+      mkdir -p packages/opencode/node_modules
+      ln -sf ${pkgs.prettier}/lib/node_modules/prettier packages/opencode/node_modules/prettier
+    '';
+  });
   mergedConfigPath = pkgs.writeText "opencode.json" (
     builtins.toJSON (
       lib.recursiveUpdate
@@ -23,7 +31,7 @@ in
 
       package = lib.mkOption {
         type = lib.types.package;
-        default = inputs.opencode.packages.${pkgs.system}.default;
+        default = patchedOpencodePackage;
         description = "The opencode package to install";
       };
 
