@@ -4,4 +4,5 @@ in
 {
   "cargo-registry-token.age".publicKeys = [ secrets ];
   "linear-api-key.age".publicKeys = [ secrets ];
+  "shipyard-ssh-key.age".publicKeys = [ secrets ];
 }

@@ -11,6 +11,8 @@
   abilities.mcp.linear.enable = true;
   abilities.agentBrowser.enable = true;
 
+  custom.terminalKeybinds.enable = false;
+
   # VM-specific mnemonic: local server overrides
   # custom.mnemonic.url = "http://127.0.0.1:8787";
   # custom.mnemonic.apiKey = "macbook-vm-local";

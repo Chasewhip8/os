@@ -5,6 +5,7 @@
     ./git.nix
     ./repos.nix
     ./ssh.nix
+    ./terminal-keybinds.nix
     ./zsh.nix
   ];
 

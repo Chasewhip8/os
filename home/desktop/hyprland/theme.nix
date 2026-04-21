@@ -75,14 +75,14 @@
       ];
 
       animation = [
-        "windows, 1, 3, wind, slide"
-        "windowsIn, 1, 3, winIn, slide"
-        "windowsOut, 1, 2.5, winOut, slide"
-        "windowsMove, 1, 2.5, wind, slide"
+        "windows, 0"
+        "windowsIn, 0"
+        "windowsOut, 0"
+        "windowsMove, 0"
         "border, 1, 0.5, liner"
         "borderangle, 1, 15, liner, loop"
-        "fade, 1, 5, default"
-        "workspaces, 1, 2.5, wind"
+        "fade, 0"
+        "workspaces, 0"
       ];
     };
 

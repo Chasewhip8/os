@@ -30,6 +30,11 @@
     enableZshIntegration = true;
   };
 
+  custom.terminalKeybinds = {
+    enable = true;
+    primaryMod = "cmd";
+  };
+
   custom.aerospace = {
     enable = true;
     configPath = ./aerospace.toml;

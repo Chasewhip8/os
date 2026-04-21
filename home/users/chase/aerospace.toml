@@ -134,8 +134,6 @@ cmd-alt-x = 'move-node-to-workspace z-shelf-x'
 # alt-rightSquareBracket = 'workspace telegram'
 # alt-backslash = 'workspace notion'
 
-alt-a = 'workspace prev'
-alt-d = 'workspace next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 cmd-alt-1 = 'move-node-to-workspace 1'
@@ -147,10 +145,6 @@ cmd-alt-6 = 'move-node-to-workspace 6'
 cmd-alt-7 = 'move-node-to-workspace 7'
 cmd-alt-8 = 'move-node-to-workspace 8'
 cmd-alt-9 = 'move-node-to-workspace 9'
-
-# Move relative and follow window.
-cmd-alt-a = ["move-node-to-workspace prev", 'workspace prev']
-cmd-alt-d = ["move-node-to-workspace next", 'workspace next']
 
 # [[on-window-detected]]
 # if.app-id = 'com.spotify.client'

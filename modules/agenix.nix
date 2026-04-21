@@ -23,4 +23,11 @@
     file = ../secrets/linear-api-key.age;
     owner = "chase";
   };
+
+  age.secrets.shipyard-ssh-key = {
+    file = ../secrets/shipyard-ssh-key.age;
+    owner = "chase";
+    mode = "0600";
+    path = "${config.users.users.chase.home}/.ssh/id_ed25519_shipyard";
+  };
 }

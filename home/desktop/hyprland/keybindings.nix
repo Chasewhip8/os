@@ -67,12 +67,6 @@
       "$mod CTRL, 8, movetoworkspace, 8"
       "$mod CTRL, 9, movetoworkspace, 9"
 
-      # Relative workspace navigation
-      "$mod, A, workspace, r-1"
-      "$mod, D, workspace, r+1"
-      "$mod CTRL, A, movetoworkspace, r-1"
-      "$mod CTRL, D, movetoworkspace, r+1"
-
       "$mod, SPACE, layoutmsg, swapwithmaster master"
     ];
 

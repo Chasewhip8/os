@@ -29,10 +29,22 @@
     enableZshIntegration = true;
   };
 
+  custom.terminalKeybinds = {
+    enable = true;
+    # XRemap swaps left Ctrl and left Super on the physical keyboard.
+    # Logical Ctrl here = physical Super key, matching macOS Cmd position
+    # for terminal app shortcuts (copy, paste, tabs, etc.).
+    primaryMod = "ctrl";
+  };
+
+  custom.opencode.extraTuiConfig.keybinds = {
+    leader = "super+x";
+    variant_cycle = "super+t";
+    command_list = "super+p";
+  };
+
   programs.kitty.extraConfig = lib.mkAfter ''
     confirm_os_window_close 0
-    map ctrl+c copy_to_clipboard
-    map ctrl+v paste_from_clipboard
     map super+c send_text all \x03
   '';
 

@@ -11,25 +11,6 @@ let
     mkdir -p ${lib.escapeShellArg (mkAbsPath root)}
   '') cfg.roots;
 
-  repoCommands = map (
-    repo:
-    let
-      absPath = mkAbsPath repo.path;
-      parentDir = dirOf absPath;
-    in
-    ''
-      mkdir -p ${lib.escapeShellArg parentDir}
-
-      if [ -d ${lib.escapeShellArg absPath} ]; then
-        if [ ! -d ${lib.escapeShellArg "${absPath}/.git"} ]; then
-          echo "repos.nix: skipping ${lib.escapeShellArg repo.path}; directory exists but is not a git repo" >&2
-        fi
-      elif [ "${if cfg.cloneMissingRepositories then "1" else "0"}" = "1" ]; then
-        GIT_SSH_COMMAND=${lib.escapeShellArg sshExe} \
-          ${gitExe} clone ${lib.escapeShellArg repo.remote} ${lib.escapeShellArg absPath}
-      fi
-    ''
-  ) cfg.repositories;
   bootstrapScript = pkgs.writeShellScriptBin "bootstrap-repos" ''
     set -eu
 
@@ -53,7 +34,7 @@ let
             fi
           else
             GIT_SSH_COMMAND=${lib.escapeShellArg sshExe} \
-              ${gitExe} clone ${lib.escapeShellArg repo.remote} ${lib.escapeShellArg absPath}
+              ${gitExe} clone --recursive ${lib.escapeShellArg repo.remote} ${lib.escapeShellArg absPath}
           fi
         ''
       ) cfg.repositories
@@ -96,11 +77,6 @@ in
       description = "Repositories to clone if missing. Existing repositories are left untouched.";
     };
 
-    cloneMissingRepositories = lib.mkOption {
-      type = lib.types.bool;
-      default = true;
-      description = "Clone declared repositories when their target directory does not exist.";
-    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -122,7 +98,7 @@ in
     home.activation.repoLayout = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       set -eu
 
-      ${lib.concatStringsSep "\n" (rootCommands ++ repoCommands)}
+      ${lib.concatStringsSep "\n" rootCommands}
     '';
   };
 }
