@@ -1,5 +1,8 @@
 # OrbStack VM (NixOS) home configuration for chase
-{ inputs, ... }:
+{ config, inputs, ... }:
+let
+  keys = config.custom.keys;
+in
 {
   imports = [
     ./nixos.nix
@@ -11,7 +14,19 @@
   abilities.mcp.linear.enable = true;
   abilities.agentBrowser.enable = true;
 
+  # Key roles: VM receives keystrokes via Mac terminal — only CTRL passes through.
+  custom.keys = {
+    action = "ctrl";
+    secondary = "ctrl";
+  };
+
   custom.terminalKeybinds.enable = false;
+
+  custom.opencode.extraTuiConfig.keybinds = {
+    leader = "${keys.secondary}+x";
+    variant_cycle = "${keys.secondary}+t";
+    command_list = "${keys.secondary}+p";
+  };
 
   # VM-specific mnemonic: local server overrides
   # custom.mnemonic.url = "http://127.0.0.1:8787";

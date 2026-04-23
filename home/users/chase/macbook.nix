@@ -30,10 +30,13 @@
     enableZshIntegration = true;
   };
 
-  custom.terminalKeybinds = {
-    enable = true;
-    primaryMod = "cmd";
+  # Key roles: native macOS — CMD(thumb) = action, CTRL(far-left) = secondary.
+  custom.keys = {
+    action = "cmd";
+    secondary = "ctrl";
   };
+
+  custom.terminalKeybinds.enable = true;
 
   custom.aerospace = {
     enable = true;

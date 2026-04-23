@@ -3,6 +3,7 @@
 {
   imports = [
     ./git.nix
+    ./keys.nix
     ./repos.nix
     ./ssh.nix
     ./terminal-keybinds.nix

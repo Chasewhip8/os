@@ -1,5 +1,8 @@
 # PC (NixOS) home configuration for chase
-{ inputs, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
+let
+  keys = config.custom.keys;
+in
 {
   imports = [
     ./nixos.nix
@@ -29,23 +32,24 @@
     enableZshIntegration = true;
   };
 
-  custom.terminalKeybinds = {
-    enable = true;
-    # XRemap swaps left Ctrl and left Super on the physical keyboard.
-    # Logical Ctrl here = physical Super key, matching macOS Cmd position
-    # for terminal app shortcuts (copy, paste, tabs, etc.).
-    primaryMod = "ctrl";
+  # Key roles: physical SUPER(thumb) → xremap → logical CTRL (action),
+  #            physical CTRL(far-left) → xremap → logical SUPER (secondary).
+  custom.keys = {
+    action = "ctrl";
+    secondary = "super";
   };
 
+  custom.terminalKeybinds.enable = true;
+
   custom.opencode.extraTuiConfig.keybinds = {
-    leader = "super+x";
-    variant_cycle = "super+t";
-    command_list = "super+p";
+    leader = "${keys.secondary}+x";
+    variant_cycle = "${keys.secondary}+t";
+    command_list = "${keys.secondary}+p";
   };
 
   programs.kitty.extraConfig = lib.mkAfter ''
     confirm_os_window_close 0
-    map super+c send_text all \x03
+    map ${keys.secondary}+c send_text all \x03
   '';
 
   # PC-specific packages (Linux GUI apps)

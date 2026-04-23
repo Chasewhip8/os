@@ -3,6 +3,6 @@
     "plugin": [
         "oh-my-openagent@latest",
         "@mohak34/opencode-notifier@latest",
-        "@ex-machina/opencode-anthropic-auth@1.6.1"
+        "@ex-machina/opencode-anthropic-auth@1.7.5"
     ]
 }
