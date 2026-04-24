@@ -43,7 +43,7 @@ in
 
       configPath = lib.mkOption {
         type = lib.types.path;
-        description = "Path to oh-my-opencode config file in this repository";
+        description = "Path to oh-my-openagent config file in this repository";
       };
 
       agentsPath = lib.mkOption {
@@ -78,13 +78,13 @@ in
 
       cp ${mergedConfigPath} "$HOME/.config/opencode/opencode.json"
       cp ${mergedTuiConfigPath} "$HOME/.config/opencode/tui.json"
-      cp ${cfg.configPath} "$HOME/.config/opencode/oh-my-opencode.jsonc"
+      cp ${cfg.configPath} "$HOME/.config/opencode/oh-my-openagent.jsonc"
       cp ${cfg.agentsPath} "$HOME/.config/opencode/AGENTS.md"
       cp ${cfg.notifierConfigPath} "$HOME/.config/opencode/opencode-notifier.json"
 
       chmod 0644 "$HOME/.config/opencode/opencode.json"
       chmod 0644 "$HOME/.config/opencode/tui.json"
-      chmod 0644 "$HOME/.config/opencode/oh-my-opencode.jsonc"
+      chmod 0644 "$HOME/.config/opencode/oh-my-openagent.jsonc"
       chmod 0644 "$HOME/.config/opencode/AGENTS.md"
       chmod 0644 "$HOME/.config/opencode/opencode-notifier.json"
     '';

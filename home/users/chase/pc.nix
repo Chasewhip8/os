@@ -47,6 +47,8 @@ in
     command_list = "${keys.secondary}+p";
   };
 
+  custom.opencode.notifierConfigPath = ./opencode-notifier-pc.json;
+
   programs.kitty.extraConfig = lib.mkAfter ''
     confirm_os_window_close 0
     map ${keys.secondary}+c send_text all \x03

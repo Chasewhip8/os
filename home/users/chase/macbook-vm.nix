@@ -28,6 +28,8 @@ in
     command_list = "${keys.secondary}+p";
   };
 
+  custom.opencode.notifierConfigPath = ./opencode-notifier.json;
+
   # VM-specific mnemonic: local server overrides
   # custom.mnemonic.url = "http://127.0.0.1:8787";
   # custom.mnemonic.apiKey = "macbook-vm-local";

@@ -15,9 +15,8 @@
   custom.opencode = {
     enable = true;
     pluginPath = ./opencode.json;
-    configPath = ./oh-my-opencode.jsonc;
+    configPath = ./oh-my-openagent.jsonc;
     agentsPath = ./AGENTS.md;
-    notifierConfigPath = ./opencode-notifier.json;
   };
 
   # custom.mnemonic.enable = true;
