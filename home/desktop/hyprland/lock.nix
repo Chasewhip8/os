@@ -1,5 +1,5 @@
 # Adds a $locker variable to the user's Hyprland config which can be bound to lock the device.
-{ ... }:
+{ inputs, pkgs, ... }:
 {
   services.hypridle = {
     enable = true;
@@ -22,6 +22,7 @@
 
   programs.hyprlock = {
     enable = true;
+    package = inputs.hyprlock.packages.${pkgs.stdenv.hostPlatform.system}.hyprlock;
     settings = {
       general = {
         disable_loading_bar = true;

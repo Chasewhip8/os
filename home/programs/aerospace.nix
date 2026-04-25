@@ -19,6 +19,12 @@ in
         description = "The AeroSpace package to install";
       };
 
+      installPackage = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "Whether to install the AeroSpace package through Home Manager.";
+      };
+
       configPath = lib.mkOption {
         type = lib.types.path;
         default = "./aerospace.toml";
@@ -28,7 +34,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = [ cfg.package ];
+    home.packages = lib.mkIf cfg.installPackage [ cfg.package ];
 
     home.activation.aerospaceResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       cp ${cfg.configPath} "$HOME/.aerospace.toml"

@@ -2,9 +2,9 @@
 { lib, pkgs, ... }:
 {
   imports = [
-    ./language-servers.nix
-    ./solana.nix
-    # ./mnemonic.nix
+    ../programs/language-servers.nix
+    ../programs/solana.nix
+    # ../programs/mnemonic.nix
   ];
 
   home.packages = [

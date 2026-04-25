@@ -2,12 +2,12 @@
 { pkgs, ... }:
 {
   imports = [
-    ./git.nix
-    ./keys.nix
-    ./repos.nix
-    ./ssh.nix
-    ./terminal-keybinds.nix
-    ./zsh.nix
+    ../programs/git.nix
+    ../programs/keys.nix
+    ../programs/repos.nix
+    ../programs/ssh.nix
+    ../programs/terminal-keybinds.nix
+    ../programs/zsh.nix
   ];
 
   # Cross-platform packages

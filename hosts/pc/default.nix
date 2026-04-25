@@ -67,7 +67,7 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
-    users."chase" = import ../../home/users/chase/pc.nix;
+    users."chase" = import ../../home/users/chase/hosts/pc.nix;
   };
 
   # Wayland hints for Electron apps

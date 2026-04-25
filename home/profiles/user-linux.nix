@@ -2,10 +2,10 @@
 { ... }:
 {
   imports = [
-    ./repos.nix
-    ../../programs/base.nix
-    ../../programs/development.nix
-    ../../programs/opencode.nix
+    ./base.nix
+    ./development.nix
+    ../programs/opencode.nix
+    ../users/chase/config/repos.nix
   ];
 
   home.username = "chase";
@@ -14,9 +14,9 @@
 
   custom.opencode = {
     enable = true;
-    pluginPath = ./opencode.json;
-    configPath = ./oh-my-openagent.jsonc;
-    agentsPath = ./AGENTS.md;
+    pluginPath = ../users/chase/config/opencode.json;
+    configPath = ../users/chase/config/oh-my-openagent.jsonc;
+    agentsPath = ../users/chase/config/AGENTS.md;
   };
 
   # custom.mnemonic.enable = true;

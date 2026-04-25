@@ -51,11 +51,6 @@ in
         description = "Path to AGENTS.md file in this repository";
       };
 
-      notifierConfigPath = lib.mkOption {
-        type = lib.types.path;
-        description = "Path to opencode-notifier.json in this repository";
-      };
-
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
         default = { };
@@ -75,18 +70,19 @@ in
 
     home.activation.opencodeResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.config/opencode"
+      mkdir -p "$HOME/.config/opencode/plugins"
+      rm -f "$HOME/.config/opencode/opencode-notifier.json"
+      rm -f "$HOME/.config/opencode/plugins/notifier.mjs"
 
       cp ${mergedConfigPath} "$HOME/.config/opencode/opencode.json"
       cp ${mergedTuiConfigPath} "$HOME/.config/opencode/tui.json"
       cp ${cfg.configPath} "$HOME/.config/opencode/oh-my-openagent.jsonc"
       cp ${cfg.agentsPath} "$HOME/.config/opencode/AGENTS.md"
-      cp ${cfg.notifierConfigPath} "$HOME/.config/opencode/opencode-notifier.json"
 
       chmod 0644 "$HOME/.config/opencode/opencode.json"
       chmod 0644 "$HOME/.config/opencode/tui.json"
       chmod 0644 "$HOME/.config/opencode/oh-my-openagent.jsonc"
       chmod 0644 "$HOME/.config/opencode/AGENTS.md"
-      chmod 0644 "$HOME/.config/opencode/opencode-notifier.json"
     '';
   };
 }

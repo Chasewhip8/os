@@ -3,11 +3,11 @@
 {
   imports = [
     # Shared profiles
-    ./repos.nix
-    ../../programs/base.nix
-    ../../programs/zed.nix
-    ../../programs/ghostty.nix
-    ../../programs/aerospace.nix
+    ../../../profiles/base.nix
+    ../config/repos.nix
+    ../../../programs/zed.nix
+    ../../../programs/ghostty.nix
+    ../../../programs/aerospace.nix
     inputs.abilities.homeModules.default
   ];
 
@@ -19,14 +19,14 @@
   custom.zed = {
     enable = true;
     installPackage = false;
-    settingsPath = ./zed-settings.json;
-    keymapPath = ./zed-keymap.json;
+    settingsPath = ../config/zed-settings.json;
+    keymapPath = ../config/zed-keymap.json;
   };
 
   custom.ghostty = {
     enable = true;
     installPackage = false;
-    settingsPath = ./ghostty-settings.nix;
+    settingsPath = ../config/ghostty-settings.nix;
     enableZshIntegration = true;
   };
 
@@ -40,7 +40,8 @@
 
   custom.aerospace = {
     enable = true;
-    configPath = ./aerospace.toml;
+    installPackage = false;
+    configPath = ../config/aerospace.toml;
   };
 
   abilities.collaborator.enable = true;

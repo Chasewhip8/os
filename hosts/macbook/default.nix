@@ -22,7 +22,7 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
-    users.chase = import ../../home/users/chase/macbook.nix;
+    users.chase = import ../../home/users/chase/hosts/macbook.nix;
   };
 
   # Used for backwards compatibility

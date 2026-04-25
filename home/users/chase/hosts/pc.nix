@@ -5,30 +5,38 @@ let
 in
 {
   imports = [
-    ./nixos.nix
+    ../../../profiles/user-linux.nix
     inputs.abilities.homeModules.default
-    ../../programs/zed.nix
-    ../../programs/ghostty.nix
+    ../../../programs/zed.nix
+    ../../../programs/ghostty.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)
-    ../../desktop/hyprland
+    ../../../desktop/hyprland
+    ../config/hyprland-pc.nix
   ];
 
   abilities.skills.enable = true;
   abilities.opencodePlugins.enable = true;
+  abilities.opencodePlugins.notifier = {
+    enable = true;
+    command = {
+      path = "${pkgs.pipewire}/bin/pw-play";
+      args = [ "${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga" ];
+    };
+  };
   abilities.mcp.linear.enable = true;
 
   # Zed config paths
   custom.zed = {
     enable = true;
-    settingsPath = ./zed-settings.json;
-    settingsOverridePath = ./zed-settings-pc.json;
-    keymapPath = ./zed-keymap.json;
+    settingsPath = ../config/zed-settings.json;
+    settingsOverridePath = ../config/zed-settings-pc.json;
+    keymapPath = ../config/zed-keymap.json;
   };
 
   custom.ghostty = {
     enable = true;
-    settingsPath = ./ghostty-settings.nix;
+    settingsPath = ../config/ghostty-settings.nix;
     enableZshIntegration = true;
   };
 
@@ -46,8 +54,6 @@ in
     variant_cycle = "${keys.secondary}+t";
     command_list = "${keys.secondary}+p";
   };
-
-  custom.opencode.notifierConfigPath = ./opencode-notifier-pc.json;
 
   programs.kitty.extraConfig = lib.mkAfter ''
     confirm_os_window_close 0

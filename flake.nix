@@ -30,6 +30,7 @@
     };
 
     hyprland.url = "github:hyprwm/Hyprland";
+    hyprlock.url = "github:hyprwm/hyprlock";
 
     xremap-flake.url = "github:xremap/nix-flake";
 
@@ -83,39 +84,40 @@
           rust-overlay.overlays.default
         ];
       };
+
+      mkLinuxHost = hostModule:
+        nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs; };
+          modules = [
+            determinate.nixosModules.default
+            inputs.agenix.nixosModules.default
+            hostModule
+            commonOverlays
+            inputs.home-manager.nixosModules.default
+          ];
+        };
+
+      mkDarwinHost =
+        {
+          hostModule,
+          system ? "aarch64-darwin",
+        }:
+        nix-darwin.lib.darwinSystem {
+          inherit system;
+          specialArgs = { inherit inputs; };
+          modules = [
+            determinate.darwinModules.default
+            hostModule
+            commonOverlays
+            inputs.home-manager.darwinModules.default
+          ];
+        };
     in
     {
-      nixosConfigurations.pc = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          determinate.nixosModules.default
-          inputs.agenix.nixosModules.default
-          ./hosts/pc
-          commonOverlays
-          inputs.home-manager.nixosModules.default
-        ];
-      };
+      nixosConfigurations.pc = mkLinuxHost ./hosts/pc;
 
-      darwinConfigurations.macbook = nix-darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = { inherit inputs; };
-        modules = [
-          determinate.darwinModules.default
-          ./hosts/macbook
-          commonOverlays
-          inputs.home-manager.darwinModules.default
-        ];
-      };
+      darwinConfigurations.macbook = mkDarwinHost { hostModule = ./hosts/macbook; };
 
-      nixosConfigurations.macbook-vm = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          determinate.nixosModules.default
-          inputs.agenix.nixosModules.default
-          ./hosts/macbook-vm
-          commonOverlays
-          inputs.home-manager.nixosModules.default
-        ];
-      };
+      nixosConfigurations.macbook-vm = mkLinuxHost ./hosts/macbook-vm;
     };
 }

@@ -61,7 +61,7 @@
   home-manager = {
     extraSpecialArgs = { inherit inputs; };
     useGlobalPkgs = true;
-    users."chase" = import ../../home/users/chase/macbook-vm.nix;
+    users."chase" = import ../../home/users/chase/hosts/macbook-vm.nix;
   };
 
   system.stateVersion = "24.05";
