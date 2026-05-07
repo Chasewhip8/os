@@ -1,25 +1,27 @@
 # OrbStack VM (NixOS) home configuration for chase
-{ config, inputs, ... }:
+{
+  config,
+  inputs,
+  ...
+}:
 let
   keys = config.custom.keys;
 in
 {
   imports = [
     ../../../profiles/user-linux.nix
-    inputs.abilities.homeModules.default
+    inputs.limitless.homeModules.default
   ];
 
-  abilities.skills.enable = true;
-  abilities.opencodePlugins.enable = true;
-  abilities.opencodePlugins.notifier = {
+  programs.limitless = {
     enable = true;
-    command = {
-      path = "/opt/orbstack-guest/bin/mac";
-      args = [ "bash" "-c" "afplay /System/Library/Sounds/Glass.aiff" ];
+    mcp.linear.enable = true;
+    opencode = {
+      extraAgentsFile = ../config/AGENTS.md;
+      service.enable = true;
+      settings = builtins.fromJSON (builtins.readFile ../config/opencode.json);
     };
   };
-  abilities.mcp.linear.enable = true;
-  abilities.agentBrowser.enable = true;
 
   # Key roles: VM receives keystrokes via Mac terminal — only CTRL passes through.
   custom.keys = {
@@ -29,10 +31,12 @@ in
 
   custom.terminalKeybinds.enable = false;
 
-  custom.opencode.extraTuiConfig.keybinds = {
-    leader = "${keys.secondary}+x";
-    variant_cycle = "${keys.secondary}+t";
-    command_list = "${keys.secondary}+p";
+  home.file.".config/opencode/tui.json".text = builtins.toJSON {
+    keybinds = {
+      leader = "${keys.secondary}+x";
+      variant_cycle = "${keys.secondary}+t";
+      command_list = "${keys.secondary}+p";
+    };
   };
 
   # VM-specific mnemonic: local server overrides

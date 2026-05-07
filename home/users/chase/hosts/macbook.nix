@@ -8,7 +8,7 @@
     ../../../programs/zed.nix
     ../../../programs/ghostty.nix
     ../../../programs/aerospace.nix
-    inputs.abilities.homeModules.default
+    inputs.limitless.homeModules.default
   ];
 
   home.username = "chase";
@@ -43,8 +43,6 @@
     installPackage = false;
     configPath = ../config/aerospace.toml;
   };
-
-  abilities.collaborator.enable = true;
 
   home.packages = [
     pkgs.autoraise

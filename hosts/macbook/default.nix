@@ -1,5 +1,8 @@
 # macOS (nix-darwin) host configuration
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
+let
+  openscreen = pkgs.callPackage ../../pkgs/openscreen-darwin.nix { };
+in
 {
   imports = [
     ../../modules/darwin/base.nix
@@ -17,6 +20,10 @@
 
   # Primary user for system defaults
   system.primaryUser = "chase";
+
+  environment.systemPackages = [
+    openscreen
+  ];
 
   # Home Manager
   home-manager = {

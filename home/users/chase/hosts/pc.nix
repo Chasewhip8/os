@@ -1,12 +1,20 @@
 # PC (NixOS) home configuration for chase
-{ config, inputs, lib, pkgs, ... }:
+{
+  config,
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
+  handy = pkgs.callPackage ../../../../pkgs/handy.nix { };
   keys = config.custom.keys;
 in
 {
   imports = [
     ../../../profiles/user-linux.nix
-    inputs.abilities.homeModules.default
+    inputs.limitless.homeModules.default
+    inputs.openscreen.homeManagerModules.default
     ../../../programs/zed.nix
     ../../../programs/ghostty.nix
 
@@ -15,16 +23,17 @@ in
     ../config/hyprland-pc.nix
   ];
 
-  abilities.skills.enable = true;
-  abilities.opencodePlugins.enable = true;
-  abilities.opencodePlugins.notifier = {
+  programs.limitless = {
     enable = true;
-    command = {
-      path = "${pkgs.pipewire}/bin/pw-play";
-      args = [ "${pkgs.sound-theme-freedesktop}/share/sounds/freedesktop/stereo/complete.oga" ];
+    mcp.linear.enable = true;
+    opencode = {
+      extraAgentsFile = ../config/AGENTS.md;
+      service.enable = true;
+      settings = builtins.fromJSON (builtins.readFile ../config/opencode.json);
     };
   };
-  abilities.mcp.linear.enable = true;
+
+  programs.openscreen.enable = true;
 
   # Zed config paths
   custom.zed = {
@@ -49,10 +58,12 @@ in
 
   custom.terminalKeybinds.enable = true;
 
-  custom.opencode.extraTuiConfig.keybinds = {
-    leader = "${keys.secondary}+x";
-    variant_cycle = "${keys.secondary}+t";
-    command_list = "${keys.secondary}+p";
+  home.file.".config/opencode/tui.json".text = builtins.toJSON {
+    keybinds = {
+      leader = "${keys.secondary}+x";
+      variant_cycle = "${keys.secondary}+t";
+      command_list = "${keys.secondary}+p";
+    };
   };
 
   programs.kitty.extraConfig = lib.mkAfter ''
@@ -62,6 +73,7 @@ in
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [
+    handy
     pkgs.pavucontrol
     pkgs.vesktop
     pkgs.slack

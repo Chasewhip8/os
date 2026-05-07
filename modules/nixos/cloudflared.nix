@@ -1,24 +1,58 @@
-# Cloudflare Tunnel daemon
-{ pkgs, ... }:
+# Cloudflare Tunnel daemon for a remotely managed tunnel.
 {
-  environment.systemPackages = [ pkgs.cloudflared ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.local.cloudflared;
+  tokenSecretFile = ../../secrets/cloudflared-tunnel-token.age;
+  hasTokenSecret = builtins.pathExists tokenSecretFile;
+in
+{
+  options.local.cloudflared.enable = lib.mkEnableOption "Cloudflare Tunnel daemon";
 
-  systemd.tmpfiles.rules = [
-    "d /etc/cloudflared 0755 root root -"
-  ];
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = [ pkgs.cloudflared ];
 
-  systemd.services.cloudflared = {
-    description = "Cloudflare Tunnel";
-    after = [ "network-online.target" ];
-    wants = [ "network-online.target" ];
-    wantedBy = [ "multi-user.target" ];
-    unitConfig = {
-      ConditionPathExists = "/etc/cloudflared/tunnel-token.env";
+    warnings = lib.optional (!hasTokenSecret) ''
+      cloudflared token secret is missing at secrets/cloudflared-tunnel-token.age;
+      create it with agenix before expecting the cloudflared service to start.
+    '';
+
+    age.secrets.cloudflared-tunnel-token = lib.mkIf hasTokenSecret {
+      file = tokenSecretFile;
+      mode = "0400";
     };
-    serviceConfig = {
-      ExecStart = "${pkgs.bash}/bin/bash -ec 'source /etc/cloudflared/tunnel-token.env; if [ -z \"\${TUNNEL_TOKEN:-}\" ]; then echo \"TUNNEL_TOKEN missing in /etc/cloudflared/tunnel-token.env\" >&2; exit 1; fi; exec ${pkgs.cloudflared}/bin/cloudflared --no-autoupdate tunnel run --token \"$TUNNEL_TOKEN\"'";
-      Restart = "always";
-      RestartSec = "5s";
+
+    systemd.services.cloudflared = lib.mkIf hasTokenSecret {
+      description = "Cloudflare Tunnel";
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig = {
+        ExecStart = "${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token-file %d/tunnel-token";
+        LoadCredential = "tunnel-token:${config.age.secrets.cloudflared-tunnel-token.path}";
+        DynamicUser = true;
+        Restart = "on-failure";
+        RestartSec = "5s";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        LockPersonality = true;
+        CapabilityBoundingSet = "";
+      };
     };
   };
 }

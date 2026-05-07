@@ -2,13 +2,23 @@
 {
   config,
   inputs,
+  lib,
   pkgs,
   ...
 }:
+let
+  githubTokenFile = ../secrets/github-token.age;
+  hasGithubTokenSecret = builtins.pathExists githubTokenFile;
+in
 {
   environment.systemPackages = [
     inputs.agenix.packages.${pkgs.system}.default
   ];
+
+  warnings = lib.optional (!hasGithubTokenSecret) ''
+    GitHub token secret is missing at secrets/github-token.age;
+    create it with agenix before expecting gh to be authenticated.
+  '';
 
   age.identityPaths = [
     "${config.users.users.chase.home}/.nixconf/secrets/identity"
@@ -22,6 +32,12 @@
   age.secrets.linear-api-key = {
     file = ../secrets/linear-api-key.age;
     owner = "chase";
+  };
+
+  age.secrets.github-token = lib.mkIf hasGithubTokenSecret {
+    file = githubTokenFile;
+    owner = "chase";
+    mode = "0400";
   };
 
   age.secrets.shipyard-ssh-key = {
