@@ -1,6 +1,5 @@
 # PC (NixOS) home configuration for chase
 {
-  config,
   inputs,
   lib,
   pkgs,
@@ -8,7 +7,6 @@
 }:
 let
   handy = pkgs.callPackage ../../../../pkgs/handy.nix { };
-  keys = config.custom.keys;
 in
 {
   imports = [
@@ -49,26 +47,44 @@ in
     enableZshIntegration = true;
   };
 
+  programs.ghostty.settings.font-family = "JetBrains Mono NL";
+
+  # The Samsung Odyssey OLED G9 uses a triangular RGB QD-OLED layout rather
+  # than an RGB stripe; use grayscale AA to avoid subpixel color fringing.
+  fonts.fontconfig = {
+    antialiasing = true;
+    hinting = "slight";
+    subpixelRendering = "none";
+  };
+
   # Key roles: physical SUPER(thumb) → xremap → logical CTRL (action),
   #            physical CTRL(far-left) → xremap → logical SUPER (secondary).
   custom.keys = {
     action = "ctrl";
     secondary = "super";
+    # Zed observes raw modifiers here, while Kitty receives the xremap output.
+    # Keep terminal behavior derived from the host key roles instead of raw
+    # per-app keymap JSON.
+    zed = {
+      action = "super";
+      secondary = "ctrl";
+    };
   };
 
   custom.terminalKeybinds.enable = true;
 
+  # Keep OpenCode on terminal-standard ctrl bindings; Kitty/Zed translate the
+  # remapped far-left key back to ctrl sequences for TUI-only shortcuts.
   home.file.".config/opencode/tui.json".text = builtins.toJSON {
     keybinds = {
-      leader = "${keys.secondary}+x";
-      variant_cycle = "${keys.secondary}+t";
-      command_list = "${keys.secondary}+p";
+      leader = "ctrl+x";
+      variant_cycle = "ctrl+t";
+      command_list = "ctrl+p";
     };
   };
 
   programs.kitty.extraConfig = lib.mkAfter ''
     confirm_os_window_close 0
-    map ${keys.secondary}+c send_text all \x03
   '';
 
   # PC-specific packages (Linux GUI apps)

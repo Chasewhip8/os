@@ -5,6 +5,7 @@
     enable = true;
     settings = {
       border-width = 0;
+      font = "Inter";
     };
   };
 

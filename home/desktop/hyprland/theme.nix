@@ -1,9 +1,39 @@
 # Hyprland theme configuration - catppuccin, GTK, Qt, cursor, animations
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
+let
+  uiFont = "Inter";
+  monoFont = "JetBrains Mono NL";
+  uiFontSize = 11;
+  monoFontSize = 11;
+in
 {
   imports = [
     inputs.catppuccin.homeModules.catppuccin
   ];
+
+  home.packages = [
+    pkgs.inter
+    pkgs.jetbrains-mono
+    pkgs.noto-fonts
+    pkgs.noto-fonts-cjk-sans
+    pkgs.noto-fonts-color-emoji
+  ];
+
+  fonts.fontconfig = {
+    enable = true;
+    defaultFonts = {
+      sansSerif = [
+        uiFont
+        "Noto Sans"
+      ];
+      monospace = [
+        monoFont
+        "Noto Sans Mono"
+      ];
+      serif = [ "Noto Serif" ];
+      emoji = [ "Noto Color Emoji" ];
+    };
+  };
 
   # OS Theme - Catppuccin
   catppuccin = {
@@ -19,6 +49,10 @@
   # GTK Theme
   gtk = {
     enable = true;
+    font = {
+      name = uiFont;
+      size = uiFontSize;
+    };
     gtk3 = {
       extraConfig.gtk-application-prefer-dark-theme = true;
     };
@@ -33,7 +67,12 @@
 
   # dconf dark mode
   dconf.settings = {
-    "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+    "org/gnome/desktop/interface" = {
+      color-scheme = "prefer-dark";
+      font-name = "${uiFont} ${toString uiFontSize}";
+      document-font-name = "${uiFont} ${toString uiFontSize}";
+      monospace-font-name = "${monoFont} ${toString monoFontSize}";
+    };
   };
 
   # Hyprland theme settings

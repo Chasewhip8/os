@@ -38,5 +38,25 @@
         PC (post-xremap): "super". Mac/VM: "ctrl".
       '';
     };
+
+    zed = {
+      action = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Zed-observed primary action modifier override. Defaults to
+          custom.keys.action when null.
+        '';
+      };
+
+      secondary = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
+          Zed-observed secondary/TUI modifier override. Defaults to
+          custom.keys.secondary when null.
+        '';
+      };
+    };
   };
 }

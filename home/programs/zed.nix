@@ -17,6 +17,11 @@ let
           builtins.fromJSON (builtins.readFile cfg.settingsOverridePath);
     in
     pkgs.writeText "zed-settings.json" (builtins.toJSON (lib.recursiveUpdate baseSettings overrideSettings));
+  mergedKeymapPath =
+    let
+      baseKeymap = builtins.fromJSON (builtins.readFile cfg.keymapPath);
+    in
+    pkgs.writeText "zed-keymap.json" (builtins.toJSON (baseKeymap ++ cfg.keymapEntries));
 in
 {
   options = {
@@ -52,6 +57,12 @@ in
         default = "./zed-keymap.json";
         description = "Path to the Zed keymap in your configuration";
       };
+
+      keymapEntries = lib.mkOption {
+        type = lib.types.listOf lib.types.anything;
+        default = [ ];
+        description = "Additional Zed keymap entries appended after the base keymap";
+      };
     };
   };
 
@@ -62,7 +73,7 @@ in
       mkdir -p "$HOME/.config/zed"
 
       cp ${mergedSettingsPath} "$HOME/.config/zed/settings.json"
-      cp ${cfg.keymapPath} "$HOME/.config/zed/keymap.json"
+      cp ${mergedKeymapPath} "$HOME/.config/zed/keymap.json"
 
       chmod 0644 "$HOME/.config/zed/settings.json"
       chmod 0644 "$HOME/.config/zed/keymap.json"

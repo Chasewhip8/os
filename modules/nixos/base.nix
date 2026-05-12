@@ -12,6 +12,10 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ "root" "@wheel" "chase" ];
 
+  # Keep the modern systemd-oriented D-Bus implementation explicit so rebuilds
+  # do not try to live-switch the running desktop back to dbus-daemon.
+  services.dbus.implementation = "broker";
+
   # Locale
   time.timeZone = "America/Boise";
   i18n.defaultLocale = "en_US.UTF-8";

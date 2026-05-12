@@ -82,7 +82,6 @@ in
         };
 
         dwindle = {
-          pseudotile = true;
           preserve_split = true;
         };
 
@@ -135,7 +134,9 @@ in
       shellIntegration.enableZshIntegration = true;
       extraConfig = ''
         window_margin_width 10
+        font_family JetBrains Mono NL
         font_size 18.0
+        disable_ligatures always
       '';
     };
   };
