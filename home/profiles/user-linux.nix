@@ -43,6 +43,12 @@ in
     tokenFile = "/run/agenix/github-token";
   };
 
+  programs.limitless.github = {
+    enable = true;
+    allowUnrestrictedRepos = true;
+    tokenFile = "/run/agenix/github-token";
+  };
+
   # custom.mnemonic.enable = true;
 
   home.shellAliases = {

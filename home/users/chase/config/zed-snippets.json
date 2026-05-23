@@ -1,0 +1,7 @@
+{
+    "Feedback comment": {
+        "prefix": "/?",
+        "body": ["// FEEDBACK: $0"],
+        "description": "Insert feedback comment"
+    }
+}

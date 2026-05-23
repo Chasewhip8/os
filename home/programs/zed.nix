@@ -63,11 +63,21 @@ in
         default = [ ];
         description = "Additional Zed keymap entries appended after the base keymap";
       };
+
+      snippetsPaths = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
+        default = { };
+        description = "Snippet files to link under ~/.config/zed/snippets";
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
     home.packages = lib.mkIf cfg.installPackage [ cfg.package ];
+
+    home.file = lib.mapAttrs' (
+      name: path: lib.nameValuePair ".config/zed/snippets/${name}" { source = path; }
+    ) cfg.snippetsPaths;
 
     home.activation.zedResetConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.config/zed"

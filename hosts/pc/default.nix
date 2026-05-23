@@ -38,7 +38,16 @@
   };
 
   # Services
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    browsing = true;
+    browsed.enable = true;
+  };
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+    openFirewall = true;
+  };
   services.udisks2.enable = true;
   services.upower.enable = true;
 

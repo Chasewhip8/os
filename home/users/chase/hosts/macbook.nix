@@ -21,6 +21,7 @@
     installPackage = false;
     settingsPath = ../config/zed-settings.json;
     keymapPath = ../config/zed-keymap.json;
+    snippetsPaths."snippets.json" = ../config/zed-snippets.json;
   };
 
   custom.ghostty = {

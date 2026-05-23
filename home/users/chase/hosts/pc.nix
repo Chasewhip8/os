@@ -23,7 +23,14 @@ in
 
   programs.limitless = {
     enable = true;
-    mcp.linear.enable = true;
+    mcp.linear.enable = false;
+    notifications = {
+      enable = true;
+      command = [
+        "/run/current-system/sw/bin/pw-play"
+        "/run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga"
+      ];
+    };
     opencode = {
       extraAgentsFile = ../config/AGENTS.md;
       service.enable = true;
@@ -39,6 +46,7 @@ in
     settingsPath = ../config/zed-settings.json;
     settingsOverridePath = ../config/zed-settings-pc.json;
     keymapPath = ../config/zed-keymap.json;
+    snippetsPaths."snippets.json" = ../config/zed-snippets.json;
   };
 
   custom.ghostty = {
@@ -62,13 +70,6 @@ in
   custom.keys = {
     action = "ctrl";
     secondary = "super";
-    # Zed observes raw modifiers here, while Kitty receives the xremap output.
-    # Keep terminal behavior derived from the host key roles instead of raw
-    # per-app keymap JSON.
-    zed = {
-      action = "super";
-      secondary = "ctrl";
-    };
   };
 
   custom.terminalKeybinds.enable = true;

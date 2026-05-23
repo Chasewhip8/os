@@ -49,8 +49,6 @@
 
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
 
-    opencode.url = "github:anomalyco/opencode/v1.14.48";
-
     openscreen = {
       # Release tags predate the Nix flake; latest main has a stale npmDepsHash.
       url = "github:siddharthvaddem/openscreen/d20a062150f3520b25233875b9b73a70d51c6723";
@@ -63,9 +61,8 @@
     };
 
     limitless = {
-      url = "github:Chasewhip8/limitless/dev";
+      url = "github:Chasewhip8/limitless";
       inputs.nixpkgs.follows = "nixpkgs";
-      inputs.opencode.follows = "opencode";
     };
 
     agenix = {

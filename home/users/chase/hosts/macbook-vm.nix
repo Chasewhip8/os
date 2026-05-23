@@ -15,7 +15,16 @@ in
 
   programs.limitless = {
     enable = true;
-    mcp.linear.enable = true;
+    mcp.linear.enable = false;
+    notifications = {
+      enable = true;
+      command = [
+        "/opt/orbstack-guest/bin/mac"
+        "bash"
+        "-c"
+        "afplay /System/Library/Sounds/Glass.aiff"
+      ];
+    };
     opencode = {
       extraAgentsFile = ../config/AGENTS.md;
       service.enable = true;
