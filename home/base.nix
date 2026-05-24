@@ -25,6 +25,10 @@
     EDITOR = "nano";
   };
 
+  # Home Manager's generated manpage currently instantiates an options.json
+  # derivation with bare nixpkgs store paths under Nix 3.21.
+  manual.manpages.enable = false;
+
   # Common tools
   programs.htop.enable = true;
   programs.home-manager.enable = true;

@@ -10,19 +10,21 @@ let
 in
 {
   imports = [
-    ../../system/nixos/base.nix
-    ../../system/nixos/agenix.nix
+    ../../system/nixos
     inputs.hyprland.nixosModules.default
     ./hardware-configuration.nix
-    ../../system/nixos/nvidia.nix
-    ../../system/nixos/greetd.nix
-    ../../system/nixos/files.nix
-    ../../system/nixos/pam-services.nix
-    ../../system/nixos/docker.nix
-    ../../system/nixos/1password.nix
-    ../../system/nixos/gaming.nix
-    ../../system/nixos/ledger.nix
   ];
+
+  local.features = {
+    desktopAuth.enable = true;
+    docker.enable = true;
+    fileManager.enable = true;
+    gaming.enable = true;
+    greetd.enable = true;
+    ledger.enable = true;
+    nvidia.enable = true;
+    onePassword.gui.enable = true;
+  };
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;

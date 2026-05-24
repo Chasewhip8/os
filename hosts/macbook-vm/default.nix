@@ -9,14 +9,12 @@
 }:
 {
   imports = [
-    ../../system/nixos/base.nix
-    ../../system/nixos/agenix.nix
-    ../../system/nixos/cloudflared.nix
-    # inputs.mnemonic.nixosModules.default
+    ../../system/nixos
     ./orbstack.nix
     "${modulesPath}/virtualisation/lxc-container.nix"
-    ../../system/nixos/1password-cli.nix
   ];
+
+  local.features.onePassword.enable = true;
 
   # Hostname
   networking.hostName = config.local.host.networkName;
@@ -36,11 +34,6 @@
 
   # Docker CLI → OrbStack's runtime (no local daemon)
   environment.sessionVariables.DOCKER_HOST = "unix:///opt/orbstack-guest/run/docker.sock";
-
-  # services.mnemonic = {
-  #   enable = true;
-  #   apiKey = "macbook-vm-local";
-  # };
 
   users.groups.docker = {};
   systemd.services.orbstack-docker-sock = {

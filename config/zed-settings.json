@@ -24,6 +24,9 @@
   "inlay_hints": { "enabled": false },
   "lsp": {
     "biome": { "settings": { "require_config_file": true } },
+    "nil": {
+      "settings": { "nil": { "nix": { "flake": { "autoArchive": true } } } }
+    },
     "rust-analyzer": {
       "initialization_options": { "check": { "command": "clippy" } }
     }

@@ -25,9 +25,9 @@ in
     };
 
     tokenFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr (lib.types.strMatching "^/.*");
       default = null;
-      example = "/run/agenix/github-token";
+      example = "osConfig.local.secrets.githubToken.path";
       description = "Runtime path to a GitHub token file read by gh when no token env vars are already set.";
     };
   };

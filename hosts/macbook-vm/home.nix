@@ -9,14 +9,11 @@ let
 in
 {
   imports = [
-    ../../home/linux.nix
-    ../../config/repos.nix
-    inputs.limitless.homeModules.default
+    ../../home/nixos.nix
   ];
 
   programs.limitless = {
     enable = true;
-    mcp.linear.enable = false;
     notifications = {
       enable = true;
       command = [
@@ -49,12 +46,8 @@ in
     };
   };
 
-  # VM-specific mnemonic: local server overrides
-  # custom.mnemonic.url = "http://127.0.0.1:8787";
-  # custom.mnemonic.apiKey = "macbook-vm-local";
-
   # VM-specific shell config
   home.shellAliases = {
-    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#${config.local.host.name} --use-remote-sudo";
+    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#${config.local.host.name} --sudo";
   };
 }

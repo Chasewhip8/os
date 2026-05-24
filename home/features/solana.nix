@@ -1,17 +1,21 @@
-# Solana CLI tools — built locally from pkgs/solana/
-{ pkgs, inputs, ... }:
+# Solana CLI tools.
+{ lib, pkgs, ... }:
 let
-  crane = inputs.crane.mkLib pkgs;
-  solana-source = pkgs.callPackage ../../pkgs/solana/solana-source.nix { };
+  hasAgaveBinary = builtins.elem pkgs.stdenv.hostPlatform.system [
+    "x86_64-linux"
+    "x86_64-darwin"
+    "aarch64-darwin"
+  ];
   solana-platform-tools = pkgs.callPackage ../../pkgs/solana/solana-platform-tools.nix {
-    inherit solana-source;
+    solanaVersion = "4.0.0";
   };
   solana-cli = pkgs.callPackage ../../pkgs/solana/solana-cli.nix {
-    inherit solana-platform-tools solana-source crane;
+    inherit solana-platform-tools;
   };
 in
 {
-  home.packages = [
+  # Agave v4.0.0 does not publish an aarch64-linux CLI release tarball.
+  home.packages = lib.optionals hasAgaveBinary [
     solana-cli
   ];
 }

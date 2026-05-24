@@ -20,8 +20,7 @@
       "match:title ^(.*dialog.*)$, float on"
 
       # Applications
-      "match:class ^(thunar)$, float on"
-      "match:class ^(thunar)$, match:title ^(chase - Thunar)$, size 1556 835"
+      "match:class ^(org\.gnome\.Nautilus)$, float on"
       "match:class ^(kitty)$, match:title ^(htop)$, float on"
 
       # Picture-in-Picture

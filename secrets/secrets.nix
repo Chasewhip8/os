@@ -5,6 +5,5 @@ in
   "cargo-registry-token.age".publicKeys = [ secrets ];
   "cloudflared-tunnel-token.age".publicKeys = [ secrets ];
   "github-token.age".publicKeys = [ secrets ];
-  "linear-api-key.age".publicKeys = [ secrets ];
   "shipyard-ssh-key.age".publicKeys = [ secrets ];
 }

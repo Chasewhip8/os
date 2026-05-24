@@ -1,10 +1,9 @@
 # Development profile - cross-platform dev tools and languages
-{ lib, pkgs, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./features/language-servers.nix
     ./features/solana.nix
-    # ./features/mnemonic.nix
   ];
 
   home.packages = [
@@ -31,11 +30,6 @@
     pkgs.openssl
     pkgs.pkg-config
   ];
-
-  # Secrets (decrypted by agenix at /run/agenix/*)
-  programs.zsh.initContent = lib.mkAfter ''
-    [ -f /run/agenix/cargo-registry-token ] && export CARGO_REGISTRIES_SPHERE_FOUNDATION_TOKEN=$(cat /run/agenix/cargo-registry-token)
-  '';
 
   # Dev tooling
   programs.go.enable = true;

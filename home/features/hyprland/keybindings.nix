@@ -5,7 +5,7 @@
     "$mod" = "ALT";
     "$term" = "kitty";
     "$editor" = "zeditor";
-    "$file" = "thunar";
+    "$file" = "nautilus";
 
     bind = [
       # System

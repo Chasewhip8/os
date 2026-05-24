@@ -55,11 +55,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    mnemonic = {
-      url = "github:Chasewhip8/mnemonic";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     limitless = {
       url = "github:Chasewhip8/limitless";
       inputs.nixpkgs.follows = "nixpkgs";

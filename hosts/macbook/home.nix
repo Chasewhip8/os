@@ -8,7 +8,6 @@ in
     ../../home/base.nix
     ../../home/features/zed.nix
     ../../home/features/aerospace.nix
-    inputs.limitless.homeModules.default
   ];
 
   home.stateVersion = "24.05";
@@ -60,8 +59,8 @@ in
   # macOS-specific shell config
   home.shellAliases = {
     nixconf-apply = "nixconf-apply-host";
-    nixconf-apply-host = "darwin-rebuild switch --flake ~/.nixconf#${config.local.host.name} --use-remote-sudo";
-    nixconf-apply-vm = "orb -m nixos nixos-rebuild switch --flake ${vmHomeDirectory}/.nixconf#macbook-vm --use-remote-sudo";
+    nixconf-apply-host = "sudo darwin-rebuild switch --flake ~/.nixconf#${config.local.host.name}";
+    nixconf-apply-vm = "orb -m nixos nixos-rebuild switch --flake ${vmHomeDirectory}/.nixconf#macbook-vm --sudo";
     nixconf-apply-all = "nixconf-apply-host && nixconf-apply-vm";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };

@@ -1,19 +1,21 @@
 {
   stdenv,
   autoPatchelfHook,
+  bzip2,
   criterion,
-  fetchzip,
+  fetchurl,
+  gnutar,
   lib,
   libclang,
   libedit,
   libxml2,
   openssl,
   python3,
-  solana-source,
   udev,
   xz,
   zlib,
-  version ? "1.52",
+  solanaVersion ? "4.0.0",
+  version ? "1.54",
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -26,6 +28,12 @@ let
   };
 
   versionMapping = {
+    "1.54" = {
+      x86_64-linux = "sha256-/MQWMcf3dWG/VBIhi/KXUB3M8DBeooDzOPCs4qq58x4=";
+      aarch64-linux = "sha256-9igS3Za2scjg4s9ncUaRLFjIPpXXYsMOiSMNZp+cLmo=";
+      x86_64-darwin = "sha256-0ctxZYkgB9Ea1y/e0Wx2km5d+p/yhv49mZRAwa80p1g=";
+      aarch64-darwin = "sha256-HIs69ehhThxFk5OpXFsZv7zI7ROCKhy1OfrmhHH5v7s=";
+    };
     "1.52" = {
       x86_64-linux = "sha256-fAEd7Bva2S6gW4+2xyp0TurkO1ygDQbGNvDOXMbNHAI=";
       aarch64-linux = "sha256-ApZHbpU76ASEWo5JEmIoGV8v+iZmVM7txPVTiEC7Eug=";
@@ -42,23 +50,31 @@ let
 
   releaseSystem = systemMapping."${system}";
   releaseHash = versionMapping."${version}"."${system}";
+  sbfSdk = fetchurl {
+    url = "https://github.com/anza-xyz/agave/releases/download/v${solanaVersion}/sbf-sdk.tar.bz2";
+    hash = "sha256-DkcFrczFsWdT+6YtoTSwdY+tK1Yv6jtgRt0/6dn/rwU=";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "solana-platform-tools";
   inherit version;
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://github.com/anza-xyz/platform-tools/releases/download/v${version}/platform-tools-${releaseSystem}.tar.bz2";
+    name = "platform-tools-${releaseSystem}-${version}.tar.bz2";
     hash = releaseHash;
-    stripRoot = false;
   };
 
+  dontUnpack = true;
   doCheck = false;
 
   # https://github.com/NixOS/nixpkgs/issues/380196#issuecomment-2646189651
   dontCheckForBrokenSymlinks = true;
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    bzip2
+    gnutar
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   # liblldb wants libpython3.10 which is gone from nixpkgs-unstable.
   # It's only the LLVM debugger — not needed for SBF compilation.
@@ -77,10 +93,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [ openssl udev ];
 
   installPhase = ''
+    runHook preInstall
+
+    mkdir -p platform-tools sbf-sdk
+    tar -xjf $src -C platform-tools
+    tar -xjf ${sbfSdk} -C sbf-sdk
+
     platformtools=$out/bin/platform-tools-sdk/sbf/dependencies/platform-tools
     mkdir -p $platformtools
-    cp -r $src/llvm $platformtools
-    cp -r $src/rust $platformtools
+    cp -r platform-tools/llvm $platformtools
+    cp -r platform-tools/rust $platformtools
     chmod 0755 -R $out
     touch $platformtools-${version}.md
 
@@ -92,7 +114,18 @@ stdenv.mkDerivation rec {
     ln -s ${criterion}/share $criterion/share
     touch $criterion-v${criterion.version}.md
 
-    cp -ar ${solana-source.src}/platform-tools-sdk/sbf/* $out/bin/platform-tools-sdk/sbf/
+    if [ -d sbf-sdk/platform-tools-sdk/sbf ]; then
+      cp -ar sbf-sdk/platform-tools-sdk/sbf/. $out/bin/platform-tools-sdk/sbf/
+    elif [ -d sbf-sdk/sbf ]; then
+      cp -ar sbf-sdk/sbf/. $out/bin/platform-tools-sdk/sbf/
+    elif [ -d sbf-sdk/sbf-sdk ]; then
+      cp -ar sbf-sdk/sbf-sdk/. $out/bin/platform-tools-sdk/sbf/
+    else
+      echo "Unsupported sbf-sdk.tar.bz2 layout for Agave ${solanaVersion}" >&2
+      exit 1
+    fi
+
+    runHook postInstall
   '';
 
   # Patch libedit reference — find the actual liblldb dynamically

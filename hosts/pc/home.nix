@@ -8,20 +8,13 @@
 }:
 {
   imports = [
-    ../../home/linux.nix
-    ../../config/repos.nix
-    inputs.limitless.homeModules.default
+    ../../home/nixos.nix
+    ../../home/desktop.nix
     inputs.openscreen.homeManagerModules.default
-    ../../home/features/zed.nix
-
-    # Linux desktop (Hyprland + theme + xremap + etc)
-    ../../home/features/hyprland
-    ../../config/hyprland-pc.nix
   ];
 
   programs.limitless = {
     enable = true;
-    mcp.linear.enable = false;
     notifications = {
       enable = true;
       command = [
@@ -45,6 +38,14 @@
     settingsOverridePath = ../../config/zed-settings-pc.json;
     keymapPath = ../../config/zed-keymap.json;
     snippetsPaths."snippets.json" = ../../config/zed-snippets.json;
+  };
+
+  custom.hyprland = {
+    monitor = [ "DP-2,5120x1440@240,0x0,1" ];
+    browserCommand = "${pkgs.google-chrome}/bin/google-chrome-stable";
+    startupPrograms = [
+      "${pkgs.google-chrome}/bin/google-chrome-stable --no-startup-window"
+    ];
   };
 
   # The Samsung Odyssey OLED G9 uses a triangular RGB QD-OLED layout rather
@@ -98,7 +99,7 @@
 
   # PC-specific shell config
   home.shellAliases = {
-    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#${config.local.host.name} --use-remote-sudo";
+    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#${config.local.host.name} --sudo";
   };
 
   programs.zsh.initContent = lib.mkAfter ''

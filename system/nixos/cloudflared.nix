@@ -6,34 +6,28 @@
   ...
 }:
 let
-  cfg = config.local.cloudflared;
-  tokenSecretFile = ../../secrets/cloudflared-tunnel-token.age;
-  hasTokenSecret = builtins.pathExists tokenSecretFile;
+  cfg = config.local.features.cloudflared;
+  tokenSecret = config.local.secrets.cloudflaredTunnelToken;
 in
 {
-  options.local.cloudflared.enable = lib.mkEnableOption "Cloudflare Tunnel daemon";
+  options.local.features.cloudflared.enable = lib.mkEnableOption "Cloudflare Tunnel daemon";
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.cloudflared ];
 
-    warnings = lib.optional (!hasTokenSecret) ''
+    warnings = lib.optional (!tokenSecret.available) ''
       cloudflared token secret is missing at secrets/cloudflared-tunnel-token.age;
       create it with agenix before expecting the cloudflared service to start.
     '';
 
-    age.secrets.cloudflared-tunnel-token = lib.mkIf hasTokenSecret {
-      file = tokenSecretFile;
-      mode = "0400";
-    };
-
-    systemd.services.cloudflared = lib.mkIf hasTokenSecret {
+    systemd.services.cloudflared = lib.mkIf tokenSecret.available {
       description = "Cloudflare Tunnel";
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         ExecStart = "${pkgs.cloudflared}/bin/cloudflared tunnel --no-autoupdate run --token-file %d/tunnel-token";
-        LoadCredential = "tunnel-token:${config.age.secrets.cloudflared-tunnel-token.path}";
+        LoadCredential = "tunnel-token:${tokenSecret.path}";
         DynamicUser = true;
         Restart = "on-failure";
         RestartSec = "5s";

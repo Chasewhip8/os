@@ -1,22 +1,23 @@
-# Thunar file manager and archive support
+# Nautilus file manager and archive support
 {
+  config,
+  lib,
   pkgs,
   ...
 }:
+let
+  cfg = config.local.features.fileManager;
+in
 {
-  environment.systemPackages = with pkgs; [
-    file-roller
-  ];
+  options.local.features.fileManager.enable = lib.mkEnableOption "desktop file manager support";
 
-  # File Manager
-  programs.thunar = {
-    enable = true;
-    plugins = with pkgs.xfce; [
-      thunar-archive-plugin
-      thunar-volman
+  config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      file-roller
+      nautilus
     ];
+
+    services.gvfs.enable = true; # Mount, trash, and other functionalities
+    services.tumbler.enable = true; # Thumbnail support for images
   };
-  programs.xfconf.enable = true; # Required for settings peristence
-  services.gvfs.enable = true; # Mount, trash, and other functionalities
-  services.tumbler.enable = true; # Thumbnail support for images
 }

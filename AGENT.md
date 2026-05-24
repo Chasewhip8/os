@@ -13,7 +13,7 @@ flowchart TD
   flake["flake.nix"]
   hosts["hosts/<host>/<default.nix, home.nix>"]
   sys["system/common<br/>system/nixos<br/>system/darwin"]
-  homeBundles["home/base.nix<br/>home/dev.nix<br/>home/linux.nix"]
+  homeBundles["home/base.nix<br/>home/dev.nix<br/>home/nixos.nix<br/>home/desktop.nix"]
   hm["home/features"]
   raw["config"]
   pkgs["pkgs"]
@@ -60,7 +60,7 @@ Machine composition. Each host keeps system and user-host choices together:
 Rules:
 
 - May import `system/nixos` or `system/darwin` from `default.nix`.
-- May import `home/base.nix`, `home/dev.nix`, `home/linux.nix`, and `home/features/*` from `home.nix`.
+- May import `home/base.nix`, `home/dev.nix`, `home/nixos.nix`, `home/desktop.nix`, and `home/features/*` from `home.nix`.
 - May choose host-specific packages, app config paths, and secret consumers.
 - Should not define reusable Home Manager program behavior inline when it belongs in `home/features`.
 
@@ -69,7 +69,8 @@ Rules:
 Reusable system modules:
 
 - `system/common/local.nix` defines the shared `local.user` and `local.host` option contract.
-- `system/nixos/*` contains reusable NixOS modules, including `system/nixos/agenix.nix`.
+- `system/nixos/default.nix` imports the NixOS module library; optional features are activated by `local.features.*.enable` in `hosts/<host>/default.nix`.
+- `system/nixos/*` contains reusable NixOS modules, including `system/nixos/secrets.nix`.
 - `system/darwin/*` contains reusable nix-darwin modules.
 
 Rules:
@@ -77,15 +78,18 @@ Rules:
 - May define system services, platform defaults, users, and OS packages.
 - May use `pkgs` for custom packages.
 - May use secrets through explicit option or secret module plumbing.
+- Runtime secret paths should flow through typed `local.secrets.*.path` options instead of hardcoded `/run/agenix/*` strings.
+- Optional host features should expose `local.features.<name>.enable` instead of activating just because the file is imported.
 - Should not import `hosts/<host>` or `home/*` composition files.
 
-### `home/{base,dev,linux}.nix`
+### `home/{base,dev,nixos,desktop}.nix`
 
 Small reusable Home Manager bundles:
 
 - `home/base.nix` — cross-platform shell, git, SSH, keys, and common CLI behavior.
 - `home/dev.nix` — development tooling.
-- `home/linux.nix` — Linux user defaults and Linux-only integrations.
+- `home/nixos.nix` — NixOS CLI/dev environment and NixOS-backed secret/service wiring.
+- `home/desktop.nix` — graphical NixOS desktop feature bundle.
 
 Rules:
 
@@ -142,7 +146,7 @@ Preferred direction:
 
 1. `flake.nix`
 2. `hosts/<host>/default.nix` and `hosts/<host>/home.nix`
-3. `system/{common,nixos,darwin}` and `home/{base,dev,linux}.nix`
+3. `system/{common,nixos,darwin}` and `home/{base,dev,nixos,desktop}.nix`
 4. `home/features`
 5. `config`
 6. `pkgs` and `secrets` as support layers
@@ -152,6 +156,14 @@ Good:
 ```nix
 # Host home layer chooses the raw config path.
 custom.zed.settingsPath = ../../config/zed-settings.json;
+```
+
+```nix
+# Host system layer states intent through feature flags.
+local.features = {
+  docker.enable = true;
+  greetd.enable = true;
+};
 ```
 
 ```nix
@@ -180,7 +192,7 @@ xdg.configFile."app/config.jsonc".text = ''
 
 - Preserve existing host behavior unless the task explicitly asks for behavior changes.
 - Keep machine-specific choices in `hosts/<host>`.
-- Move reusable logic down into `system/`, `home/{base,dev,linux}.nix`, or `home/features`.
+- Move reusable logic down into `system/`, `home/{base,dev,nixos,desktop}.nix`, or `home/features`.
 - Pass raw app config by path options instead of direct cross-layer reads.
 - Keep `pkgs` free of host and user assumptions.
 - Keep secret selection explicit in host or system composition.
