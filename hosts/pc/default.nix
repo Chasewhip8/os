@@ -29,6 +29,10 @@ in
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [ "amd_pstate=active" ];
+
+  # Let AMD CPPC scale aggressively down at idle while still allowing boost.
+  powerManagement.cpuFreqGovernor = "powersave";
 
   # Hostname
   networking.hostName = config.local.host.networkName;
