@@ -1,36 +1,30 @@
 # macOS (nix-darwin) host configuration
-{ inputs, pkgs, ... }:
+{ config, inputs, pkgs, ... }:
 let
   openscreen = pkgs.callPackage ../../pkgs/openscreen-darwin.nix { };
+  user = config.local.user;
 in
 {
   imports = [
-    ../../modules/darwin/base.nix
-    ../../modules/darwin/homebrew.nix
+    ../../system/darwin/base.nix
+    ../../system/darwin/homebrew.nix
   ];
 
   # Determinate Nix custom settings (written to /etc/nix/nix.custom.conf)
-  determinateNix.customSettings.trusted-users = [ "root" "chase" "@admin" ];
+  determinateNix.customSettings.trusted-users = [ "root" user.name "@admin" ];
 
   # Define user
-  users.users.chase = {
-    name = "chase";
-    home = "/Users/chase";
+  users.users.${user.name} = {
+    name = user.name;
+    home = user.homeDirectory;
   };
 
   # Primary user for system defaults
-  system.primaryUser = "chase";
+  system.primaryUser = user.name;
 
   environment.systemPackages = [
     openscreen
   ];
-
-  # Home Manager
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    useGlobalPkgs = true;
-    users.chase = import ../../home/users/chase/hosts/macbook.nix;
-  };
 
   # Used for backwards compatibility
   system.stateVersion = 5;

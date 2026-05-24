@@ -1,9 +1,9 @@
 # 1Password CLI and GUI
-{ ... }:
+{ config, ... }:
 {
   programs._1password.enable = true;
   programs._1password-gui = {
     enable = true;
-    polkitPolicyOwners = [ "chase" ];
+    polkitPolicyOwners = [ config.local.user.name ];
   };
 }

@@ -56,6 +56,7 @@ in
     # Hyprland
     wayland.windowManager.hyprland = {
       enable = true;
+      configType = "hyprlang";
       package = hyprlandPackage;
       portalPackage = hyprlandDesktopPortalPackage;
       systemd.enable = true;

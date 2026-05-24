@@ -4,137 +4,135 @@ Optimize for clarity, composability, and reversibility. Every change should be e
 
 # Nix repo layer rules
 
-This document defines the intended layer rules for the repo reorg. It is a guide for how files should be arranged and imported, not a claim that every file already matches this shape.
+The repo is intentionally shallow: hosts own host choices, `system/` owns reusable system modules, `home/` owns reusable Home Manager composition, and `config/` owns native app config files.
 
 ## Diagram
 
 ```mermaid
 flowchart TD
   flake["flake.nix"]
-  hosts["hosts/<host>"]
-  os["modules/nixos<br/>modules/darwin"]
-  userHosts["home/users/chase/hosts"]
-  profiles["home/profiles"]
-  hm["home/programs<br/>home/desktop"]
-  raw["home/users/chase/config"]
+  hosts["hosts/<host>/<default.nix, home.nix>"]
+  sys["system/common<br/>system/nixos<br/>system/darwin"]
+  homeBundles["home/base.nix<br/>home/dev.nix<br/>home/linux.nix"]
+  hm["home/features"]
+  raw["config"]
   pkgs["pkgs"]
   secrets["secrets"]
 
   flake --> hosts
-  hosts --> os
-  hosts --> userHosts
-  userHosts --> profiles
-  profiles --> hm
+  hosts --> sys
+  hosts --> homeBundles
+  homeBundles --> hm
+  hosts --> raw
   hm --> raw
 
   hosts --> pkgs
-  os --> pkgs
+  sys --> pkgs
   hm --> pkgs
 
+  sys --> secrets
   hosts --> secrets
-  os --> secrets
-  userHosts --> secrets
 ```
 
-Imports should flow downward. Higher layers compose lower layers. Lower layers should not import host files, user host files, or profiles above them.
+Imports should flow downward. Higher layers compose lower layers. Lower layers should not import host files or host-specific app config.
 
 ## Layers
 
 ### `flake.nix`
 
-Top level output wiring. It should pin inputs, expose systems, and point at host entry points such as `hosts/pc/default.nix`, `hosts/macbook/default.nix`, and `hosts/macbook-vm/default.nix`.
+Top-level output wiring. It pins inputs, defines shared host/user metadata, exposes NixOS/Darwin systems, and points each host at both its system module and Home Manager module.
 
 Rules:
 
-- May point to `hosts/<host>`.
+- May point to `hosts/<host>/default.nix` and `hosts/<host>/home.nix`.
+- May construct shared `local.user` / `local.host` data.
 - Should pass shared inputs through `specialArgs` or output wiring.
 - Should not hold host service config or raw app config.
 
 ### `hosts/<host>`
 
-Machine composition. Existing examples include `hosts/pc/default.nix`, `hosts/pc/hardware-configuration.nix`, `hosts/macbook/default.nix`, `hosts/macbook-vm/default.nix`, and `hosts/macbook-vm/orbstack.nix`.
+Machine composition. Each host keeps system and user-host choices together:
+
+- `hosts/<host>/default.nix` — system-level NixOS/nix-darwin config.
+- `hosts/<host>/home.nix` — host-specific Home Manager config.
+- Additional host-owned files like `hardware-configuration.nix` or `orbstack.nix` live beside them.
 
 Rules:
 
-- May import `modules/nixos` or `modules/darwin`.
-- May import `home/users/chase/hosts/<host>` once that layer exists.
-- May choose host specific packages and secrets.
-- Should not define reusable Home Manager program behavior inline.
+- May import `system/nixos` or `system/darwin` from `default.nix`.
+- May import `home/base.nix`, `home/dev.nix`, `home/linux.nix`, and `home/features/*` from `home.nix`.
+- May choose host-specific packages, app config paths, and secret consumers.
+- Should not define reusable Home Manager program behavior inline when it belongs in `home/features`.
 
-### `modules/{nixos,darwin}`
+### `system`
 
-Reusable OS modules. Current examples include `modules/nixos/base.nix`, `modules/nixos/docker.nix`, `modules/nixos/greetd.nix`, `modules/nixos/nvidia.nix`, `modules/darwin/base.nix`, and `modules/darwin/homebrew.nix`.
+Reusable system modules:
+
+- `system/common/local.nix` defines the shared `local.user` and `local.host` option contract.
+- `system/nixos/*` contains reusable NixOS modules, including `system/nixos/agenix.nix`.
+- `system/darwin/*` contains reusable nix-darwin modules.
 
 Rules:
 
-- May define system services, platform defaults, and OS packages.
+- May define system services, platform defaults, users, and OS packages.
 - May use `pkgs` for custom packages.
-- May use secrets only through explicit option or secret module plumbing.
-- Should not import `hosts/<host>`, `home/users/chase/hosts`, or `home/profiles`.
+- May use secrets through explicit option or secret module plumbing.
+- Should not import `hosts/<host>` or `home/*` composition files.
 
-### `home/users/chase/hosts`
+### `home/{base,dev,linux}.nix`
 
-User per host composition. Current files include `home/users/chase/hosts/pc.nix`, `home/users/chase/hosts/macbook.nix`, and `home/users/chase/hosts/macbook-vm.nix`.
+Small reusable Home Manager bundles:
 
-Rules:
-
-- May import `home/profiles`.
-- May bind host specific paths, app settings, and user secrets.
-- May pass raw config paths from `home/users/chase/config` into lower modules through options.
-- Should not define general program behavior inline.
-
-### `home/profiles`
-
-Reusable Home Manager bundles. This intended layer can group development, desktop, terminal, platform, or similar user modes once they are extracted.
+- `home/base.nix` — cross-platform shell, git, SSH, keys, and common CLI behavior.
+- `home/dev.nix` — development tooling.
+- `home/linux.nix` — Linux user defaults and Linux-only integrations.
 
 Rules:
 
-- May import `home/programs` and `home/desktop`.
-- May expose options for host layers to fill.
-- Should not import `hosts/<host>` or `home/users/chase/hosts`.
-- Should avoid direct raw config reads unless the profile owns that contract.
+- May import `home/features/*`.
+- May expose or fill shared user-level options.
+- Should not import `hosts/<host>`.
+- Should only read files from `config/` when the bundle owns that user-level contract.
 
-### `home/programs` and `home/desktop`
+### `home/features`
 
-Reusable Home Manager feature modules. Current examples include `home/programs/git.nix`, `home/programs/zsh.nix`, `home/programs/ghostty.nix`, `home/programs/opencode.nix`, `home/programs/solana.nix`, `home/desktop/hyprland/default.nix`, `home/desktop/hyprland/keybindings.nix`, and `home/desktop/hyprland/windowrules.nix`.
+Reusable Home Manager feature modules. Examples include `home/features/git.nix`, `home/features/zsh.nix`, `home/features/zed.nix`, and `home/features/hyprland/default.nix`.
 
 Rules:
 
 - Configure one program or desktop feature area.
-- May define reusable options for profiles or user host layers.
+- May define reusable options for host home modules or bundles.
 - May use `pkgs` for package choices.
 - Should receive raw app config by path option.
-- Should not import host files, profiles, or user host composition.
+- Should not import host files or host composition.
 
-Raw app config should be passed by path options. For example, a user host layer can set `my.program.configFile = ../config/oh-my-openagent.jsonc;`, while the program module only consumes `configFile`. This keeps modules reusable and protects local files such as `home/users/chase/config/oh-my-openagent.jsonc` during the reorg.
+### `config`
 
-### `home/users/chase/config`
-
-User owned config and data. This layer is primarily for app native files such as JSON, JSONC, TOML, YAML, scripts, templates, and text config. It can also hold Chase specific data or host override modules when the file is not reusable outside this user, such as `home/users/chase/config/repos.nix` and `home/users/chase/config/hyprland-pc.nix`. `home/users/chase/config/oh-my-openagent.jsonc` is the concrete file to treat carefully and not clobber.
+Native app config and user-owned data: JSON, TOML, Nix data modules, templates, snippets, and app-specific text files.
 
 Rules:
 
-- Should not import reusable Nix modules from `home/programs`, `home/profiles`, or `hosts`.
-- Should be consumed by path options from user host, profile, or program layers.
+- Should not import reusable modules from `home/`, `hosts/`, or `system/`.
+- Should be consumed by path options from host home modules or reusable Home Manager modules.
 - Should remain safe to edit outside the Nix module graph.
 
 ### `pkgs`
 
-Custom package definitions. Current examples include `pkgs/solana/solana-cli.nix`, `pkgs/solana/solana-platform-tools.nix`, `pkgs/solana/solana-rust.nix`, and `pkgs/solana/solana-source.nix`.
+Custom package definitions.
 
 Rules:
 
-- May be used by hosts, OS modules, profiles, or program modules.
-- Should stay package focused.
+- May be used by hosts, system modules, Home Manager bundles, or Home Manager features.
+- Should stay package-focused.
 - Should not know which host or user consumes a package.
 
 ### `secrets`
 
-Secret declarations and encrypted material. Current examples include `secrets/secrets.nix` and the integration module `modules/agenix.nix`.
+Secret declarations and encrypted material.
 
 Rules:
 
-- May be referenced by host, OS, or user host layers when that layer owns the choice.
+- May be referenced by host or system layers when that layer owns the choice.
 - Reusable modules should receive secret names or paths through options when possible.
 - Never hardcode decrypted secret values in Nix modules or raw config files.
 
@@ -143,49 +141,47 @@ Rules:
 Preferred direction:
 
 1. `flake.nix`
-2. `hosts/<host>`
-3. `modules/{nixos,darwin}` and `home/users/chase/hosts`
-4. `home/profiles`
-5. `home/programs` and `home/desktop`
-6. `home/users/chase/config`
-7. `pkgs` and `secrets` as shared support layers
+2. `hosts/<host>/default.nix` and `hosts/<host>/home.nix`
+3. `system/{common,nixos,darwin}` and `home/{base,dev,linux}.nix`
+4. `home/features`
+5. `config`
+6. `pkgs` and `secrets` as support layers
 
 Good:
 
 ```nix
-# User host layer chooses the raw config path.
-my.program.configFile = ../config/oh-my-openagent.jsonc;
+# Host home layer chooses the raw config path.
+custom.zed.settingsPath = ../../config/zed-settings.json;
 ```
 
 ```nix
-# Profile composes reusable modules.
+# Bundle composes reusable modules.
 imports = [
-  ../programs/git.nix
-  ../programs/zsh.nix
+  ./features/git.nix
+  ./features/zsh.nix
 ];
 ```
 
 Avoid:
 
 ```nix
-# Program module reaches into user host composition.
-imports = [ ../../users/chase/pc.nix ];
+# Reusable module reaches into host composition.
+imports = [ ../../hosts/pc/home.nix ];
 ```
 
 ```nix
-# Raw config is embedded in a reusable module.
+# Raw app config is embedded in a reusable module.
 xdg.configFile."app/config.jsonc".text = ''
   { "hostSpecific": true }
 '';
 ```
 
-## Reorg invariants
+## Refactor invariants
 
-- Preserve existing host behavior while extracting layers.
-- Write docs only until a reorg step explicitly edits Nix code.
-- Keep dirty local raw config, especially `home/users/chase/config/oh-my-openagent.jsonc`, untouched unless the user asks for that file to change.
-- Move reusable logic down. Keep machine and user host choices up.
-- Pass raw app config by path options instead of direct cross layer reads.
+- Preserve existing host behavior unless the task explicitly asks for behavior changes.
+- Keep machine-specific choices in `hosts/<host>`.
+- Move reusable logic down into `system/`, `home/{base,dev,linux}.nix`, or `home/features`.
+- Pass raw app config by path options instead of direct cross-layer reads.
 - Keep `pkgs` free of host and user assumptions.
-- Keep secret selection explicit in host or user host composition.
-- Treat any upward import as a temporary violation to document or fix in the same reorg slice.
+- Keep secret selection explicit in host or system composition.
+- Treat any upward import as a temporary violation to document or fix in the same refactor slice.

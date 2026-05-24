@@ -29,13 +29,10 @@ in
 {
   imports = [
     ./base.nix
-    ./development.nix
-    ../programs/gh.nix
-    ../users/chase/config/repos.nix
+    ./dev.nix
+    ./features/gh.nix
   ];
 
-  home.username = "chase";
-  home.homeDirectory = "/home/chase";
   home.stateVersion = "24.05";
 
   custom.gh = {

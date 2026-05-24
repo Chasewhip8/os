@@ -1,24 +1,22 @@
 # PC (NixOS) home configuration for chase
 {
+  config,
   inputs,
   lib,
   pkgs,
   ...
 }:
-let
-  handy = pkgs.callPackage ../../../../pkgs/handy.nix { };
-in
 {
   imports = [
-    ../../../profiles/user-linux.nix
+    ../../home/linux.nix
+    ../../config/repos.nix
     inputs.limitless.homeModules.default
     inputs.openscreen.homeManagerModules.default
-    ../../../programs/zed.nix
-    ../../../programs/ghostty.nix
+    ../../home/features/zed.nix
 
     # Linux desktop (Hyprland + theme + xremap + etc)
-    ../../../desktop/hyprland
-    ../config/hyprland-pc.nix
+    ../../home/features/hyprland
+    ../../config/hyprland-pc.nix
   ];
 
   programs.limitless = {
@@ -32,9 +30,9 @@ in
       ];
     };
     opencode = {
-      extraAgentsFile = ../config/AGENTS.md;
+      extraAgentsFile = ../../config/AGENTS.md;
       service.enable = true;
-      settings = builtins.fromJSON (builtins.readFile ../config/opencode.json);
+      settings = builtins.fromJSON (builtins.readFile ../../config/opencode.json);
     };
   };
 
@@ -43,19 +41,11 @@ in
   # Zed config paths
   custom.zed = {
     enable = true;
-    settingsPath = ../config/zed-settings.json;
-    settingsOverridePath = ../config/zed-settings-pc.json;
-    keymapPath = ../config/zed-keymap.json;
-    snippetsPaths."snippets.json" = ../config/zed-snippets.json;
+    settingsPath = ../../config/zed-settings.json;
+    settingsOverridePath = ../../config/zed-settings-pc.json;
+    keymapPath = ../../config/zed-keymap.json;
+    snippetsPaths."snippets.json" = ../../config/zed-snippets.json;
   };
-
-  custom.ghostty = {
-    enable = true;
-    settingsPath = ../config/ghostty-settings.nix;
-    enableZshIntegration = true;
-  };
-
-  programs.ghostty.settings.font-family = "JetBrains Mono NL";
 
   # The Samsung Odyssey OLED G9 uses a triangular RGB QD-OLED layout rather
   # than an RGB stripe; use grayscale AA to avoid subpixel color fringing.
@@ -90,7 +80,6 @@ in
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [
-    handy
     pkgs.pavucontrol
     pkgs.vesktop
     pkgs.slack
@@ -109,7 +98,7 @@ in
 
   # PC-specific shell config
   home.shellAliases = {
-    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#pc --use-remote-sudo";
+    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#${config.local.host.name} --use-remote-sudo";
   };
 
   programs.zsh.initContent = lib.mkAfter ''

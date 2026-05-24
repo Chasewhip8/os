@@ -1,5 +1,6 @@
 # NixOS VM configuration for OrbStack
 {
+  config,
   pkgs,
   inputs,
   modulesPath,
@@ -8,17 +9,17 @@
 }:
 {
   imports = [
-    ../../modules/nixos/base.nix
-    ../../modules/agenix.nix
-    ../../modules/nixos/cloudflared.nix
+    ../../system/nixos/base.nix
+    ../../system/nixos/agenix.nix
+    ../../system/nixos/cloudflared.nix
     # inputs.mnemonic.nixosModules.default
     ./orbstack.nix
     "${modulesPath}/virtualisation/lxc-container.nix"
-    ../../modules/nixos/1password-cli.nix
+    ../../system/nixos/1password-cli.nix
   ];
 
   # Hostname
-  networking.hostName = "macbook-vm";
+  networking.hostName = config.local.host.networkName;
 
   # Set host platform for aarch64-linux (OrbStack VM)
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
@@ -28,7 +29,6 @@
 
   # Terminal terminfo entries for remote shells
   environment.systemPackages = [
-    pkgs.ghostty.terminfo
     pkgs.kitty.terminfo
     pkgs.docker-client
     pkgs.docker-compose
@@ -55,14 +55,7 @@
   };
 
   # User — extend base user with VM-specific groups
-  users.users.chase.extraGroups = [ "wheel" "docker" ];
-
-  # Home Manager
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    useGlobalPkgs = true;
-    users."chase" = import ../../home/users/chase/hosts/macbook-vm.nix;
-  };
+  users.users.${config.local.user.name}.extraGroups = [ "wheel" "docker" ];
 
   system.stateVersion = "24.05";
 }

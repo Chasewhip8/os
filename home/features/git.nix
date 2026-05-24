@@ -1,10 +1,12 @@
 # Shared Git configuration
-{ ... }:
+{ config, ... }:
 {
   programs.git = {
     enable = true;
-    userName = "Chasewhip8";
-    userEmail = "chasewhip20@gmail.com";
+    settings.user = {
+      name = config.local.user.git.name;
+      email = config.local.user.git.email;
+    };
     ignores = [
       # OS
       ".DS_Store"

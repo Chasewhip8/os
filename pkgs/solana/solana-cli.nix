@@ -100,12 +100,7 @@ let
     OPENSSL_NO_VENDOR = 1;
   };
 
-  cargoArtifacts = craneLib.buildDepsOnly (
-    commonArgs
-    // {
-      dummySrc = src;
-    }
-  );
+  cargoArtifacts = craneLib.buildDepsOnly commonArgs;
 in
 craneLib.buildPackage (
   commonArgs

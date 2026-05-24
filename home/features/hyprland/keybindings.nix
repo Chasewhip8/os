@@ -25,7 +25,6 @@
       "$mod, F, exec, $browser"
       "$mod, R, exec, $file"
       "$mod, C, exec, $editor"
-      "CTRL, SPACE, exec, handy --toggle-transcription"
 
       # Focus windows
       "$mod, J, movefocus, l"

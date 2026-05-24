@@ -87,40 +87,160 @@
         ];
       };
 
+      defaultUser = {
+        name = "chase";
+        fullName = "Chase";
+        uid = 1000;
+        git = {
+          name = "Chasewhip8";
+          email = "chasewhip20@gmail.com";
+        };
+      };
+
+      mkLocalConfig =
+        {
+          hostName,
+          hostType,
+          platform,
+          homeDirectory,
+          networkName ? hostName,
+          user ? defaultUser,
+        }:
+        {
+          imports = [ ./system/common/local.nix ];
+          local = {
+            user = {
+              inherit (user) name fullName git;
+              inherit homeDirectory;
+              uid = user.uid;
+            };
+            host = {
+              name = hostName;
+              type = hostType;
+              inherit networkName platform;
+            };
+          };
+        };
+
+      mkHomeManagerUser =
+        {
+          homeModule,
+          localConfig,
+          userName,
+        }:
+        {
+          home-manager = {
+            extraSpecialArgs = { inherit inputs; };
+            useGlobalPkgs = true;
+            sharedModules = [
+              ({ config, ... }: {
+                imports = [ localConfig ];
+                home.username = config.local.user.name;
+                home.homeDirectory = config.local.user.homeDirectory;
+              })
+            ];
+            users.${userName} = {
+              imports = [ homeModule ];
+            };
+          };
+        };
+
       mkLinuxHost =
-        hostModule:
+        {
+          name,
+          hostModule,
+          homeModule,
+          hostType ? "desktop",
+          networkName ? name,
+          user ? defaultUser,
+          homeDirectory ? "/home/${user.name}",
+        }:
+        let
+          localConfig = mkLocalConfig {
+            hostName = name;
+            platform = "linux";
+            inherit
+              homeDirectory
+              hostType
+              networkName
+              user
+              ;
+          };
+        in
         nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs; };
           modules = [
+            localConfig
             determinate.nixosModules.default
             inputs.agenix.nixosModules.default
             hostModule
             commonOverlays
             inputs.home-manager.nixosModules.default
+            (mkHomeManagerUser {
+              inherit homeModule localConfig;
+              userName = user.name;
+            })
           ];
         };
 
       mkDarwinHost =
         {
+          name,
           hostModule,
+          homeModule,
+          hostType ? "desktop",
+          networkName ? name,
+          user ? defaultUser,
+          homeDirectory ? "/Users/${user.name}",
           system ? "aarch64-darwin",
         }:
+        let
+          localConfig = mkLocalConfig {
+            hostName = name;
+            platform = "darwin";
+            inherit
+              homeDirectory
+              hostType
+              networkName
+              user
+              ;
+          };
+        in
         nix-darwin.lib.darwinSystem {
           inherit system;
           specialArgs = { inherit inputs; };
           modules = [
+            localConfig
             determinate.darwinModules.default
             hostModule
             commonOverlays
             inputs.home-manager.darwinModules.default
+            (mkHomeManagerUser {
+              inherit homeModule localConfig;
+              userName = user.name;
+            })
           ];
         };
     in
     {
-      nixosConfigurations.pc = mkLinuxHost ./hosts/pc;
+      nixosConfigurations.pc = mkLinuxHost {
+        name = "pc";
+        networkName = "nixos";
+        hostModule = ./hosts/pc;
+        homeModule = ./hosts/pc/home.nix;
+      };
 
-      darwinConfigurations.macbook = mkDarwinHost { hostModule = ./hosts/macbook; };
+      darwinConfigurations.macbook = mkDarwinHost {
+        name = "macbook";
+        hostModule = ./hosts/macbook;
+        homeModule = ./hosts/macbook/home.nix;
+      };
 
-      nixosConfigurations.macbook-vm = mkLinuxHost ./hosts/macbook-vm;
+      nixosConfigurations.macbook-vm = mkLinuxHost {
+        name = "macbook-vm";
+        hostType = "vm";
+        hostModule = ./hosts/macbook-vm;
+        homeModule = ./hosts/macbook-vm/home.nix;
+      };
     };
 }

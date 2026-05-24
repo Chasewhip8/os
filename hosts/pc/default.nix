@@ -1,23 +1,27 @@
 # NixOS PC configuration
 {
+  config,
   pkgs,
   inputs,
   ...
 }:
+let
+  userName = config.local.user.name;
+in
 {
   imports = [
-    ../../modules/nixos/base.nix
-    ../../modules/agenix.nix
+    ../../system/nixos/base.nix
+    ../../system/nixos/agenix.nix
     inputs.hyprland.nixosModules.default
     ./hardware-configuration.nix
-    ../../modules/nixos/nvidia.nix
-    ../../modules/nixos/greetd.nix
-    ../../modules/nixos/files.nix
-    ../../modules/nixos/pam-services.nix
-    ../../modules/nixos/docker.nix
-    ../../modules/nixos/1password.nix
-    ../../modules/nixos/gaming.nix
-    ../../modules/nixos/ledger.nix
+    ../../system/nixos/nvidia.nix
+    ../../system/nixos/greetd.nix
+    ../../system/nixos/files.nix
+    ../../system/nixos/pam-services.nix
+    ../../system/nixos/docker.nix
+    ../../system/nixos/1password.nix
+    ../../system/nixos/gaming.nix
+    ../../system/nixos/ledger.nix
   ];
 
   # Bootloader
@@ -25,7 +29,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Hostname
-  networking.hostName = "nixos";
+  networking.hostName = config.local.host.networkName;
 
   # Networking
   networking.networkmanager.enable = true;
@@ -65,19 +69,12 @@
   security.pam.services.greetd.enableGnomeKeyring = true;
 
   # User - extend base user with PC-specific groups
-  users.users.chase.extraGroups = [ "networkmanager" "wheel" ];
+  users.users.${userName}.extraGroups = [ "networkmanager" "wheel" ];
 
   # XRemap permissions
   hardware.uinput.enable = true;
-  users.groups.uinput.members = [ "chase" ];
-  users.groups.input.members = [ "chase" ];
-
-  # Home Manager
-  home-manager = {
-    extraSpecialArgs = { inherit inputs; };
-    useGlobalPkgs = true;
-    users."chase" = import ../../home/users/chase/hosts/pc.nix;
-  };
+  users.groups.uinput.members = [ userName ];
+  users.groups.input.members = [ userName ];
 
   # Wayland hints for Electron apps
   environment.sessionVariables = {

@@ -9,7 +9,8 @@ let
 in
 {
   imports = [
-    ../../../profiles/user-linux.nix
+    ../../home/linux.nix
+    ../../config/repos.nix
     inputs.limitless.homeModules.default
   ];
 
@@ -26,9 +27,9 @@ in
       ];
     };
     opencode = {
-      extraAgentsFile = ../config/AGENTS.md;
+      extraAgentsFile = ../../config/AGENTS.md;
       service.enable = true;
-      settings = builtins.fromJSON (builtins.readFile ../config/opencode.json);
+      settings = builtins.fromJSON (builtins.readFile ../../config/opencode.json);
     };
   };
 
@@ -54,6 +55,6 @@ in
 
   # VM-specific shell config
   home.shellAliases = {
-    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#macbook-vm --use-remote-sudo";
+    nixconf-apply = "nixos-rebuild switch --flake ~/.nixconf#${config.local.host.name} --use-remote-sudo";
   };
 }

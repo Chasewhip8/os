@@ -1,34 +1,25 @@
 # macOS home configuration for chase
-{ inputs, pkgs, ... }:
+{ config, inputs, pkgs, ... }:
+let
+  vmHomeDirectory = "/home/${config.local.user.name}";
+in
 {
   imports = [
-    # Shared profiles
-    ../../../profiles/base.nix
-    ../config/repos.nix
-    ../../../programs/zed.nix
-    ../../../programs/ghostty.nix
-    ../../../programs/aerospace.nix
+    ../../home/base.nix
+    ../../home/features/zed.nix
+    ../../home/features/aerospace.nix
     inputs.limitless.homeModules.default
   ];
 
-  home.username = "chase";
-  home.homeDirectory = "/Users/chase";
   home.stateVersion = "24.05";
 
   # Zed config paths
   custom.zed = {
     enable = true;
     installPackage = false;
-    settingsPath = ../config/zed-settings.json;
-    keymapPath = ../config/zed-keymap.json;
-    snippetsPaths."snippets.json" = ../config/zed-snippets.json;
-  };
-
-  custom.ghostty = {
-    enable = true;
-    installPackage = false;
-    settingsPath = ../config/ghostty-settings.nix;
-    enableZshIntegration = true;
+    settingsPath = ../../config/zed-settings.json;
+    keymapPath = ../../config/zed-keymap.json;
+    snippetsPaths."snippets.json" = ../../config/zed-snippets.json;
   };
 
   # Key roles: native macOS — CMD(thumb) = action, CTRL(far-left) = secondary.
@@ -42,7 +33,7 @@
   custom.aerospace = {
     enable = true;
     installPackage = false;
-    configPath = ../config/aerospace.toml;
+    configPath = ../../config/aerospace.toml;
   };
 
   home.packages = [
@@ -69,8 +60,8 @@
   # macOS-specific shell config
   home.shellAliases = {
     nixconf-apply = "nixconf-apply-host";
-    nixconf-apply-host = "darwin-rebuild switch --flake ~/.nixconf#macbook --use-remote-sudo";
-    nixconf-apply-vm = "orb -m nixos nixos-rebuild switch --flake /home/chase/.nixconf#macbook-vm --use-remote-sudo";
+    nixconf-apply-host = "darwin-rebuild switch --flake ~/.nixconf#${config.local.host.name} --use-remote-sudo";
+    nixconf-apply-vm = "orb -m nixos nixos-rebuild switch --flake ${vmHomeDirectory}/.nixconf#macbook-vm --use-remote-sudo";
     nixconf-apply-all = "nixconf-apply-host && nixconf-apply-vm";
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };

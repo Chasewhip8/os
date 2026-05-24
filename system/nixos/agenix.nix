@@ -7,12 +7,13 @@
   ...
 }:
 let
-  githubTokenFile = ../secrets/github-token.age;
+  githubTokenFile = ../../secrets/github-token.age;
   hasGithubTokenSecret = builtins.pathExists githubTokenFile;
+  user = config.local.user;
 in
 {
   environment.systemPackages = [
-    inputs.agenix.packages.${pkgs.system}.default
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
   ];
 
   warnings = lib.optional (!hasGithubTokenSecret) ''
@@ -21,29 +22,29 @@ in
   '';
 
   age.identityPaths = [
-    "${config.users.users.chase.home}/.nixconf/secrets/identity"
+    "${user.homeDirectory}/.nixconf/secrets/identity"
   ];
 
   age.secrets.cargo-registry-token = {
-    file = ../secrets/cargo-registry-token.age;
-    owner = "chase";
+    file = ../../secrets/cargo-registry-token.age;
+    owner = user.name;
   };
 
   age.secrets.linear-api-key = {
-    file = ../secrets/linear-api-key.age;
-    owner = "chase";
+    file = ../../secrets/linear-api-key.age;
+    owner = user.name;
   };
 
   age.secrets.github-token = lib.mkIf hasGithubTokenSecret {
     file = githubTokenFile;
-    owner = "chase";
+    owner = user.name;
     mode = "0400";
   };
 
   age.secrets.shipyard-ssh-key = {
-    file = ../secrets/shipyard-ssh-key.age;
-    owner = "chase";
+    file = ../../secrets/shipyard-ssh-key.age;
+    owner = user.name;
     mode = "0600";
-    path = "${config.users.users.chase.home}/.ssh/id_ed25519_shipyard";
+    path = "${user.homeDirectory}/.ssh/id_ed25519_shipyard";
   };
 }
