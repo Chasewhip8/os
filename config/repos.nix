@@ -259,6 +259,10 @@
         remote = "git@github.com:Chasewhip8/abilities.git";
       }
       {
+        path = "personal/openpay";
+        remote = "git@github.com:Chasewhip8/openpay.git";
+      }
+      {
         path = "personal/os";
         remote = "git@github.com:Chasewhip8/os.git";
       }
