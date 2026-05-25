@@ -12,6 +12,10 @@ in
     ../../home/nixos.nix
   ];
 
+  # OrbStack mirrors the macOS account into the VM as UID 501.
+  # Keep this as a normal sudo-capable user; don't let NixOS manage the UID.
+  home.uid = 501;
+
   programs.limitless = {
     enable = true;
     notifications = {

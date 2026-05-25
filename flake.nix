@@ -234,6 +234,7 @@
       nixosConfigurations.macbook-vm = mkLinuxHost {
         name = "macbook-vm";
         hostType = "vm";
+        user = defaultUser // { uid = null; };
         hostModule = ./hosts/macbook-vm;
         homeModule = ./hosts/macbook-vm/home.nix;
       };
