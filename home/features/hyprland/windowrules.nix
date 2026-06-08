@@ -23,6 +23,9 @@
       "match:class ^(org\.gnome\.Nautilus)$, float on"
       "match:class ^(kitty)$, match:title ^(htop)$, float on"
 
+      # Handy recording controller overlay
+      "match:class ^(Handy)$, match:title ^(Recording)$, no_initial_focus on, no_focus on, no_blur on, border_size 0, rounding 0, no_shadow on"
+
       # Picture-in-Picture
       "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, float on"
       "match:title ^([Pp]icture[-\\s]?[Ii]n[-\\s]?[Pp]icture)(.*)$, keep_aspect_ratio on"

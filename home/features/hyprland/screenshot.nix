@@ -1,19 +1,37 @@
 # Adds a $screenshot variable to the user's Hyprland config which can be bound for screenshots.
 { pkgs, ... }:
+let
+  screenshotRuntimeInputs = with pkgs; [
+    coreutils
+    grimblast
+    hyprshade
+    libnotify
+    swappy
+    wl-clipboard
+  ];
+
+  screenshot = pkgs.writeShellScriptBin "hyprland-screenshot" ''
+    export PATH=${pkgs.lib.makeBinPath screenshotRuntimeInputs}:$PATH
+
+    ${builtins.readFile ./screenshot.sh}
+  '';
+in
 {
   home.file = {
-    ".config/script/screenshot.sh".source = ./screenshot.sh;
+    ".config/script/screenshot.sh" = {
+      text = ''
+        #!${pkgs.runtimeShell}
+        exec ${screenshot}/bin/hyprland-screenshot "$@"
+      '';
+      executable = true;
+    };
   };
 
-  # screenshot.sh dependencies
   home.packages = [
-    pkgs.hyprshade
-    pkgs.grimblast
-    pkgs.swappy
-    pkgs.wl-clipboard
+    screenshot
   ];
 
   wayland.windowManager.hyprland.settings = {
-    "$screenshot" = ".config/script/screenshot.sh sf";
+    "$screenshot" = "${screenshot}/bin/hyprland-screenshot sf";
   };
 }

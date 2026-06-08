@@ -1,47 +1,63 @@
 {
-  "project_panel": { "dock": "left" },
-  "bottom_dock_layout": "contained",
-  "agent": {
-    "sidebar_side": "right",
-    "button": true,
-    "enable_feedback": false,
-    "play_sound_when_agent_done": "always",
-    "tool_permissions": { "default": "allow", "tools": {} }
-  },
-  "agent_buffer_font_size": 20,
-  "agent_servers": { "opencode": { "type": "registry" } },
-  "agent_ui_font_size": 22,
-  "auto_update": true,
-  "autosave": "on_window_change",
-  "base_keymap": "JetBrains",
-  "buffer_font_family": "JetBrains Mono NL",
-  "buffer_font_size": 18,
-  "collaboration_panel": { "button": false },
-  "disable_ai": true,
-  "edit_predictions": { "mode": "subtle", "provider": "zed" },
-  "format_on_save": "on",
-  "git": { "inline_blame": { "enabled": false } },
-  "inlay_hints": { "enabled": false },
-  "lsp": {
-    "biome": { "settings": { "require_config_file": true } },
-    "nil": {
-      "settings": { "nil": { "nix": { "flake": { "autoArchive": true } } } }
+    "agent": {
+        "button": true,
+        "enable_feedback": false,
+        "sidebar_side": "left",
+        "tool_permissions": { "default": "allow", "tools": {} }
     },
-    "rust-analyzer": {
-      "initialization_options": { "check": { "command": "clippy" } }
-    }
-  },
-  "outline_panel": { "button": false },
-  "proxy": "",
-  "scroll_sensitivity": 1,
-  "soft_wrap": "editor_width",
-  "tab_size": 4,
-  "terminal": {
-    "font_family": "JetBrains Mono NL",
-    "font_size": 18,
-    "line_height": "standard"
-  },
-  "theme": "Ayu Mirage",
-  "ui_font_family": "Inter",
-  "ui_font_size": 25
+    "agent_buffer_font_size": 20,
+    "agent_ui_font_size": 22,
+    "auto_update": true,
+    "autosave": "on_window_change",
+    "base_keymap": "JetBrains",
+    "bottom_dock_layout": "contained",
+    "buffer_font_family": "JetBrains Mono NL",
+    "buffer_font_size": 18,
+    "collaboration_panel": { "button": false },
+    "disable_ai": false,
+    "edit_predictions": { "mode": "subtle", "provider": "zed" },
+    "format_on_save": "on",
+    "git": { "inline_blame": { "enabled": false } },
+    "inlay_hints": { "enabled": false },
+    "lsp": {
+        "biome": { "settings": { "require_config_file": true } },
+        "nil": {
+            "settings": {
+                "nil": { "nix": { "flake": { "autoArchive": true } } }
+            }
+        },
+        "rust-analyzer": {
+            "initialization_options": { "check": { "command": "clippy" } }
+        }
+    },
+    "outline_panel": { "button": false },
+    "project_panel": { "dock": "right" },
+    "proxy": "",
+    "scroll_sensitivity": 1,
+    "soft_wrap": "editor_width",
+    "tab_size": 4,
+    "terminal": {
+        "font_family": "JetBrains Mono NL",
+        "font_size": 18,
+        "line_height": "standard"
+    },
+    "theme": "Ayu Mirage",
+    "ui_font_family": "Inter",
+    "ui_font_size": 25,
+    "file_scan_exclusions": [
+        "**/.git",
+        "**/.svn",
+        "**/.hg",
+        "**/.jj",
+        "**/.sl",
+        "**/.repo",
+        "**/CVS",
+        "**/.DS_Store",
+        "**/Thumbs.db",
+        "**/.classpath",
+        "**/.settings",
+        "**/node_modules",
+        "**/.turbo",
+        "**/.direnv"
+    ]
 }

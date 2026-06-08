@@ -128,11 +128,14 @@
             extraSpecialArgs = { inherit inputs; };
             useGlobalPkgs = true;
             sharedModules = [
-              ({ config, ... }: {
-                imports = [ localConfig ];
-                home.username = config.local.user.name;
-                home.homeDirectory = config.local.user.homeDirectory;
-              })
+              (
+                { config, ... }:
+                {
+                  imports = [ localConfig ];
+                  home.username = config.local.user.name;
+                  home.homeDirectory = config.local.user.homeDirectory;
+                }
+              )
             ];
             users.${userName} = {
               imports = [ homeModule ];

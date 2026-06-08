@@ -6,6 +6,9 @@
   pkgs,
   ...
 }:
+let
+  handy = pkgs.callPackage ../../pkgs/handy.nix { };
+in
 {
   imports = [
     ../../home/nixos.nix
@@ -43,8 +46,10 @@
   custom.hyprland = {
     monitor = [ "DP-2,5120x1440@240,0x0,1" ];
     browserCommand = "${pkgs.google-chrome}/bin/google-chrome-stable";
+    dictationCommand = "${handy}/bin/handy --start-hidden --toggle-transcription";
     startupPrograms = [
       "${pkgs.google-chrome}/bin/google-chrome-stable --no-startup-window"
+      "${handy}/bin/handy --start-hidden"
     ];
   };
 
@@ -81,6 +86,8 @@
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [
+    handy
+    pkgs.wtype
     pkgs.pavucontrol
     pkgs.vesktop
     pkgs.slack

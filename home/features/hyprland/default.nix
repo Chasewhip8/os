@@ -28,6 +28,12 @@ in
       description = "Command used by Hyprland browser keybindings.";
     };
 
+    dictationCommand = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Command used by the Hyprland voice-to-text keybinding.";
+    };
+
     startupPrograms = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       default = [ ];

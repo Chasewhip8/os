@@ -1,5 +1,12 @@
 # Hyprland keybindings
-{ ... }:
+{
+  config,
+  lib,
+  ...
+}:
+let
+  cfg = config.custom.hyprland;
+in
 {
   wayland.windowManager.hyprland.settings = {
     "$mod" = "ALT";
@@ -68,6 +75,8 @@
       "$mod CTRL, 9, movetoworkspace, 9"
 
       "$mod, SPACE, layoutmsg, swapwithmaster master"
+    ] ++ lib.optionals (cfg.dictationCommand != null) [
+      "CTRL, SPACE, exec, ${cfg.dictationCommand}"
     ];
 
     bindm = [
