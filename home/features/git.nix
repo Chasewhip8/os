@@ -7,6 +7,7 @@
       name = config.local.user.git.name;
       email = config.local.user.git.email;
     };
+    settings.url."git@github.com:".insteadOf = "https://github.com/";
     ignores = [
       # OS
       ".DS_Store"

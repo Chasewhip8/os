@@ -29,14 +29,15 @@ let
 
   cargoRegistryTokenPath = runtimePath "cargo-registry-token";
   githubTokenPath = runtimePath "github-token";
-  cloudflaredTunnelTokenPath = runtimePath "cloudflared-tunnel-token";
+  cloudflaredTunnelCredentialsName = "cloudflared-${config.local.host.name}-credentials.json";
+  cloudflaredTunnelCredentialsPath = runtimePath cloudflaredTunnelCredentialsName;
 
   cargoRegistryTokenFile = ../../secrets/cargo-registry-token.age;
   githubTokenFile = ../../secrets/github-token.age;
-  cloudflaredTunnelTokenFile = ../../secrets/cloudflared-tunnel-token.age;
+  cloudflaredTunnelCredentialsFile = ../../secrets + "/${cloudflaredTunnelCredentialsName}.age";
   shipyardSshKeyFile = ../../secrets/shipyard-ssh-key.age;
 
-  hasCloudflaredTunnelTokenSecret = builtins.pathExists cloudflaredTunnelTokenFile;
+  hasCloudflaredTunnelCredentialsSecret = builtins.pathExists cloudflaredTunnelCredentialsFile;
   hasGithubTokenSecret = builtins.pathExists githubTokenFile;
   user = config.local.user;
   shipyardSshKeyPath = "${user.homeDirectory}/.ssh/id_ed25519_shipyard";
@@ -44,7 +45,7 @@ in
 {
   options.local.secrets = {
     cargoRegistryToken = mkSecretOptions "the Cargo registry token";
-    cloudflaredTunnelToken = mkSecretOptions "the Cloudflare Tunnel token";
+    cloudflaredTunnelCredentials = mkSecretOptions "this host's Cloudflare Tunnel credentials JSON";
     githubToken = mkSecretOptions "the GitHub token";
     shipyardSshKey = mkSecretOptions "the Shipyard SSH key";
   };
@@ -55,9 +56,9 @@ in
         path = cargoRegistryTokenPath;
         available = true;
       };
-      cloudflaredTunnelToken = {
-        path = cloudflaredTunnelTokenPath;
-        available = hasCloudflaredTunnelTokenSecret;
+      cloudflaredTunnelCredentials = {
+        path = cloudflaredTunnelCredentialsPath;
+        available = hasCloudflaredTunnelCredentialsSecret;
       };
       githubToken = {
         path = githubTokenPath;
@@ -95,10 +96,10 @@ in
       path = githubTokenPath;
     };
 
-    age.secrets.cloudflared-tunnel-token = lib.mkIf hasCloudflaredTunnelTokenSecret {
-      file = cloudflaredTunnelTokenFile;
+    age.secrets.${cloudflaredTunnelCredentialsName} = lib.mkIf hasCloudflaredTunnelCredentialsSecret {
+      file = cloudflaredTunnelCredentialsFile;
       mode = "0400";
-      path = cloudflaredTunnelTokenPath;
+      path = cloudflaredTunnelCredentialsPath;
     };
 
     age.secrets.shipyard-ssh-key = {

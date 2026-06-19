@@ -3,7 +3,8 @@ let
 in
 {
   "cargo-registry-token.age".publicKeys = [ secrets ];
-  "cloudflared-tunnel-token.age".publicKeys = [ secrets ];
+  "cloudflared-pc-credentials.json.age".publicKeys = [ secrets ];
+  "cloudflared-macbook-vm-credentials.json.age".publicKeys = [ secrets ];
   "github-token.age".publicKeys = [ secrets ];
   "shipyard-ssh-key.age".publicKeys = [ secrets ];
 }

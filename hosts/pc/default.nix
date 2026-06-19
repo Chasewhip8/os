@@ -17,6 +17,10 @@ in
 
   local.features = {
     desktopAuth.enable = true;
+    cloudflared = {
+      enable = true;
+      tunnelId = "360dbf95-a38e-43ff-ba87-b91f9d5ae354";
+    };
     docker.enable = true;
     fileManager.enable = true;
     gaming.enable = true;

@@ -14,7 +14,13 @@
     "${modulesPath}/virtualisation/lxc-container.nix"
   ];
 
-  local.features.onePassword.enable = true;
+  local.features = {
+    cloudflared = {
+      enable = true;
+      tunnelId = "1fbc039d-3f68-4d94-ae1f-5efa8f2ea59f";
+    };
+    onePassword.enable = true;
+  };
 
   # Hostname
   networking.hostName = config.local.host.networkName;
