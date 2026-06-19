@@ -7,6 +7,7 @@
 }:
 let
   userName = config.local.user.name;
+  sshKeys = import ../../config/ssh-keys.nix;
 in
 {
   imports = [
@@ -28,6 +29,13 @@ in
     ledger.enable = true;
     nvidia.enable = true;
     onePassword.gui.enable = true;
+    tailscale = {
+      enable = true;
+      ssh = {
+        enable = true;
+        authorizedKeys = [ sshKeys.remoteTailscale ];
+      };
+    };
   };
 
   # Bootloader

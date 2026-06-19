@@ -14,6 +14,7 @@
       "kitty"
       "notion"
       "slack"
+      "tailscale"
       "telegram"
       "zed"
       "granola"

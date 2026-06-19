@@ -7,6 +7,9 @@
   lib,
   ...
 }:
+let
+  sshKeys = import ../../config/ssh-keys.nix;
+in
 {
   imports = [
     ../../system/nixos
@@ -20,6 +23,13 @@
       tunnelId = "1fbc039d-3f68-4d94-ae1f-5efa8f2ea59f";
     };
     onePassword.enable = true;
+    tailscale = {
+      enable = true;
+      ssh = {
+        enable = true;
+        authorizedKeys = [ sshKeys.remoteTailscale ];
+      };
+    };
   };
 
   # Hostname
@@ -53,7 +63,7 @@
     };
   };
 
-  # User — extend base user with VM-specific groups
+  # User — extend base user with VM-specific groups.
   users.users.${config.local.user.name}.extraGroups = [ "wheel" "docker" ];
 
   system.stateVersion = "24.05";

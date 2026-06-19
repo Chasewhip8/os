@@ -11,5 +11,6 @@
     ./ledger.nix
     ./nvidia.nix
     ./pam-services.nix
+    ./tailscale.nix
   ];
 }
