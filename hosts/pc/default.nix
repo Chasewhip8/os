@@ -41,10 +41,11 @@ in
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "amd_pstate=active" ];
-
-  # Let AMD CPPC scale aggressively down at idle while still allowing boost.
-  powerManagement.cpuFreqGovernor = "powersave";
+  # Keep CPU frequency pinned to the performance governor for gaming latency.
+  powerManagement = {
+    enable = true;
+    cpuFreqGovernor = "performance";
+  };
 
   # Hostname
   networking.hostName = config.local.host.networkName;

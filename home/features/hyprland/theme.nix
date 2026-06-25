@@ -44,6 +44,9 @@ in
       enable = true;
       accent = "rosewater";
     };
+    # The Catppuccin Hyprland module emits a Lua-backed `colors` block that
+    # current Hyprland rejects; explicit border colors are configured below.
+    hyprland.enable = false;
   };
 
   # GTK Theme
