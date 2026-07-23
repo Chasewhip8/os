@@ -21,6 +21,11 @@ in
     cloudflared = {
       enable = true;
       tunnelId = "1fbc039d-3f68-4d94-ae1f-5efa8f2ea59f";
+      httpPorts = {
+        api = 8080;
+        backend = 3210;
+        web = 3000;
+      };
     };
     onePassword.enable = true;
     tailscale = {

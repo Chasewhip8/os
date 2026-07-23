@@ -1,5 +1,10 @@
 # Hyprland theme configuration - catppuccin, GTK, Qt, cursor, animations
-{ inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 let
   uiFont = "Inter";
   monoFont = "JetBrains Mono NL";
@@ -49,6 +54,12 @@ in
     hyprland.enable = false;
   };
 
+  home.pointerCursor = {
+    enable = true;
+    gtk.enable = true;
+    hyprcursor.enable = true;
+  };
+
   # GTK Theme
   gtk = {
     enable = true;
@@ -85,8 +96,10 @@ in
     };
 
     env = [
-      "XCURSOR_SIZE,32"
-      "HYPRCURSOR_SIZE,32"
+      "XCURSOR_THEME,${config.home.pointerCursor.name}"
+      "XCURSOR_SIZE,${toString config.home.pointerCursor.size}"
+      "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
+      "HYPRCURSOR_SIZE,${toString config.home.pointerCursor.hyprcursor.size}"
     ];
 
     misc = {

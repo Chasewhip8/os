@@ -2,10 +2,15 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
   cfg = config.custom.hyprland;
+  disableNightshift = pkgs.writeShellScriptBin "disable-nightshift" ''
+    ${pkgs.systemd}/bin/systemctl --user stop hyprlux.service
+    ${config.wayland.windowManager.hyprland.package}/bin/hyprctl keyword decoration:screen_shader '[[EMPTY]]'
+  '';
 in
 {
   wayland.windowManager.hyprland.settings = {
@@ -21,6 +26,7 @@ in
       "$mod, return, fullscreen"
       "$mod CTRL, P, exec, $screenshot"
       "$mod CTRL, backspace, exec, $locker"
+      "$mod CTRL, N, exec, ${disableNightshift}/bin/disable-nightshift"
 
       # Layout
       "$mod CTRL, SPACE, togglefloating"

@@ -19,6 +19,7 @@
     (pkgs.rust-bin.selectLatestNightlyWith (toolchain: toolchain.default))
 
     # CLI tools
+    pkgs.google-cloud-sdk
     pkgs.jq
 
     # Build tools

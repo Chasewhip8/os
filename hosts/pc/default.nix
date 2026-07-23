@@ -21,6 +21,11 @@ in
     cloudflared = {
       enable = true;
       tunnelId = "360dbf95-a38e-43ff-ba87-b91f9d5ae354";
+      httpPorts = {
+        api = 8080;
+        backend = 3210;
+        web = 3000;
+      };
     };
     docker.enable = true;
     fileManager.enable = true;

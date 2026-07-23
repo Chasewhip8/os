@@ -30,6 +30,8 @@
             "initialization_options": { "check": { "command": "clippy" } }
         }
     },
+    "markdown_preview": { "limit_content_width": false },
+    "markdown_preview_font_size": 23,
     "outline_panel": { "button": false },
     "project_panel": { "dock": "right" },
     "proxy": "",
