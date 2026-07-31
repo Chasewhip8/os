@@ -18,6 +18,6 @@
   };
 
   wayland.windowManager.hyprland.settings = {
-    "$launcher" = "tofi-drun | xargs hyprctl dispatch exec --";
+    launcher._var = "tofi-drun --drun-launch=true";
   };
 }

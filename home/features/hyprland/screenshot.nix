@@ -1,4 +1,4 @@
-# Adds a $screenshot variable to the user's Hyprland config which can be bound for screenshots.
+# Adds a screenshot local to the user's Hyprland config which can be bound for screenshots.
 { pkgs, ... }:
 let
   screenshotRuntimeInputs = with pkgs; [
@@ -32,6 +32,6 @@ in
   ];
 
   wayland.windowManager.hyprland.settings = {
-    "$screenshot" = "${screenshot}/bin/hyprland-screenshot sf";
+    screenshot._var = "${screenshot}/bin/hyprland-screenshot sf";
   };
 }

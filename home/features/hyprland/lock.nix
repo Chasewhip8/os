@@ -1,4 +1,4 @@
-# Adds a $locker variable to the user's Hyprland config which can be bound to lock the device.
+# Adds a locker local to the user's Hyprland config which can be bound to lock the device.
 { inputs, pkgs, ... }:
 {
   services.hypridle = {
@@ -45,6 +45,6 @@
   };
 
   wayland.windowManager.hyprland.settings = {
-    "$locker" = "hyprlock";
+    locker._var = "hyprlock";
   };
 }

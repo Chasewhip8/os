@@ -56,7 +56,7 @@
     };
 
     limitless = {
-      url = "github:Chasewhip8/limitless";
+      url = "github:Chasewhip8/limitless?ref=main";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

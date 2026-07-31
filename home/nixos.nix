@@ -10,7 +10,6 @@
 let
   secrets = osConfig.local.secrets;
   cargoRegistryTokenPath = secrets.cargoRegistryToken.path;
-  googleApplicationCredentialsPath = "${config.xdg.configHome}/gcloud/application_default_credentials.json";
 in
 {
   imports = [
@@ -34,15 +33,11 @@ in
     tokenFile = secrets.githubToken.path;
   };
 
+  programs.limitless.opencode.disableClaudeCode = true;
+
   home.shellAliases = {
     nixconf-update = "nix flake update --flake ~/.nixconf";
   };
-
-  home.sessionVariables.GOOGLE_APPLICATION_CREDENTIALS = googleApplicationCredentialsPath;
-
-  systemd.user.services.opencode2.Service.Environment = lib.mkIf config.programs.limitless.opencode.service.enable [
-    "GOOGLE_APPLICATION_CREDENTIALS=${googleApplicationCredentialsPath}"
-  ];
 
   programs.zsh.initContent = lib.mkAfter ''
     [ -f ${lib.escapeShellArg cargoRegistryTokenPath} ] && export CARGO_REGISTRIES_SPHERE_FOUNDATION_TOKEN=$(${pkgs.coreutils}/bin/cat ${lib.escapeShellArg cargoRegistryTokenPath})

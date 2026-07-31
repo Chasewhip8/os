@@ -11,15 +11,92 @@ let
   hyprlandPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
   hyprlandDesktopPortalPackage =
     inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-
-  startupScript = pkgs.writeShellScriptBin "start" (lib.concatLines cfg.startupPrograms);
+  monitorNumberType = lib.types.either lib.types.int lib.types.float;
+  monitorScaleType = lib.types.oneOf [
+    lib.types.str
+    lib.types.int
+    lib.types.float
+  ];
+  reservedAreaType = lib.types.submodule {
+    options =
+      lib.genAttrs
+        [
+          "top"
+          "right"
+          "bottom"
+          "left"
+        ]
+        (
+          _:
+          lib.mkOption {
+            type = lib.types.int;
+            default = 0;
+          }
+        );
+  };
+  nullableMonitorOption =
+    type: description:
+    lib.mkOption {
+      type = lib.types.nullOr type;
+      default = null;
+      inherit description;
+    };
+  monitorType = lib.types.submodule {
+    options = {
+      output = lib.mkOption {
+        type = lib.types.str;
+        description = "Hyprland output name or description selector.";
+      };
+      mode = lib.mkOption {
+        type = lib.types.str;
+        default = "preferred";
+        description = "Output mode, such as preferred or 5120x1440@240.";
+      };
+      position = lib.mkOption {
+        type = lib.types.str;
+        default = "auto";
+        description = "Output position, such as auto-right or 0x0.";
+      };
+      scale = lib.mkOption {
+        type = monitorScaleType;
+        default = "auto";
+        description = "Output scale or the auto scaling policy.";
+      };
+      reserved = nullableMonitorOption (lib.types.either lib.types.int reservedAreaType) "Reserved output area in pixels.";
+      disabled = nullableMonitorOption lib.types.bool "Whether to disable the output.";
+      transform = nullableMonitorOption lib.types.int "Output transform from 0 through 7.";
+      mirror = nullableMonitorOption lib.types.str "Name of the output to mirror.";
+      bitdepth = nullableMonitorOption lib.types.int "Output bit depth.";
+      cm = nullableMonitorOption lib.types.str "Output color-management mode.";
+      sdr_eotf = nullableMonitorOption lib.types.str "SDR electro-optical transfer function.";
+      sdrbrightness = nullableMonitorOption monitorNumberType "SDR brightness multiplier.";
+      sdrsaturation = nullableMonitorOption monitorNumberType "SDR saturation multiplier.";
+      vrr = nullableMonitorOption lib.types.int "Variable refresh rate mode.";
+      icc = nullableMonitorOption lib.types.str "ICC profile path.";
+      supports_wide_color = nullableMonitorOption lib.types.int "Override wide-color support detection.";
+      supports_hdr = nullableMonitorOption lib.types.int "Override HDR support detection.";
+      sdr_min_luminance = nullableMonitorOption monitorNumberType "Minimum SDR luminance.";
+      sdr_max_luminance = nullableMonitorOption lib.types.int "Maximum SDR luminance.";
+      min_luminance = nullableMonitorOption monitorNumberType "Minimum output luminance.";
+      max_luminance = nullableMonitorOption lib.types.int "Maximum output luminance.";
+      max_avg_luminance = nullableMonitorOption lib.types.int "Maximum average output luminance.";
+    };
+  };
+  startupHandler = lib.generators.mkLuaInline ''
+    function()
+    ${
+      lib.concatMapStrings (
+        command: "  hl.exec_cmd(${lib.generators.toLua { } command})\n"
+      ) cfg.startupPrograms
+    }end
+  '';
 in
 {
   options.custom.hyprland = {
     monitor = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+      type = lib.types.listOf monitorType;
       default = [ ];
-      description = "Hyprland monitor entries for this host.";
+      description = "Structured Hyprland monitor declarations for this host.";
     };
 
     browserCommand = lib.mkOption {
@@ -62,44 +139,49 @@ in
     # Hyprland
     wayland.windowManager.hyprland = {
       enable = true;
-      configType = "hyprlang";
+      configType = "lua";
       package = hyprlandPackage;
       portalPackage = hyprlandDesktopPortalPackage;
       systemd.enable = true;
       systemd.variables = [ "--all" ];
 
       settings = {
-        monitor = cfg.monitor;
-        "$browser" = cfg.browserCommand;
+        browser._var = cfg.browserCommand;
 
-        exec-once = lib.optionals (cfg.startupPrograms != [ ]) [ "${startupScript}/bin/start" ];
+        monitor = map (lib.filterAttrsRecursive (_: value: value != null)) cfg.monitor;
 
-        master = {
-          orientation = "center";
-          slave_count_for_center_master = 0;
-          mfact = 0.50;
-          new_status = "master";
+        config = {
+          master = {
+            orientation = "center";
+            slave_count_for_center_master = 0;
+            mfact = 0.50;
+            new_status = "master";
+          };
+
+          input = {
+            kb_layout = "us";
+            follow_mouse = true;
+            sensitivity = 1.5;
+            force_no_accel = true;
+          };
+
+          dwindle.preserve_split = true;
+
+          general = {
+            gaps_in = 1;
+            gaps_out = 1;
+            resize_on_border = true;
+            layout = "master";
+          };
+
+          cursor.no_warps = false;
         };
-
-        input = {
-          kb_layout = "us";
-          follow_mouse = true;
-          sensitivity = 1.5;
-          force_no_accel = true;
-        };
-
-        dwindle = {
-          preserve_split = true;
-        };
-
-        general = {
-          gaps_in = 1;
-          gaps_out = 1;
-          resize_on_border = true;
-          layout = "master";
-        };
-
-        cursor.no_warps = false;
+      }
+      // lib.optionalAttrs (cfg.startupPrograms != [ ]) {
+        on._args = [
+          "hyprland.start"
+          startupHandler
+        ];
       };
     };
 

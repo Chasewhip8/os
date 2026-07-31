@@ -91,74 +91,231 @@ in
 
   # Hyprland theme settings
   wayland.windowManager.hyprland.settings = {
-    cursor = {
-      no_hardware_cursors = true;
-    };
-
     env = [
-      "XCURSOR_THEME,${config.home.pointerCursor.name}"
-      "XCURSOR_SIZE,${toString config.home.pointerCursor.size}"
-      "HYPRCURSOR_THEME,${config.home.pointerCursor.name}"
-      "HYPRCURSOR_SIZE,${toString config.home.pointerCursor.hyprcursor.size}"
+      {
+        _args = [
+          "XCURSOR_THEME"
+          config.home.pointerCursor.name
+        ];
+      }
+      {
+        _args = [
+          "XCURSOR_SIZE"
+          (toString config.home.pointerCursor.size)
+        ];
+      }
+      {
+        _args = [
+          "HYPRCURSOR_THEME"
+          config.home.pointerCursor.name
+        ];
+      }
+      {
+        _args = [
+          "HYPRCURSOR_SIZE"
+          (toString config.home.pointerCursor.hyprcursor.size)
+        ];
+      }
     ];
 
-    misc = {
-      disable_hyprland_logo = true;
-    };
+    config = {
+      cursor.no_hardware_cursors = true;
 
-    general = {
-      # Border Theme
-      "col.active_border" = "rgba(eb6f92ff) rgba(c4a7e7ff) 45deg";
-      "col.inactive_border" = "rgba(31748fcc) rgba(9ccfd8cc) 45deg";
-    };
+      misc.disable_hyprland_logo = true;
 
-    group = {
-      "col.border_active" = "rgba(eb6f92ff) rgba(c4a7e7ff) 45deg";
-      "col.border_inactive" = "rgba(31748fcc) rgba(9ccfd8cc) 45deg";
-      "col.border_locked_active" = "rgba(eb6f92ff) rgba(c4a7e7ff) 45deg";
-      "col.border_locked_inactive" = "rgba(31748fcc) rgba(9ccfd8cc) 45deg";
-    };
+      general.col = {
+        active_border = {
+          colors = [
+            "rgba(eb6f92ff)"
+            "rgba(c4a7e7ff)"
+          ];
+          angle = 45;
+        };
+        inactive_border = {
+          colors = [
+            "rgba(31748fcc)"
+            "rgba(9ccfd8cc)"
+          ];
+          angle = 45;
+        };
+      };
 
-    animations = {
-      enabled = true;
+      group.col = {
+        border_active = {
+          colors = [
+            "rgba(eb6f92ff)"
+            "rgba(c4a7e7ff)"
+          ];
+          angle = 45;
+        };
+        border_inactive = {
+          colors = [
+            "rgba(31748fcc)"
+            "rgba(9ccfd8cc)"
+          ];
+          angle = 45;
+        };
+        border_locked_active = {
+          colors = [
+            "rgba(eb6f92ff)"
+            "rgba(c4a7e7ff)"
+          ];
+          angle = 45;
+        };
+        border_locked_inactive = {
+          colors = [
+            "rgba(31748fcc)"
+            "rgba(9ccfd8cc)"
+          ];
+          angle = 45;
+        };
+      };
 
-      bezier = [
-        "wind, 0.05, 0.9, 0.1, 1.0"
-        "winIn, 0.1, 1.0, 0.1, 1.0"
-        "winOut, 0.3, 0.0, 0, 1.0"
-        "liner, 1, 1, 1, 1"
-      ];
+      animations.enabled = true;
 
-      animation = [
-        "windows, 0"
-        "windowsIn, 0"
-        "windowsOut, 0"
-        "windowsMove, 0"
-        "border, 1, 0.5, liner"
-        "borderangle, 1, 15, liner, loop"
-        "fade, 0"
-        "workspaces, 0"
-      ];
-    };
+      decoration = {
+        rounding = 5;
 
-    windowrule = [
-      # opacity rules
-      "opacity 0.80 0.80, match:class ^(kitty)$"
-      "opacity 0.80 0.80, match:class ^(org.freedesktop.impl.portal.desktop.gtk)$"
-      "opacity 0.80 0.80, match:class ^(org.freedesktop.impl.portal.desktop.hyprland)$"
-    ];
-
-    decoration = {
-      rounding = 5;
-
-      blur = {
-        enabled = true;
-        size = 6;
-        passes = 3;
-        new_optimizations = true;
-        ignore_opacity = true;
-        xray = false;
+        blur = {
+          enabled = true;
+          size = 6;
+          passes = 3;
+          new_optimizations = true;
+          ignore_opacity = true;
+          xray = false;
+        };
       };
     };
+
+    curve = [
+      {
+        _args = [
+          "wind"
+          {
+            type = "bezier";
+            points = [
+              [
+                0.05
+                0.9
+              ]
+              [
+                0.1
+                1.0
+              ]
+            ];
+          }
+        ];
+      }
+      {
+        _args = [
+          "winIn"
+          {
+            type = "bezier";
+            points = [
+              [
+                0.1
+                1.0
+              ]
+              [
+                0.1
+                1.0
+              ]
+            ];
+          }
+        ];
+      }
+      {
+        _args = [
+          "winOut"
+          {
+            type = "bezier";
+            points = [
+              [
+                0.3
+                0.0
+              ]
+              [
+                0
+                1.0
+              ]
+            ];
+          }
+        ];
+      }
+      {
+        _args = [
+          "liner"
+          {
+            type = "bezier";
+            points = [
+              [
+                1
+                1
+              ]
+              [
+                1
+                1
+              ]
+            ];
+          }
+        ];
+      }
+    ];
+
+    animation = [
+      {
+        leaf = "windows";
+        enabled = false;
+      }
+      {
+        leaf = "windowsIn";
+        enabled = false;
+      }
+      {
+        leaf = "windowsOut";
+        enabled = false;
+      }
+      {
+        leaf = "windowsMove";
+        enabled = false;
+      }
+      {
+        leaf = "border";
+        enabled = true;
+        speed = 0.5;
+        bezier = "liner";
+      }
+      {
+        leaf = "borderangle";
+        enabled = true;
+        speed = 15;
+        bezier = "liner";
+        style = "loop";
+      }
+      {
+        leaf = "fade";
+        enabled = false;
+      }
+      {
+        leaf = "workspaces";
+        enabled = false;
+      }
+    ];
+
+    window_rule = [
+      # opacity rules
+      {
+        match.class = "^(kitty)$";
+        opacity = "0.80 0.80";
+      }
+      {
+        match.class = "^(org.freedesktop.impl.portal.desktop.gtk)$";
+        opacity = "0.80 0.80";
+      }
+      {
+        match.class = "^(org.freedesktop.impl.portal.desktop.hyprland)$";
+        opacity = "0.80 0.80";
+      }
+    ];
   };
 }
