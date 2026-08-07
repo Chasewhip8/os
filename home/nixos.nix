@@ -3,6 +3,7 @@
   config,
   inputs,
   lib,
+  options,
   osConfig,
   pkgs,
   ...
@@ -10,6 +11,9 @@
 let
   secrets = osConfig.local.secrets;
   cargoRegistryTokenPath = secrets.cargoRegistryToken.path;
+  limitlessAcliAvailable = lib.hasAttrByPath [ "programs" "limitless" "tools" "acli" ] options;
+  limitlessSentryAvailable = lib.hasAttrByPath [ "programs" "limitless" "tools" "sentry" ] options;
+  enableLimitlessSentry = limitlessSentryAvailable && secrets.sentryApiToken.available;
 in
 {
   imports = [
@@ -27,13 +31,33 @@ in
     tokenFile = secrets.githubToken.path;
   };
 
-  programs.limitless.github = {
-    enable = true;
-    allowUnrestrictedRepos = true;
-    tokenFile = secrets.githubToken.path;
+  programs.limitless = {
+    github = {
+      enable = true;
+      allowUnrestrictedRepos = true;
+      tokenFile = secrets.githubToken.path;
+    };
+    opencode.disableClaudeCode = true;
+  }
+  // lib.optionalAttrs (limitlessAcliAvailable || enableLimitlessSentry) {
+    tools =
+      lib.optionalAttrs limitlessAcliAvailable {
+        acli = {
+          enable = true;
+          site = "spherepay-team.atlassian.net";
+          email = "chase@spherepay.co";
+        }
+        // lib.optionalAttrs secrets.atlassianApiToken.available {
+          tokenFile = secrets.atlassianApiToken.path;
+        };
+      }
+      // lib.optionalAttrs enableLimitlessSentry {
+        sentry = {
+          enable = true;
+          tokenFile = secrets.sentryApiToken.path;
+        };
+      };
   };
-
-  programs.limitless.opencode.disableClaudeCode = true;
 
   home.shellAliases = {
     nixconf-update = "nix flake update --flake ~/.nixconf";

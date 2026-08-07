@@ -161,7 +161,7 @@ in
           input = {
             kb_layout = "us";
             follow_mouse = true;
-            sensitivity = 1.5;
+            sensitivity = 1.0;
             force_no_accel = true;
           };
 

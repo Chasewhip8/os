@@ -80,8 +80,12 @@
           class = "^(Handy)$";
           title = "^(Recording)$";
         };
+        float = true;
+        move = [
+          "(monitor_w - window_w) / 2"
+          "monitor_h - window_h - 40"
+        ];
         no_initial_focus = true;
-        no_focus = true;
         no_blur = true;
         border_size = 0;
         rounding = 0;

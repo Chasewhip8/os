@@ -6,5 +6,7 @@ in
   "cloudflared-pc-credentials.json.age".publicKeys = [ secrets ];
   "cloudflared-macbook-vm-credentials.json.age".publicKeys = [ secrets ];
   "github-token.age".publicKeys = [ secrets ];
+  "atlassian-api-token.age".publicKeys = [ secrets ];
+  "sentry-api-token.age".publicKeys = [ secrets ];
   "shipyard-ssh-key.age".publicKeys = [ secrets ];
 }
