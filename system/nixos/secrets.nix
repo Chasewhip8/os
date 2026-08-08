@@ -31,6 +31,8 @@ let
   githubTokenPath = runtimePath "github-token";
   atlassianApiTokenPath = runtimePath "atlassian-api-token";
   sentryApiTokenPath = runtimePath "sentry-api-token";
+  limitlessBotGithubTokenPath = runtimePath "limitless-bot-github-token";
+  limitlessBotSlackEnvironmentPath = runtimePath "limitless-bot-slack-environment";
   cloudflaredTunnelCredentialsName = "cloudflared-${config.local.host.name}-credentials.json";
   cloudflaredTunnelCredentialsPath = runtimePath cloudflaredTunnelCredentialsName;
 
@@ -38,6 +40,8 @@ let
   githubTokenFile = ../../secrets/github-token.age;
   atlassianApiTokenFile = ../../secrets/atlassian-api-token.age;
   sentryApiTokenFile = ../../secrets/sentry-api-token.age;
+  limitlessBotGithubTokenFile = ../../secrets/limitless-bot-github-token.age;
+  limitlessBotSlackEnvironmentFile = ../../secrets/limitless-bot-slack-environment.age;
   cloudflaredTunnelCredentialsFile = ../../secrets + "/${cloudflaredTunnelCredentialsName}.age";
   shipyardSshKeyFile = ../../secrets/shipyard-ssh-key.age;
 
@@ -45,6 +49,9 @@ let
   hasGithubTokenSecret = builtins.pathExists githubTokenFile;
   hasAtlassianApiTokenSecret = builtins.pathExists atlassianApiTokenFile;
   hasSentryApiTokenSecret = builtins.pathExists sentryApiTokenFile;
+  hasLimitlessBotGithubTokenSecret = builtins.pathExists limitlessBotGithubTokenFile;
+  hasLimitlessBotSlackEnvironmentSecret = builtins.pathExists limitlessBotSlackEnvironmentFile;
+  limitlessBot = config.local.features.limitlessBot;
   user = config.local.user;
   shipyardSshKeyPath = "${user.homeDirectory}/.ssh/id_ed25519_shipyard";
 in
@@ -54,6 +61,8 @@ in
     atlassianApiToken = mkSecretOptions "the Atlassian API token";
     cloudflaredTunnelCredentials = mkSecretOptions "this host's Cloudflare Tunnel credentials JSON";
     githubToken = mkSecretOptions "the GitHub token";
+    limitlessBotGithubToken = mkSecretOptions "the Limitless bot GitHub token";
+    limitlessBotSlackEnvironment = mkSecretOptions "the Limitless bot Slack service environment";
     sentryApiToken = mkSecretOptions "the Sentry API token";
     shipyardSshKey = mkSecretOptions "the Shipyard SSH key";
   };
@@ -75,6 +84,14 @@ in
       githubToken = {
         path = githubTokenPath;
         available = hasGithubTokenSecret;
+      };
+      limitlessBotGithubToken = {
+        path = limitlessBotGithubTokenPath;
+        available = limitlessBot.enable && hasLimitlessBotGithubTokenSecret;
+      };
+      limitlessBotSlackEnvironment = {
+        path = limitlessBotSlackEnvironmentPath;
+        available = limitlessBot.enable && hasLimitlessBotSlackEnvironmentSecret;
       };
       sentryApiToken = {
         path = sentryApiTokenPath;
@@ -102,6 +119,14 @@ in
       ++ lib.optional (!hasSentryApiTokenSecret) ''
         Sentry API token secret is missing at secrets/sentry-api-token.age;
         create it with agenix before expecting sentry to be authenticated.
+      ''
+      ++ lib.optional (limitlessBot.enable && !hasLimitlessBotGithubTokenSecret) ''
+        Limitless bot GitHub token secret is missing at secrets/limitless-bot-github-token.age;
+        create it with agenix before provisioning the bot workspace.
+      ''
+      ++ lib.optional (limitlessBot.enable && !hasLimitlessBotSlackEnvironmentSecret) ''
+        Limitless bot Slack environment secret is missing at secrets/limitless-bot-slack-environment.age;
+        create it with agenix before enabling the Slack bridge.
       '';
 
     age.identityPaths = [
@@ -134,6 +159,26 @@ in
       mode = "0400";
       path = sentryApiTokenPath;
     };
+
+    age.secrets.limitless-bot-github-token =
+      lib.mkIf (limitlessBot.enable && hasLimitlessBotGithubTokenSecret)
+        {
+          file = limitlessBotGithubTokenFile;
+          owner = limitlessBot.userName;
+          group = limitlessBot.userName;
+          mode = "0400";
+          path = limitlessBotGithubTokenPath;
+        };
+
+    age.secrets.limitless-bot-slack-environment =
+      lib.mkIf (limitlessBot.enable && hasLimitlessBotSlackEnvironmentSecret)
+        {
+          file = limitlessBotSlackEnvironmentFile;
+          owner = limitlessBot.userName;
+          group = limitlessBot.userName;
+          mode = "0400";
+          path = limitlessBotSlackEnvironmentPath;
+        };
 
     age.secrets.${cloudflaredTunnelCredentialsName} = lib.mkIf hasCloudflaredTunnelCredentialsSecret {
       file = cloudflaredTunnelCredentialsFile;

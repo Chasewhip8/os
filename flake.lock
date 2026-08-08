@@ -953,11 +953,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786115725,
-        "narHash": "sha256-DPhoik/QAbPX+n7pzzQeQZ8fk0YhcC0B4dUF43B7gHM=",
+        "lastModified": 1786212426,
+        "narHash": "sha256-/+VlHEeI6vRUTJ1eW3V1vY5czBBMtDQmfBsBGPwgiIA=",
         "owner": "Chasewhip8",
         "repo": "limitless",
-        "rev": "16e0519a932d1ab3a0c574dc1ba3e4c0e6b457a2",
+        "rev": "8ada831326799d3d024bfa3f31a4f1bfb08a7b1e",
         "type": "github"
       },
       "original": {

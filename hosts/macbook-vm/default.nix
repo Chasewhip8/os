@@ -2,7 +2,6 @@
 {
   config,
   pkgs,
-  inputs,
   modulesPath,
   lib,
   ...
@@ -27,6 +26,7 @@ in
         web = 3000;
       };
     };
+    limitlessBot.enable = true;
     onePassword.enable = true;
     tailscale = {
       enable = true;
@@ -56,20 +56,41 @@ in
   # Docker CLI → OrbStack's runtime (no local daemon)
   environment.sessionVariables.DOCKER_HOST = "unix:///opt/orbstack-guest/run/docker.sock";
 
-  users.groups.docker = {};
+  users.groups.docker = { };
   systemd.services.orbstack-docker-sock = {
     description = "Fix OrbStack Docker socket permissions";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${pkgs.coreutils}/bin/chgrp docker /opt/orbstack-guest/run/docker.sock";
+      ExecStart = pkgs.writeShellScript "fix-orbstack-docker-sock" ''
+        set -eu
+        socket=/opt/orbstack-guest/run/docker.sock
+        ${pkgs.coreutils}/bin/chgrp docker "$socket"
+        ${pkgs.coreutils}/bin/chmod g+rw "$socket"
+      '';
+    };
+  };
+  systemd.paths.orbstack-docker-sock = {
+    description = "Watch for OrbStack Docker socket recreation";
+    wantedBy = [ "multi-user.target" ];
+    pathConfig = {
+      PathChanged = "/opt/orbstack-guest/run";
+      Unit = "orbstack-docker-sock.service";
     };
   };
 
+  home-manager.users = lib.mkIf config.local.features.limitlessBot.enable {
+    ${config.local.features.limitlessBot.userName}.imports = [
+      ./limitless-bot-home.nix
+    ];
+  };
+
   # User — extend base user with VM-specific groups.
-  users.users.${config.local.user.name}.extraGroups = [ "wheel" "docker" ];
+  users.users.${config.local.user.name}.extraGroups = [
+    "wheel"
+    "docker"
+  ];
 
   system.stateVersion = "24.05";
 }

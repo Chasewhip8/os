@@ -119,6 +119,7 @@
 
       mkHomeManagerUser =
         {
+          homeDirectory,
           homeModule,
           localConfig,
           userName,
@@ -127,18 +128,15 @@
           home-manager = {
             extraSpecialArgs = { inherit inputs; };
             useGlobalPkgs = true;
-            sharedModules = [
-              (
-                { config, ... }:
-                {
-                  imports = [ localConfig ];
-                  home.username = config.local.user.name;
-                  home.homeDirectory = config.local.user.homeDirectory;
-                }
-              )
-            ];
             users.${userName} = {
-              imports = [ homeModule ];
+              imports = [
+                localConfig
+                homeModule
+              ];
+              home = {
+                username = userName;
+                inherit homeDirectory;
+              };
             };
           };
         };
@@ -175,7 +173,7 @@
             commonOverlays
             inputs.home-manager.nixosModules.default
             (mkHomeManagerUser {
-              inherit homeModule localConfig;
+              inherit homeDirectory homeModule localConfig;
               userName = user.name;
             })
           ];
@@ -214,7 +212,7 @@
             commonOverlays
             inputs.home-manager.darwinModules.default
             (mkHomeManagerUser {
-              inherit homeModule localConfig;
+              inherit homeDirectory homeModule localConfig;
               userName = user.name;
             })
           ];
@@ -237,7 +235,9 @@
       nixosConfigurations.macbook-vm = mkLinuxHost {
         name = "macbook-vm";
         hostType = "vm";
-        user = defaultUser // { uid = null; };
+        user = defaultUser // {
+          uid = null;
+        };
         hostModule = ./hosts/macbook-vm;
         homeModule = ./hosts/macbook-vm/home.nix;
       };
