@@ -7,6 +7,7 @@
   ...
 }:
 let
+  chatgpt = pkgs.callPackage ../../pkgs/chatgpt.nix { };
   handy = pkgs.callPackage ../../pkgs/handy.nix { };
 in
 {
@@ -28,7 +29,6 @@ in
     opencode = {
       extraAgentsFile = ../../config/AGENTS.md;
       service.enable = true;
-      settings = builtins.fromJSON (builtins.readFile ../../config/opencode.json);
     };
   };
 
@@ -77,15 +77,8 @@ in
 
   custom.terminalKeybinds.enable = true;
 
-  # Keep OpenCode on terminal-standard ctrl bindings; Kitty/Zed translate the
-  # remapped far-left key back to ctrl sequences for TUI-only shortcuts.
-  home.file.".config/opencode/tui.json".text = builtins.toJSON {
-    keybinds = {
-      leader = "ctrl+x";
-      variant_cycle = "ctrl+t";
-      command_list = "ctrl+p";
-    };
-  };
+  # OpenCode 2 defaults to ctrl+x, ctrl+t, and ctrl+p. Keep cli.json mutable so
+  # terminal preferences survive while Kitty/Zed continue translating keys.
 
   programs.kitty.extraConfig = lib.mkAfter ''
     confirm_os_window_close 0
@@ -93,6 +86,7 @@ in
 
   # PC-specific packages (Linux GUI apps)
   home.packages = [
+    chatgpt
     handy
     pkgs.wtype
     pkgs.pavucontrol

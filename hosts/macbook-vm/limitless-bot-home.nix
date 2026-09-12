@@ -98,7 +98,6 @@ in
     opencode = {
       disableClaudeCode = true;
       extraAgentsFile = ../../config/AGENTS.md;
-      settings = builtins.fromJSON (builtins.readFile ../../config/opencode.json);
       service = {
         enable = true;
         hostname = "127.0.0.1";
@@ -115,7 +114,7 @@ in
     };
   };
 
-  systemd.user.services.opencode.Service.Environment = [
+  systemd.user.services.opencode2.Service.Environment = [
     "DOCKER_CONFIG=${bot.homeDirectory}/.config/docker"
     "DOCKER_HOST=unix:///opt/orbstack-guest/run/docker.sock"
   ];

@@ -1,6 +1,6 @@
 # Limitless Slack bot setup
 
-This host runs a second OpenCode service as `limitless-bot`. The normal
+This host runs a second OpenCode 2 service as `limitless-bot`. The normal
 `chase` service remains on `127.0.0.1:4096`; the bot service uses
 `127.0.0.1:4097` and the persistent workspace at
 `/home/limitless-bot/pay/workspace`.
@@ -65,7 +65,7 @@ sudo -u limitless-bot test -r /run/agenix/limitless-bot-slack-environment
 
 The bot must not belong to `wheel`; membership in `docker` is intentional.
 
-## 3. Authenticate OpenCode
+## 3. Authenticate OpenCode 2
 
 Provider authentication must be created as the bot user inside the VM.
 Authentication performed by a Mac-side attached client does not configure the
@@ -73,10 +73,10 @@ server account.
 
 ```sh
 sudo -iu limitless-bot
-opencode auth login --provider openai
+opencode2 auth login openai
 ```
 
-The resulting OpenCode credential remains in the bot's persistent home and is
+The resulting OpenCode 2 credential remains in the bot's persistent home and is
 not managed by Nix or agenix.
 
 ## 4. Clone the workspace
@@ -98,7 +98,7 @@ This is an independent clean checkout. Do not copy the existing `chase`
 workspace or its uncommitted state. Nix does not automatically pull, reset, or
 otherwise update this checkout.
 
-## 5. Smoke-test OpenCode and Docker
+## 5. Smoke-test OpenCode 2 and Docker
 
 Set the user-manager environment when operating through `sudo`:
 
@@ -106,9 +106,9 @@ Set the user-manager environment when operating through `sudo`:
 export XDG_RUNTIME_DIR="/run/user/$(id -u)"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=$XDG_RUNTIME_DIR/bus"
 
-systemctl --user restart opencode
-systemctl --user status opencode
-curl --fail http://127.0.0.1:4097/global/health
+systemctl --user restart opencode2
+systemctl --user status opencode2
+opencode2 api get /api/health
 
 docker version
 docker run --rm --name gary-smoke hello-world
@@ -117,8 +117,7 @@ docker run --rm --name gary-smoke hello-world
 Attach for a direct model smoke test:
 
 ```sh
-opencode attach http://127.0.0.1:4097 \
-  --dir /home/limitless-bot/pay/workspace
+opencode2 /home/limitless-bot/pay/workspace
 ```
 
 Use a `gary-` prefix or an explicit ownership label for bot-created Docker
@@ -142,14 +141,14 @@ The Slack app requires:
 - Socket Mode and an app token with `connections:write`.
 - The `app_mention` event subscription.
 - Bot scopes `app_mentions:read`, `chat:write`, `channels:history`,
-  `groups:history`, and `files:read`.
+  `groups:history`, `files:read`, and `files:write`.
 - Membership only in approved private channels.
 
 Verify:
 
 ```sh
-systemctl --user status opencode
-journalctl --user -u opencode -n 200 --no-pager
+systemctl --user status opencode2
+journalctl --user -u opencode2 -n 200 --no-pager
 test -s "$XDG_RUNTIME_DIR/limitless-slack-ready"
 ```
 
@@ -161,19 +160,20 @@ attachment, and a follow-up mention after restarting the service.
 After logging in as `limitless-bot` and exporting the user-manager variables above:
 
 ```sh
-systemctl --user restart opencode
-journalctl --user -u opencode -f
+systemctl --user restart opencode2
+journalctl --user -u opencode2 -f
 gary
 ```
 
-The `gary` alias attaches to port 4097 from the current directory.
+The `gary` alias connects through OpenCode's managed-service discovery and uses
+the current directory as its project location.
 
 ## Rollback
 
 1. Remove the app from its Slack channels.
 2. Set `programs.limitless.slack.enable = false` and rebuild while the bot
    account is still enabled.
-3. Stop the bot's `opencode` user service using the user-manager environment
+3. Stop the bot's `opencode2` user service using the user-manager environment
    from the operations section.
 4. Set `local.features.limitlessBot.enable = false` in
    `hosts/macbook-vm/default.nix` and rebuild. This removes its Home Manager

@@ -9,6 +9,8 @@ in
   "limitless-bot-github-token.age".publicKeys = [ secrets ];
   "limitless-bot-slack-environment.age".publicKeys = [ secrets ];
   "atlassian-api-token.age".publicKeys = [ secrets ];
+  "notion-personal.age".publicKeys = [ secrets ];
+  "notion-work.age".publicKeys = [ secrets ];
   "sentry-api-token.age".publicKeys = [ secrets ];
   "shipyard-ssh-key.age".publicKeys = [ secrets ];
 }

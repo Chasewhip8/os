@@ -15,6 +15,22 @@ in
   # Enable Flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.trusted-users = [ "root" "@wheel" user.name ];
+  nix.channel.enable = false;
+
+  # Keep declarative packages out of the mutable profile used by nix profile install.
+  home-manager.useUserPackages = true;
+
+  # Preserve Home Manager's desktop entries and portal definitions in the user profile.
+  environment.pathsToLink = [
+    "/share/applications"
+    "/share/xdg-desktop-portal"
+  ];
+
+  # Ad-hoc profiles must not shadow packages or desktop resources from this flake.
+  environment.profiles = lib.mkForce [
+    "/etc/profiles/per-user/$USER"
+    "/run/current-system/sw"
+  ];
 
   # Keep the modern systemd-oriented D-Bus implementation explicit so rebuilds
   # do not try to live-switch the running desktop back to dbus-daemon.

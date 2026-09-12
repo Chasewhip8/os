@@ -4,9 +4,6 @@
   inputs,
   ...
 }:
-let
-  keys = config.custom.keys;
-in
 {
   imports = [
     ../../home/nixos.nix
@@ -30,7 +27,6 @@ in
     opencode = {
       extraAgentsFile = ../../config/AGENTS.md;
       service.enable = true;
-      settings = builtins.fromJSON (builtins.readFile ../../config/opencode.json);
     };
   };
 
@@ -41,14 +37,6 @@ in
   };
 
   custom.terminalKeybinds.enable = false;
-
-  home.file.".config/opencode/tui.json".text = builtins.toJSON {
-    keybinds = {
-      leader = "${keys.secondary}+x";
-      variant_cycle = "${keys.secondary}+t";
-      command_list = "${keys.secondary}+p";
-    };
-  };
 
   # VM-specific shell config
   home.shellAliases = {

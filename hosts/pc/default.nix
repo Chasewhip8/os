@@ -24,6 +24,7 @@ in
       httpPorts = {
         api = 8080;
         backend = 3210;
+        onboarding = 3001;
         web = 3000;
       };
     };
