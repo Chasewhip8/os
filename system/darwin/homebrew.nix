@@ -11,6 +11,7 @@
       "aerospace"
       "discord"
       "google-chrome"
+      "handy"
       "kitty"
       "notion"
       "slack"
