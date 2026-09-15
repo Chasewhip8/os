@@ -9,6 +9,7 @@
 let
   chatgpt = pkgs.callPackage ../../pkgs/chatgpt.nix { };
   handy = pkgs.callPackage ../../pkgs/handy.nix { };
+  t3code = pkgs.callPackage ../../pkgs/t3code.nix { };
 in
 {
   imports = [
@@ -28,7 +29,10 @@ in
     };
     opencode = {
       extraAgentsFile = ../../config/AGENTS.md;
-      service.enable = true;
+      service = {
+        enable = true;
+        hostname = "127.0.0.1";
+      };
     };
   };
 
@@ -60,6 +64,8 @@ in
     ];
   };
 
+  wayland.windowManager.hyprland.xdph.settings.screencopy.allow_token_by_default = true;
+
   # The Samsung Odyssey OLED G9 uses a triangular RGB QD-OLED layout rather
   # than an RGB stripe; use grayscale AA to avoid subpixel color fringing.
   fonts.fontconfig = {
@@ -88,6 +94,7 @@ in
   home.packages = [
     chatgpt
     handy
+    t3code
     pkgs.wtype
     pkgs.pavucontrol
     pkgs.vesktop
@@ -99,7 +106,8 @@ in
     pkgs.openjdk25
     pkgs.glfw
     pkgs.obsidian
-    pkgs.audacity
+    # Audacity 4 changes project format and drops workflows still available in 3.x.
+    pkgs.audacity_3
     pkgs.telegram-desktop
     pkgs.signal-desktop
     pkgs.anki-bin

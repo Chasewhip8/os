@@ -14,7 +14,7 @@
   udev,
   xz,
   zlib,
-  solanaVersion ? "4.0.0",
+  solanaVersion ? "4.0.3",
   version ? "1.54",
 }:
 let
@@ -52,7 +52,7 @@ let
   releaseHash = versionMapping."${version}"."${system}";
   sbfSdk = fetchurl {
     url = "https://github.com/anza-xyz/agave/releases/download/v${solanaVersion}/sbf-sdk.tar.bz2";
-    hash = "sha256-DkcFrczFsWdT+6YtoTSwdY+tK1Yv6jtgRt0/6dn/rwU=";
+    hash = "sha256-DQHuDwaASaVgfVUFYwBKxVtJfb9VpKuelpMRVtrpPF0=";
   };
 in
 stdenv.mkDerivation rec {

@@ -37,12 +37,21 @@ in
     onePassword.gui.enable = true;
     tailscale = {
       enable = true;
+      serve = {
+        enable = true;
+        port = config.home-manager.users.${userName}.programs.limitless.opencode.service.port;
+      };
       ssh = {
         enable = true;
         authorizedKeys = [ sshKeys.remoteTailscale ];
       };
     };
   };
+
+  # Keep the editor toolchain on TypeScript 5 until its native-compiler migration.
+  nixpkgs.overlays = [
+    (_: previous: { typescript = previous.typescript_5; })
+  ];
 
   # Bootloader
   boot.loader.systemd-boot.enable = true;
@@ -80,6 +89,12 @@ in
   services.udisks2.enable = true;
   services.upower.enable = true;
 
+  # Limit crash-dump work so browser failures put less pressure on memory and disk.
+  systemd.coredump.settings.Coredump = {
+    ProcessSizeMax = "1G";
+    ExternalSizeMax = "1G";
+  };
+
   # Audio
   security.rtkit.enable = true;
   services.pipewire = {
@@ -94,7 +109,10 @@ in
   security.pam.services.greetd.enableGnomeKeyring = true;
 
   # User - extend base user with PC-specific groups
-  users.users.${userName}.extraGroups = [ "networkmanager" "wheel" ];
+  users.users.${userName}.extraGroups = [
+    "networkmanager"
+    "wheel"
+  ];
 
   # XRemap permissions
   hardware.uinput.enable = true;

@@ -13,7 +13,7 @@
   udev,
   zlib,
   versionCheckHook,
-  version ? "4.0.0",
+  version ? "4.0.3",
 }:
 let
   system = stdenv.hostPlatform.system;
@@ -21,15 +21,15 @@ let
   releaseMapping = {
     x86_64-linux = {
       target = "x86_64-unknown-linux-gnu";
-      hash = "sha256-yDm6Yp0Q7dX5mvaIB9wllI/OYs1RdrVq0T4j91Yu9PI=";
+      hash = "sha256-UKbtBHTJWOHOP7opj0X8HNMRfbXF3yU8wMfYyCfoE6g=";
     };
     x86_64-darwin = {
       target = "x86_64-apple-darwin";
-      hash = "sha256-THsS0arYSmksetN0yKN+ViVc6CvMq2iwKl5AvDstQSE=";
+      hash = "sha256-7+XtRmZg800VdJot6T/Csv0/TWSFNr6GV9Udp/ZLd1s=";
     };
     aarch64-darwin = {
       target = "aarch64-apple-darwin";
-      hash = "sha256-eRln77dFyV+PaHaJIy6JV40rVAGJveLJnemHlPBoT/U=";
+      hash = "sha256-QVuX+s/USf7QajNwJzHLdVQ/BJHqd4E7AHpMS4+CXmE=";
     };
   };
 
@@ -37,8 +37,8 @@ let
     releaseMapping.${system}
       or (throw "solana-cli ${version} has no upstream Agave binary release for ${system}");
 
-  sbfSdk = "${solana-platform-tools}/bin/platform-tools-sdk/sbf";
-  sbfRust = "${sbfSdk}/dependencies/platform-tools/rust/bin";
+  sbfTools = "${solana-platform-tools}/bin/platform-tools-sdk/sbf/dependencies/platform-tools";
+  sbfRust = "${sbfTools}/rust/bin";
 in
 stdenv.mkDerivation rec {
   pname = "solana-cli";
@@ -87,21 +87,56 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    for bin in cargo-build-sbf cargo-test-sbf; do
-      if [ -x "$out/bin/$bin" ]; then
-        wrapProgram "$out/bin/$bin" \
-          --prefix PATH : "${sbfRust}" \
-          --set SBF_SDK_PATH "${sbfSdk}" \
-          --append-flags --no-rustup-override \
-          --append-flags --skip-tools-install
-      fi
-    done
+    wrapProgram "$out/bin/cargo-build-sbf" \
+      --prefix PATH : "${sbfRust}" \
+      --add-flags "--tools-version v${solana-platform-tools.version}" \
+      --add-flags --no-rustup-override \
+      --add-flags --skip-tools-install
+
+    wrapProgram "$out/bin/cargo-test-sbf" \
+      --prefix PATH : "$out/bin"
   '';
 
   doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/solana";
   versionCheckProgramArg = "--version";
+
+  # Compile offline to verify that the packaged toolchain is discoverable.
+  postInstallCheck = ''
+    export HOME="$TMPDIR/sbf-check"
+    export CARGO_HOME="$HOME/cargo"
+    mkdir -p "$HOME/.cache/solana/v${solana-platform-tools.version}" "$HOME/project/src"
+    ln -s ${sbfTools} "$HOME/.cache/solana/v${solana-platform-tools.version}/platform-tools"
+
+    cat > "$HOME/project/Cargo.toml" <<'EOF'
+    [package]
+    name = "nix-sbf-check"
+    version = "0.1.0"
+    edition = "2021"
+    [lib]
+    crate-type = ["cdylib"]
+    [profile.release]
+    panic = "abort"
+    EOF
+
+    cat > "$HOME/project/src/lib.rs" <<'EOF'
+    #![no_std]
+    #[no_mangle]
+    pub extern "C" fn entrypoint(_input: *mut u8) -> u64 {
+        0
+    }
+    #[panic_handler]
+    fn panic(_info: &core::panic::PanicInfo<'_>) -> ! {
+        loop {}
+    }
+    EOF
+
+    "$out/bin/cargo-build-sbf" --offline \
+      --manifest-path "$HOME/project/Cargo.toml" \
+      --sbf-out-dir "$HOME/deploy"
+    test -s "$HOME/deploy/nix_sbf_check.so"
+  '';
 
   passthru = {
     platform-tools = solana-platform-tools;
