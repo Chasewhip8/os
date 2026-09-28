@@ -9,7 +9,6 @@
     ./gaming.nix
     ./greetd.nix
     ./ledger.nix
-    ./limitless-bot.nix
     ./nvidia.nix
     ./pam-services.nix
     ./tailscale.nix

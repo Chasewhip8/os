@@ -1,7 +1,6 @@
 # OrbStack VM (NixOS) home configuration for chase
 {
   config,
-  inputs,
   ...
 }:
 {
@@ -15,18 +14,13 @@
 
   programs.limitless = {
     enable = true;
-    notifications = {
-      enable = true;
-      command = [
-        "/opt/orbstack-guest/bin/mac"
-        "bash"
-        "-c"
-        "afplay /System/Library/Sounds/Glass.aiff"
-      ];
-    };
     opencode = {
       extraAgentsFile = ../../config/AGENTS.md;
-      service.enable = true;
+      service = {
+        enable = true;
+        hostname = "127.0.0.1";
+        port = 4096;
+      };
     };
   };
 

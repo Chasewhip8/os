@@ -20,18 +20,13 @@ in
 
   programs.limitless = {
     enable = true;
-    notifications = {
-      enable = true;
-      command = [
-        "/run/current-system/sw/bin/pw-play"
-        "/run/current-system/sw/share/sounds/freedesktop/stereo/complete.oga"
-      ];
-    };
+    desktop.enable = true;
     opencode = {
       extraAgentsFile = ../../config/AGENTS.md;
       service = {
         enable = true;
         hostname = "127.0.0.1";
+        port = 4096;
       };
     };
   };

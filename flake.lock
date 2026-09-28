@@ -889,16 +889,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1789397592,
-        "narHash": "sha256-979B0CoSME3EL7uUFQcjZ1OjwvWHlXUoEKk99urB/gY=",
+        "lastModified": 1790259044,
+        "narHash": "sha256-66ybIjPdgtUTi426mu1gCZ6Yj/unc1WVOdyuvnFNgBM=",
         "owner": "Chasewhip8",
         "repo": "limitless",
-        "rev": "fce045aa90399a79cc876c867cd1e303bae07b89",
+        "rev": "fdce6ea74cddcf322c9489c04b1f30ba843f9acc",
         "type": "github"
       },
       "original": {
         "owner": "Chasewhip8",
-        "ref": "feature/opencode-v2-readiness",
+        "ref": "main",
         "repo": "limitless",
         "type": "github"
       }

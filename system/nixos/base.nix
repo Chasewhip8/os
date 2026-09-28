@@ -13,8 +13,15 @@ in
   nixpkgs.config.allowUnfree = true;
 
   # Enable Flakes
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nix.settings.trusted-users = [ "root" "@wheel" user.name ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+    user.name
+  ];
   nix.channel.enable = false;
 
   # Keep declarative packages out of the mutable profile used by nix profile install.
@@ -60,11 +67,17 @@ in
     home = user.homeDirectory;
     shell = pkgs.zsh;
     description = user.fullName;
+    # Remote development services should not start before login.
+    linger = false;
     extraGroups = lib.mkDefault [ "wheel" ];
-  } // lib.optionalAttrs (user.uid != null) { uid = user.uid; };
+  }
+  // lib.optionalAttrs (user.uid != null) { uid = user.uid; };
 
   # System packages
-  environment.systemPackages = with pkgs; [ git wget ];
+  environment.systemPackages = with pkgs; [
+    git
+    wget
+  ];
 
   # Dynamic binaries
   programs.nix-ld.enable = true;

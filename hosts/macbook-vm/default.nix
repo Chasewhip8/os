@@ -27,7 +27,6 @@ in
         web = 3000;
       };
     };
-    limitlessBot.enable = true;
     onePassword.enable = true;
     tailscale = {
       enable = true;
@@ -79,12 +78,6 @@ in
       PathChanged = "/opt/orbstack-guest/run";
       Unit = "orbstack-docker-sock.service";
     };
-  };
-
-  home-manager.users = lib.mkIf config.local.features.limitlessBot.enable {
-    ${config.local.features.limitlessBot.userName}.imports = [
-      ./limitless-bot-home.nix
-    ];
   };
 
   # User — extend base user with VM-specific groups.

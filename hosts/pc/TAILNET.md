@@ -8,18 +8,24 @@ Remote OpenCode client
   → https://nixos.tail93a561.ts.net:443
     → Tailscale Serve
       → http://127.0.0.1:4096
-        → chase's OpenCode user service
+        → chase's native OpenCode service
 ```
 
-The PC must be awake and Chase must have an active login session. OpenCode runs
-under the existing user service with lingering disabled. The system-level proxy
-can run before login; it returns an upstream error while OpenCode is unavailable.
+The PC must be awake and Chase must have an active login session. The systemd
+user manager starts and supervises OpenCode at login. Nix explicitly disables
+lingering, so OpenCode does not start at boot. The system-level proxy can run
+before login; it returns an upstream error while OpenCode is unavailable.
 
 ## Configuration
 
-- `hosts/pc/default.nix` enables `local.features.tailscale.serve` and takes the
-  upstream port from the Home Manager OpenCode service configuration.
-- `hosts/pc/home.nix` binds OpenCode to `127.0.0.1`.
+- `hosts/pc/home.nix` enables `programs.limitless.opencode.service` and declares
+  its binding as `127.0.0.1:4096`.
+- `hosts/pc/default.nix` enables `local.features.tailscale.serve` and reads its
+  target port from that Home Manager service configuration.
+- `system/nixos/base.nix` sets `users.users.chase.linger = false`.
+- The service applies its binding through native OpenCode commands and preserves
+  authentication, CORS settings, and the service environment. OpenCode's private
+  service configuration stays writable outside Home Manager.
 - `system/nixos/tailscale.nix` owns `tailscale-serve-local.service`. It waits for
   Tailscale connectivity, then runs Serve in the foreground so stopping the unit
   removes its route. Systemd restarts the process if the daemon connection closes.
@@ -49,7 +55,16 @@ Run these steps on the PC when ready to activate the configuration.
    issuance publishes the machine's full DNS name in certificate transparency
    logs.
 
-3. Review the pending repository changes, then apply the PC configuration:
+3. Review the pending repository changes and finish active sessions. Starting or
+   restarting the supervised service takes ownership of the native daemon and
+   can interrupt active work and persistent terminals. When migrating from the
+   old `opencode2` service, stop its unit before rebuilding:
+
+   ```sh
+   systemctl --user stop opencode2
+   ```
+
+   Then apply the PC configuration:
 
    ```sh
    sudo nixos-rebuild switch --flake /home/chase/.nixconf#pc
@@ -59,19 +74,23 @@ Run these steps on the PC when ready to activate the configuration.
    activated before sign-in: it waits without blocking system activation. If
    HTTPS still needs consent, its journal can contain a Tailscale setup URL.
 
-4. Check both services and find the HTTPS address:
+4. Home Manager applies the service configuration during the rebuild. Check both
+   services, confirm lingering is disabled, and find the HTTPS address:
 
    ```sh
-   systemctl --user status opencode2
+   systemctl --user status opencode
+   opencode service status
+   opencode api get /api/info
+   loginctl show-user chase -p Linger
    systemctl status tailscale-serve-local
    journalctl -u tailscale-serve-local -n 50 --no-pager
    tailscale serve status --json
    ```
 
-   The proxy being `active` means its process is running; it may still be waiting
-   for Tailscale sign-in or HTTPS setup. The JSON status should contain a
-   `Foreground` entry with HTTPS on port 443 and a `Web` handler proxying `/` to
-   `http://127.0.0.1:4096`. The journal prints the HTTPS URL once ready.
+   Expect `Linger=no`. The proxy being `active` means its process is running;
+   it may still be waiting for Tailscale sign-in or HTTPS setup. The JSON status
+   should contain a `Foreground` entry with HTTPS on port 443 and a `Web` handler
+   proxying `/` to `http://127.0.0.1:4096`. The journal prints the HTTPS URL once ready.
 
    Tailscale 1.102.3's plain `tailscale serve status` omits foreground routes and
    can print `No serve config` while this proxy is working. Use the JSON output
@@ -80,19 +99,17 @@ Run these steps on the PC when ready to activate the configuration.
 5. Display the existing OpenCode pairing credentials with the tailnet address:
 
    ```sh
-   opencode2 pair --url https://nixos.tail93a561.ts.net
+   opencode pair --url https://nixos.tail93a561.ts.net
    ```
 
-   Keep the password private. OpenCode 2.0.2 supports `--url`, which sets the
-   address in both the printed credentials and the QR code. Without this flag,
-   pairing displays the local listening address. `service set hostname` controls
-   the listening hostname; the Nix service already specifies `127.0.0.1`.
+   Keep the password private. `--url` sets the address in both the printed
+   credentials and the QR code. Without this flag, pairing displays the local
+   listening address. Change the listening hostname or port through Nix.
 
 ## Connect from another computer
 
 Use a compatible OpenCode V2 client, preferably the same release as the PC. The
-current flake selects OpenCode 2.0.2 and Tailscale 1.102.3. The packaged CLI remains
-available as `opencode2`.
+Limitless pin selects OpenCode 2.0.12. The packaged CLI is now `opencode`.
 
 ### Terminal
 
@@ -106,11 +123,11 @@ bash -c '
   read -r -s -p "OpenCode server password: " OPENCODE_PASSWORD || exit 1
   printf "\n"
   export OPENCODE_PASSWORD
-  exec opencode2 --server "$1"
+  exec opencode --server "$1"
 ' bash https://nixos.tail93a561.ts.net
 ```
 
-Use the password shown by `opencode2 pair` on the PC. A remote session works with
+Use the password shown by `opencode pair` on the PC. A remote session works with
 the PC's directories and tools; select a project directory on the PC.
 
 The V2 CLI documentation covers `--server`; password environment handling was
@@ -132,14 +149,14 @@ authentication:
 
 ```sh
 curl -sS -o /dev/null -w '%{http_code}\n' \
-  https://nixos.tail93a561.ts.net/api/health
+  https://nixos.tail93a561.ts.net/api/info
 ```
 
 Expect `401`. Then check authenticated health; curl prompts for the password:
 
 ```sh
 curl --fail --show-error --user opencode \
-  https://nixos.tail93a561.ts.net/api/health
+  https://nixos.tail93a561.ts.net/api/info
 ```
 
 Finally connect the OpenCode client and confirm it can open an existing PC
@@ -147,14 +164,18 @@ session. Native terminal clients do not require a CORS configuration change.
 
 ## Operations
 
-If you previously saved the HTTPS URL using `opencode2 service set hostname`,
-remove that override. Unsetting it stops OpenCode; restart the Nix-managed user
-service to restore its configured listener:
+Use systemd to manage the supervised service:
 
 ```sh
-opencode2 service unset hostname
-systemctl --user restart opencode2
+systemctl --user status opencode
+systemctl --user restart opencode
+journalctl --user -u opencode -n 100 --no-pager
 ```
+
+Change hostname and port in `hosts/pc/home.nix`, then rebuild. The proxy reads
+the same port, and the service applies the binding automatically. Restarts can
+interrupt active sessions. A native `opencode service stop` is normally undone
+by supervision; use `systemctl --user stop opencode` when stopping it deliberately.
 
 ```sh
 # Stop or start the private HTTPS proxy.
@@ -181,8 +202,10 @@ Troubleshooting:
   rules for the PC's TCP port 443.
 - **HTTP 401:** the server is reachable but the pairing password is missing or
   incorrect.
-- **HTTP 502:** check that the PC login session and `opencode2` user service are
-  active and that OpenCode is listening on the configured loopback port.
+- **HTTP 502:** check that the PC login session and `opencode` user service are
+  active. Use `systemctl --user status opencode` and `opencode service status`
+  to inspect startup and verify the listener is `127.0.0.1:4096`. Check
+  `journalctl --user -u opencode` for errors.
 
 Tailscale Serve reference: <https://tailscale.com/kb/1242/tailscale-serve>.
 OpenCode pairing reference: <https://opencode.ai/v2/docs/cli/web/>.

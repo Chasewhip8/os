@@ -29,49 +29,24 @@ let
 
   cargoRegistryTokenPath = runtimePath "cargo-registry-token";
   githubTokenPath = runtimePath "github-token";
-  atlassianApiTokenPath = runtimePath "atlassian-api-token";
-  notionPersonalPath = runtimePath "notion-personal";
-  notionWorkPath = runtimePath "notion-work";
-  sentryApiTokenPath = runtimePath "sentry-api-token";
-  limitlessBotGithubTokenPath = runtimePath "limitless-bot-github-token";
-  limitlessBotSlackEnvironmentPath = runtimePath "limitless-bot-slack-environment";
   cloudflaredTunnelCredentialsName = "cloudflared-${config.local.host.name}-credentials.json";
   cloudflaredTunnelCredentialsPath = runtimePath cloudflaredTunnelCredentialsName;
 
   cargoRegistryTokenFile = ../../secrets/cargo-registry-token.age;
   githubTokenFile = ../../secrets/github-token.age;
-  atlassianApiTokenFile = ../../secrets/atlassian-api-token.age;
-  notionPersonalFile = ../../secrets/notion-personal.age;
-  notionWorkFile = ../../secrets/notion-work.age;
-  sentryApiTokenFile = ../../secrets/sentry-api-token.age;
-  limitlessBotGithubTokenFile = ../../secrets/limitless-bot-github-token.age;
-  limitlessBotSlackEnvironmentFile = ../../secrets/limitless-bot-slack-environment.age;
   cloudflaredTunnelCredentialsFile = ../../secrets + "/${cloudflaredTunnelCredentialsName}.age";
   shipyardSshKeyFile = ../../secrets/shipyard-ssh-key.age;
 
   hasCloudflaredTunnelCredentialsSecret = builtins.pathExists cloudflaredTunnelCredentialsFile;
   hasGithubTokenSecret = builtins.pathExists githubTokenFile;
-  hasAtlassianApiTokenSecret = builtins.pathExists atlassianApiTokenFile;
-  hasNotionPersonalSecret = builtins.pathExists notionPersonalFile;
-  hasNotionWorkSecret = builtins.pathExists notionWorkFile;
-  hasSentryApiTokenSecret = builtins.pathExists sentryApiTokenFile;
-  hasLimitlessBotGithubTokenSecret = builtins.pathExists limitlessBotGithubTokenFile;
-  hasLimitlessBotSlackEnvironmentSecret = builtins.pathExists limitlessBotSlackEnvironmentFile;
-  limitlessBot = config.local.features.limitlessBot;
   user = config.local.user;
   shipyardSshKeyPath = "${user.homeDirectory}/.ssh/id_ed25519_shipyard";
 in
 {
   options.local.secrets = {
     cargoRegistryToken = mkSecretOptions "the Cargo registry token";
-    atlassianApiToken = mkSecretOptions "the Atlassian API token";
     cloudflaredTunnelCredentials = mkSecretOptions "this host's Cloudflare Tunnel credentials JSON";
     githubToken = mkSecretOptions "the GitHub token";
-    limitlessBotGithubToken = mkSecretOptions "the Limitless bot GitHub token";
-    limitlessBotSlackEnvironment = mkSecretOptions "the Limitless bot Slack service environment";
-    notionPersonal = mkSecretOptions "the personal Notion account token";
-    notionWork = mkSecretOptions "the work Notion account token";
-    sentryApiToken = mkSecretOptions "the Sentry API token";
     shipyardSshKey = mkSecretOptions "the Shipyard SSH key";
   };
 
@@ -81,10 +56,6 @@ in
         path = cargoRegistryTokenPath;
         available = true;
       };
-      atlassianApiToken = {
-        path = atlassianApiTokenPath;
-        available = hasAtlassianApiTokenSecret;
-      };
       cloudflaredTunnelCredentials = {
         path = cloudflaredTunnelCredentialsPath;
         available = hasCloudflaredTunnelCredentialsSecret;
@@ -92,26 +63,6 @@ in
       githubToken = {
         path = githubTokenPath;
         available = hasGithubTokenSecret;
-      };
-      limitlessBotGithubToken = {
-        path = limitlessBotGithubTokenPath;
-        available = limitlessBot.enable && hasLimitlessBotGithubTokenSecret;
-      };
-      limitlessBotSlackEnvironment = {
-        path = limitlessBotSlackEnvironmentPath;
-        available = limitlessBot.enable && hasLimitlessBotSlackEnvironmentSecret;
-      };
-      notionPersonal = {
-        path = notionPersonalPath;
-        available = hasNotionPersonalSecret;
-      };
-      notionWork = {
-        path = notionWorkPath;
-        available = hasNotionWorkSecret;
-      };
-      sentryApiToken = {
-        path = sentryApiTokenPath;
-        available = hasSentryApiTokenSecret;
       };
       shipyardSshKey = {
         path = shipyardSshKeyPath;
@@ -123,35 +74,10 @@ in
       inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     ];
 
-    warnings =
-      lib.optional (!hasGithubTokenSecret) ''
-        GitHub token secret is missing at secrets/github-token.age;
-        create it with agenix before expecting gh to be authenticated.
-      ''
-      ++ lib.optional (!hasAtlassianApiTokenSecret) ''
-        Atlassian API token secret is missing at secrets/atlassian-api-token.age;
-        create it with agenix before expecting acli to be authenticated.
-      ''
-      ++ lib.optional (!hasNotionPersonalSecret) ''
-        Personal Notion account token is missing at secrets/notion-personal.age;
-        create it with agenix before using ntn-personal.
-      ''
-      ++ lib.optional (!hasNotionWorkSecret) ''
-        Work Notion account token is missing at secrets/notion-work.age;
-        create it with agenix before using ntn or ntn-work.
-      ''
-      ++ lib.optional (!hasSentryApiTokenSecret) ''
-        Sentry API token secret is missing at secrets/sentry-api-token.age;
-        create it with agenix before expecting sentry to be authenticated.
-      ''
-      ++ lib.optional (limitlessBot.enable && !hasLimitlessBotGithubTokenSecret) ''
-        Limitless bot GitHub token secret is missing at secrets/limitless-bot-github-token.age;
-        create it with agenix before provisioning the bot workspace.
-      ''
-      ++ lib.optional (limitlessBot.enable && !hasLimitlessBotSlackEnvironmentSecret) ''
-        Limitless bot Slack environment secret is missing at secrets/limitless-bot-slack-environment.age;
-        create it with agenix before enabling the Slack bridge.
-      '';
+    warnings = lib.optional (!hasGithubTokenSecret) ''
+      GitHub token secret is missing at secrets/github-token.age;
+      create it with agenix before expecting gh to be authenticated.
+    '';
 
     age.identityPaths = [
       "${user.homeDirectory}/.nixconf/secrets/identity"
@@ -169,54 +95,6 @@ in
       mode = "0400";
       path = githubTokenPath;
     };
-
-    age.secrets.atlassian-api-token = lib.mkIf hasAtlassianApiTokenSecret {
-      file = atlassianApiTokenFile;
-      owner = user.name;
-      mode = "0400";
-      path = atlassianApiTokenPath;
-    };
-
-    age.secrets.notion-personal = lib.mkIf hasNotionPersonalSecret {
-      file = notionPersonalFile;
-      owner = user.name;
-      mode = "0400";
-      path = notionPersonalPath;
-    };
-
-    age.secrets.notion-work = lib.mkIf hasNotionWorkSecret {
-      file = notionWorkFile;
-      owner = user.name;
-      mode = "0400";
-      path = notionWorkPath;
-    };
-
-    age.secrets.sentry-api-token = lib.mkIf hasSentryApiTokenSecret {
-      file = sentryApiTokenFile;
-      owner = user.name;
-      mode = "0400";
-      path = sentryApiTokenPath;
-    };
-
-    age.secrets.limitless-bot-github-token =
-      lib.mkIf (limitlessBot.enable && hasLimitlessBotGithubTokenSecret)
-        {
-          file = limitlessBotGithubTokenFile;
-          owner = limitlessBot.userName;
-          group = limitlessBot.userName;
-          mode = "0400";
-          path = limitlessBotGithubTokenPath;
-        };
-
-    age.secrets.limitless-bot-slack-environment =
-      lib.mkIf (limitlessBot.enable && hasLimitlessBotSlackEnvironmentSecret)
-        {
-          file = limitlessBotSlackEnvironmentFile;
-          owner = limitlessBot.userName;
-          group = limitlessBot.userName;
-          mode = "0400";
-          path = limitlessBotSlackEnvironmentPath;
-        };
 
     age.secrets.${cloudflaredTunnelCredentialsName} = lib.mkIf hasCloudflaredTunnelCredentialsSecret {
       file = cloudflaredTunnelCredentialsFile;
